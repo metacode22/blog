@@ -11,5 +11,5 @@ export default async function PostDetailPage({
 
   if (!postDetail) notFound();
 
-  return <article>{postDetail.content}</article>;
+  return <article className='prose max-w-none'>{postDetail.content}</article>;
 }
