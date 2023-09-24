@@ -1,3 +1,25 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.prose .autolink-header {
+  text-decoration: none;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  &::after {
+    align-self: flex-end;
+    content: url('/icons/autolink-icon.svg');
+    width: 24px;
+    height: 24px;
+    display: none;
+  }
+
+  &:hover {
+    &::after {
+      display: inline;
+    }
+  }
+}

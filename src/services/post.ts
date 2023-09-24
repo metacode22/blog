@@ -1,4 +1,6 @@
 import { compileMDX } from 'next-mdx-remote/rsc';
+import rehypeAutolinkHeadings from 'rehype-autolink-headings';
+import rehypeSlug from 'rehype-slug';
 
 type RepositoryFileTree = {
   tree: [
@@ -56,7 +58,6 @@ export async function getPostMetas() {
      * @TODO
      * timeToRead 기능 더하기
      */
-
     if (postDetail) {
       postMetas.push(postDetail.meta);
     }
@@ -100,6 +101,20 @@ export async function getPostDetailByPostFileName(postFileName: string) {
        * @TODO
        * mdxOptions 추가하기
        */
+      mdxOptions: {
+        rehypePlugins: [
+          rehypeSlug,
+          [
+            rehypeAutolinkHeadings,
+            {
+              behavior: 'wrap',
+              properties: {
+                class: ['autolink-header'],
+              },
+            },
+          ],
+        ],
+      },
     },
   });
 
