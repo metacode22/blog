@@ -2,6 +2,8 @@ import { getPostDetailByPostFileName } from '@/src/services/post';
 
 import { notFound } from 'next/navigation';
 
+import '@/src/styles/prism-one-dark.css'
+
 export default async function PostDetailPage({
   params: { postId },
 }: {

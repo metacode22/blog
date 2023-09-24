@@ -1,5 +1,6 @@
 import { compileMDX } from 'next-mdx-remote/rsc';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
+import rehypePrism from 'rehype-prism-plus';
 import rehypeSlug from 'rehype-slug';
 
 type RepositoryFileTree = {
@@ -104,6 +105,7 @@ export async function getPostDetailByPostFileName(postFileName: string) {
       mdxOptions: {
         rehypePlugins: [
           rehypeSlug,
+          rehypePrism,
           [
             rehypeAutolinkHeadings,
             {
