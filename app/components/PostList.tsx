@@ -1,3 +1,4 @@
+import ROUTES from '@/src/constants/routes';
 import { getPostMetas } from '@/src/services/post';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -23,7 +24,7 @@ export default async function PostList({ postListName }: { postListName: string 
              * @TODO
              * posts/[postId] 페이지 만들어지면 href 변경하기
              */
-            href={'/'}
+            href={`${ROUTES.POSTS}/${postMeta.id}`}
             className='flex h-60 w-full items-center gap-12 break-keep rounded-sm border-2 border-slate-400'>
             <Image
               src={`${process.env.NEXT_PUBLIC_POSTS_SOURCE}/${postMeta.id}/thumbnail.png`}

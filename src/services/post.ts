@@ -40,7 +40,7 @@ export async function getPostMetas() {
    * repositoryFileTree에 무엇이 찍히는지 확인 이후 메서드 체이닝으로 리팩터링하기
    */
   const repositoryFileTree: RepositoryFileTree = await response.json();
-  console.log("🚀 ~ file: post.ts:43 ~ getPostMetas ~ repositoryFileTree:", repositoryFileTree)
+  // console.log("🚀 ~ file: post.ts:43 ~ getPostMetas ~ repositoryFileTree:", repositoryFileTree)
 
   const postFileNames = repositoryFileTree.tree
     .map(file => file.path)
