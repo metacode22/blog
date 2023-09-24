@@ -1,3 +1,9 @@
+import PostList from './components/PostList';
+
 export default function HomePage() {
-  return <div>Home</div>;
+  return (
+    <div>
+      <PostList postListName='주요 글' />
+    </div>
+  );
 }

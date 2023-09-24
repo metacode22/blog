@@ -4,7 +4,7 @@ import { CiSearch } from 'react-icons/ci';
 
 export default function GlobalNavigationBar() {
   return (
-    <nav className='flex justify-between items-center p-4 lg:px-20 lg:py-4 border-b-[1px]'>
+    <nav className='sticky flex w-full items-center justify-between border-b-[1px] p-4 lg:px-20 lg:py-4'>
       <ul className='flex justify-start gap-3'>
         <li>
           <Link href={ROUTES.HOME}>Logo</Link>
@@ -12,14 +12,18 @@ export default function GlobalNavigationBar() {
         <li>
           <Link href={ROUTES.HOME}>Home</Link>
         </li>
-        <li>
+        {/**
+         * @TODO
+         * About 페이지 만들어지면 주석 해제하기
+         */}
+        {/* <li>
           <Link href={ROUTES.ABOUT}>About</Link>
-        </li>
+        </li> */}
       </ul>
       <ul>
         <li>
-          <div className='flex justify-end items-center gap-3'>
-            <input type='text' />
+          <div className='flex items-center justify-end gap-3'>
+            <input type='text' className='border-2 border-teal-200' />
             <CiSearch size={20} />
           </div>
         </li>
