@@ -5,7 +5,6 @@ import Link from 'next/link';
 
 export default async function PostList({ postListName }: { postListName: string }) {
   const postMetas = await getPostMetas();
-  // console.log('🚀 ~ file: PostList.tsx:7 ~ PostList ~ postMetas:', postMetas);
 
   if (!postMetas) return <div>무언가 잘못됨!</div>;
 

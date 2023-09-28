@@ -2,7 +2,8 @@ import { getPostDetailByPostFileName } from '@/src/services/post';
 
 import { notFound } from 'next/navigation';
 
-import '@/src/styles/prism-one-dark.css'
+import '@/src/styles/prism-one-dark.css';
+import Image from 'next/image';
 
 export default async function PostDetailPage({
   params: { postId },
@@ -13,5 +14,32 @@ export default async function PostDetailPage({
 
   if (!postDetail) notFound();
 
-  return <article className='prose max-w-none'>{postDetail.content}</article>;
+  return (
+    <article className='prose flex w-full max-w-none flex-col'>
+      <div className='flex w-full justify-center bg-gradient-to-b from-indigo-50 px-4 py-8'>
+        <div className='w-full max-w-5xl'>
+          <div className='flex flex-col items-start gap-8'>
+            {postDetail.meta.categories.map(category => (
+              <span
+                key={category}
+                className='rounded-[32px] bg-indigo-500 px-3 py-[6px] text-sm text-white'>
+                {category}
+              </span>
+            ))}
+            <h1 className='m-0'>{postDetail.meta.title}</h1>
+            <div>
+              <p className='m-0'>{postDetail.meta.summary}</p>
+              <div className='flex justify-start gap-4'>
+                <span>updatedAt</span>
+                <span>timeToRead</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className='flex w-full justify-center p-4'>
+        <div className='w-full max-w-5xl'>{postDetail.content}</div>
+      </div>
+    </article>
+  );
 }
