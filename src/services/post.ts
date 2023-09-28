@@ -1,4 +1,5 @@
 import { compileMDX } from 'next-mdx-remote/rsc';
+import readingTime from 'reading-time';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypePrism from 'rehype-prism-plus';
 import rehypeSlug from 'rehype-slug';
@@ -14,7 +15,6 @@ type RepositoryFileTree = {
 type PostMeta = {
   title: string;
   summary: string;
-  timeToRead: number;
   categories: string[];
   createdAt: string;
   updatedAt: string;
@@ -53,7 +53,6 @@ export async function getPostMetas() {
   const postMetas = [];
   for (const postFileName of postFileNames) {
     const postDetail = await getPostDetailByPostFileName(postFileName);
-    // console.log("🚀 ~ file: post.ts:53 ~ getPostMetas ~ postDetail:", postDetail)
 
     /**
      * @TODO
@@ -61,6 +60,7 @@ export async function getPostMetas() {
      */
     if (postDetail) {
       postMetas.push(postDetail.meta);
+      // console.log("🚀 ~ file: post.ts:63 ~ getPostMetas ~ postMetas:", postMetas)
     }
   }
 
@@ -92,7 +92,6 @@ export async function getPostDetailByPostFileName(postFileName: string) {
    * rawMdx가 404: Not Found인 경우를 확인하기
    */
   if (rawMdx === '404: Not Found') return undefined;
-  // console.log('🚀 ~ file: post.ts:93 ~ getPostDetailByTitle ~ rawMdx:', rawMdx);
 
   const { frontmatter, content } = await compileMDX<PostMeta>({
     source: rawMdx,
@@ -120,10 +119,12 @@ export async function getPostDetailByPostFileName(postFileName: string) {
     },
   });
 
+  const timeToRead = Math.ceil(readingTime(rawMdx).minutes);
   const postFileNameWithoutFileExtension = postFileName.replace('/index.mdx', '');
   const postDetail = {
     meta: {
       id: postFileNameWithoutFileExtension,
+      timeToRead,
       ...frontmatter,
     },
     content,
