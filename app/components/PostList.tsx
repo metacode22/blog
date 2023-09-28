@@ -25,14 +25,15 @@ export default async function PostList({ postListName }: { postListName: string 
              * posts/[postId] 페이지 만들어지면 href 변경하기
              */
             href={`${ROUTES.POSTS}/${postMeta.id}`}
-            className='flex h-60 w-full items-center gap-12 break-keep rounded-sm border-2 border-slate-400'>
-            <Image
-              src={`${process.env.NEXT_PUBLIC_POSTS_SOURCE}/${postMeta.id}/thumbnail.png`}
-              alt={`${postMeta.title} 썸네일`}
-              width={240}
-              height={240}
-              className='rounded-2xl border-2 border-red-300'
-            />
+            className='flex h-60 w-full items-center gap-14 break-keep rounded-sm'>
+            <div className='relative min-h-[240px] min-w-[240px]'>
+              <Image
+                src={`${process.env.NEXT_PUBLIC_POSTS_SOURCE}/${postMeta.id}/thumbnail.png`}
+                alt={`${postMeta.title} 썸네일`}
+                fill
+                className='rounded-2xl bg-slate-500 p-2'
+              />
+            </div>
             <div className='flex h-full flex-col justify-between self-start'>
               <div>
                 {postMeta.categories.map(category => (
