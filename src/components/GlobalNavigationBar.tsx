@@ -4,7 +4,7 @@ import { CiSearch } from 'react-icons/ci';
 
 export default function GlobalNavigationBar() {
   return (
-    <nav className='sticky flex w-full items-center justify-between border-b-[1px] p-4 lg:px-20 lg:py-4'>
+    <nav className='bg-white flex w-full items-center justify-between border-b-[1px] p-4 lg:px-20 lg:py-4'>
       <ul className='flex justify-start gap-3'>
         <li>
           <Link href={ROUTES.HOME}>Logo</Link>
