@@ -1,24 +1,9 @@
 import { compileMDX } from 'next-mdx-remote/rsc';
+import { RepositoryFileTree, PostMeta } from '../types/posts';
 import readingTime from 'reading-time';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypePrism from 'rehype-prism-plus';
 import rehypeSlug from 'rehype-slug';
-
-type RepositoryFileTree = {
-  tree: [
-    {
-      path: string;
-    },
-  ];
-};
-
-type PostMeta = {
-  title: string;
-  summary: string;
-  categories: string[];
-  createdAt: string;
-  updatedAt: string;
-};
 
 export async function getPostMetas() {
   const response = await fetch(process.env.GITHUB_API_URL_TO_GET_POSTS_SOURCE_TREE, {
