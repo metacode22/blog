@@ -1,11 +1,11 @@
 import { compileMDX } from 'next-mdx-remote/rsc';
-import { RepositoryFileTree, PostMeta } from '../types/posts';
+import { RepositoryFileTree, PostMetaFromRawMdx, PostMeta, PostDetail } from '../types/posts';
 import readingTime from 'reading-time';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypePrism from 'rehype-prism-plus';
 import rehypeSlug from 'rehype-slug';
 
-export async function getPostMetas() {
+export async function getPostMetas(): Promise<PostMeta[] | undefined> {
   const response = await fetch(process.env.GITHUB_API_URL_TO_GET_POSTS_SOURCE_TREE, {
     headers: {
       Accept: 'application/vnd.github+json',
@@ -35,7 +35,7 @@ export async function getPostMetas() {
     .filter(path => path.endsWith('/index.mdx'));
   // console.log("🚀 ~ file: post.ts:52 ~ getPostMetas ~ postFileNames:", postFileNames)
 
-  const postMetas = [];
+  const postMetas: PostMeta[] = [];
   for (const postFileName of postFileNames) {
     const postDetail = await getPostDetailByPostFileName(postFileName);
 
@@ -78,7 +78,7 @@ export async function getPostDetailByPostFileName(postFileName: string) {
    */
   if (rawMdx === '404: Not Found') return undefined;
 
-  const { frontmatter, content } = await compileMDX<PostMeta>({
+  const { frontmatter, content } = await compileMDX<PostMetaFromRawMdx>({
     source: rawMdx,
     options: {
       parseFrontmatter: true,
@@ -106,7 +106,7 @@ export async function getPostDetailByPostFileName(postFileName: string) {
 
   const timeToRead = Math.ceil(readingTime(rawMdx).minutes);
   const postFileNameWithoutFileExtension = postFileName.replace('/index.mdx', '');
-  const postDetail = {
+  const postDetail: PostDetail = {
     meta: {
       id: postFileNameWithoutFileExtension,
       timeToRead,
