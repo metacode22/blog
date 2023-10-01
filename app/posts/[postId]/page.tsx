@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import '@/src/styles/prism-one-dark.css';
 import Image from 'next/image';
 import Category from '@/src/components/Category';
+import TimeToRead from '@/src/components/TimeToRead';
 
 export default async function PostDetailPage({
   params: { postId },
@@ -18,7 +19,7 @@ export default async function PostDetailPage({
   return (
     <article className='prose flex w-full max-w-none flex-col'>
       <div className='flex w-full justify-center bg-gradient-to-b from-indigo-50 px-4 py-8'>
-        <div className='w-full max-w-5xl flex flex-col gap-4'>
+        <div className='flex w-full max-w-5xl flex-col gap-4'>
           <div className='relative min-h-[240px] overflow-hidden'>
             <Image
               src={`${process.env.NEXT_PUBLIC_POSTS_SOURCE}/${postId}/thumbnail.png`}
@@ -38,7 +39,7 @@ export default async function PostDetailPage({
               <p className='m-0'>{postDetail.meta.summary}</p>
               <div className='flex justify-start gap-4'>
                 <span>updatedAt</span>
-                <span>timeToRead</span>
+                <TimeToRead timeToRead={postDetail.meta.timeToRead} />
               </div>
             </div>
           </div>

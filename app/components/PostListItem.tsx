@@ -7,6 +7,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import clsx from 'clsx';
 import Category from '@/src/components/Category';
+import TimeToRead from '@/src/components/TimeToRead';
 
 export default function PostListItem({ postMeta }: { postMeta: PostMeta }) {
   const { targetRef, isHovered } = useHover<HTMLAnchorElement>();
@@ -43,7 +44,7 @@ export default function PostListItem({ postMeta }: { postMeta: PostMeta }) {
         <div>{postMeta.summary}</div>
         <div className='flex gap-4'>
           <span className='text-gray-500'>date</span>
-          <span className='text-gray-500'>time to read</span>
+          <TimeToRead timeToRead={postMeta.timeToRead} />
         </div>
       </div>
     </Link>
