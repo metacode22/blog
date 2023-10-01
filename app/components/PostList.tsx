@@ -1,18 +1,18 @@
-import ROUTES from '@/src/constants/routes';
-import useHover from '@/src/hooks/useHover';
-import { getPostMetas } from '@/src/services/post';
-import Image from 'next/image';
-import Link from 'next/link';
 import PostListItem from './PostListItem';
+import { PostMeta } from '@/src/types/posts';
 
-export default async function PostList({ postListName }: { postListName: string }) {
-  const postMetas = await getPostMetas();
-
-  if (!postMetas) return <div>무언가 잘못됨!</div>;
+export default async function PostList({
+  postListName = '글 목록',
+  postMetas,
+}: {
+  postListName?: string;
+  postMetas: PostMeta[];
+}) {
+  if (!postMetas.length) return <div>글이 하나도 없음.</div>;
 
   return (
-    <section>
-      <h2>{postListName}</h2>
+    <section className='flex flex-col gap-8'>
+      <h2 className='text-3xl font-bold text-slate-700'>{postListName}</h2>
       {/**
        * @TODO
        * 글들이 많아지면 Vercel Blog 처럼 grid를 이용해서 만들기
