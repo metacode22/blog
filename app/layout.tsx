@@ -1,9 +1,6 @@
 import GlobalNavigationBar from '@/src/components/GlobalNavigationBar';
 import '@/src/styles/globals.css';
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
-
-const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: '신승준 블로그',
@@ -13,7 +10,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang='ko'>
-      <body className={inter.className}>
+      <body>
         <GlobalNavigationBar />
         <main className='flex justify-center'>{children}</main>
       </body>
