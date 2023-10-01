@@ -1,5 +1,5 @@
 import { compileMDX } from 'next-mdx-remote/rsc';
-import { PostMetaFromRawMdx, PostMeta, PostDetail } from '../types/posts';
+import { RepositoryFileTree, PostMetaFromRawMdx, PostMeta, PostDetail } from '../types/posts';
 import readingTime from 'reading-time';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypePrism from 'rehype-prism-plus';
@@ -19,6 +19,21 @@ export async function getPostMetas(): Promise<PostMeta[] | undefined> {
    * response.ok가 false일 때 status, statusText가 어떤 것이 뜨는지 확인하고 throw error로 처리해보기.
    */
   if (!response.ok) return undefined;
+
+  const repositoryFileTree: RepositoryFileTree = await response.json();
+
+  const postFileNames = repositoryFileTree.tree
+    .map(file => file.path)
+    .filter(path => path.endsWith('/index.mdx'));
+
+  const postMetas: PostMeta[] = [];
+  for (const postFileName of postFileNames) {
+    const postDetail = await getPostDetailByPostFileName(postFileName);
+
+    if (postDetail) postMetas.push(postDetail.meta);
+  }
+
+  return postMetas.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
 }
 
 export async function getPostDetailByPostFileName(postFileName: string) {
