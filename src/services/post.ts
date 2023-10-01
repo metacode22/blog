@@ -1,5 +1,5 @@
 import { compileMDX } from 'next-mdx-remote/rsc';
-import { RepositoryFileTree, PostMetaFromRawMdx, PostMeta, PostDetail } from '../types/posts';
+import { PostMetaFromRawMdx, PostMeta, PostDetail } from '../types/posts';
 import readingTime from 'reading-time';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypePrism from 'rehype-prism-plus';
@@ -18,38 +18,7 @@ export async function getPostMetas(): Promise<PostMeta[] | undefined> {
    * @TODO
    * response.ok가 false일 때 status, statusText가 어떤 것이 뜨는지 확인하고 throw error로 처리해보기.
    */
-  if (!response.ok) {
-    // console.log(response.status, response.statusText);
-    return undefined;
-  }
-
-  /**
-   * @TODO
-   * repositoryFileTree에 무엇이 찍히는지 확인 이후 메서드 체이닝으로 리팩터링하기
-   */
-  const repositoryFileTree: RepositoryFileTree = await response.json();
-  // console.log("🚀 ~ file: post.ts:43 ~ getPostMetas ~ repositoryFileTree:", repositoryFileTree)
-
-  const postFileNames = repositoryFileTree.tree
-    .map(file => file.path)
-    .filter(path => path.endsWith('/index.mdx'));
-  // console.log("🚀 ~ file: post.ts:52 ~ getPostMetas ~ postFileNames:", postFileNames)
-
-  const postMetas: PostMeta[] = [];
-  for (const postFileName of postFileNames) {
-    const postDetail = await getPostDetailByPostFileName(postFileName);
-
-    /**
-     * @TODO
-     * timeToRead 기능 더하기
-     */
-    if (postDetail) {
-      postMetas.push(postDetail.meta);
-      // console.log("🚀 ~ file: post.ts:63 ~ getPostMetas ~ postMetas:", postMetas)
-    }
-  }
-
-  return postMetas.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
+  if (!response.ok) return undefined;
 }
 
 export async function getPostDetailByPostFileName(postFileName: string) {
@@ -65,10 +34,7 @@ export async function getPostDetailByPostFileName(postFileName: string) {
    * @TODO
    * response.ok가 false일 때 status, statusText가 어떤 것이 뜨는지 확인하고 throw error로 처리해보기.
    */
-  if (!response.ok) {
-    // console.log(response.status, response.statusText);
-    return undefined;
-  }
+  if (!response.ok) return undefined;
 
   const rawMdx = await response.text();
 
@@ -84,7 +50,7 @@ export async function getPostDetailByPostFileName(postFileName: string) {
       parseFrontmatter: true,
       /**
        * @TODO
-       * mdxOptions 추가하기
+       * mdxOptions에 toc 추가하기
        */
       mdxOptions: {
         rehypePlugins: [
@@ -104,17 +70,15 @@ export async function getPostDetailByPostFileName(postFileName: string) {
     },
   });
 
-  const timeToRead = Math.ceil(readingTime(rawMdx).minutes);
   const postFileNameWithoutFileExtension = postFileName.replace('/index.mdx', '');
   const postDetail: PostDetail = {
     meta: {
       id: postFileNameWithoutFileExtension,
-      timeToRead,
+      timeToRead: Math.ceil(readingTime(rawMdx).minutes),
       ...frontmatter,
     },
     content,
   };
-  // console.log("🚀 ~ file: post.ts:114 ~ getPostDetailByPostFileName ~ postDetail:", postDetail)
 
   return postDetail;
 }
