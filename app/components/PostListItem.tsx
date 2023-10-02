@@ -6,8 +6,8 @@ import { PostMeta } from '@/src/types/posts';
 import Image from 'next/image';
 import Link from 'next/link';
 import clsx from 'clsx';
-import Category from '@/src/components/Category';
-import TimeToRead from '@/src/components/TimeToRead';
+import Category from '@/src/components/post/Category';
+import TimeToRead from '@/src/components/post/TimeToRead';
 
 export default function PostListItem({ postMeta }: { postMeta: PostMeta }) {
   const { targetRef, isHovered } = useHover<HTMLAnchorElement>();

@@ -4,8 +4,8 @@ import { notFound } from 'next/navigation';
 
 import '@/src/styles/prism-one-dark.css';
 import Image from 'next/image';
-import Category from '@/src/components/Category';
-import TimeToRead from '@/src/components/TimeToRead';
+import Category from '@/src/components/post/Category';
+import TimeToRead from '@/src/components/post/TimeToRead';
 
 export default async function PostDetailPage({
   params: { postId },
