@@ -1,6 +1,5 @@
-/**
- * 2023. 03. 31 과 같은 형태로 만들기
- */
-export default function Date({ date }: { date: string }) {
-  return <span className='text-gray-500'></span>;
+import { ReactNode } from 'react';
+
+export default function Date({ children }: { children: ReactNode }) {
+  return <span className='text-gray-500'>{children}</span>;
 }

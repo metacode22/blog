@@ -8,6 +8,8 @@ import Link from 'next/link';
 import clsx from 'clsx';
 import Category from '@/src/components/post/Category';
 import TimeToRead from '@/src/components/post/TimeToRead';
+import Date from '@/src/components/post/Date';
+import formatDateWithDot from '@/src/utils/helpers/date';
 
 export default function PostListItem({ postMeta }: { postMeta: PostMeta }) {
   const { targetRef, isHovered } = useHover<HTMLAnchorElement>();
@@ -43,7 +45,7 @@ export default function PostListItem({ postMeta }: { postMeta: PostMeta }) {
         </h3>
         <div>{postMeta.summary}</div>
         <div className='flex gap-4'>
-          <span className='text-gray-500'>date</span>
+          <Date>{formatDateWithDot(postMeta.updatedAt)}</Date>
           <TimeToRead timeToRead={postMeta.timeToRead} />
         </div>
       </div>

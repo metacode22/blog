@@ -6,6 +6,8 @@ import '@/src/styles/prism-one-dark.css';
 import Image from 'next/image';
 import Category from '@/src/components/post/Category';
 import TimeToRead from '@/src/components/post/TimeToRead';
+import Date from '@/src/components/post/Date';
+import formatDateWithDot from '@/src/utils/helpers/date';
 
 export default async function PostDetailPage({
   params: { postId },
@@ -38,7 +40,7 @@ export default async function PostDetailPage({
             <div>
               <p className='m-0'>{postDetail.meta.summary}</p>
               <div className='flex justify-start gap-4'>
-                <span>updatedAt</span>
+                <Date>{formatDateWithDot(postDetail.meta.updatedAt)}</Date>
                 <TimeToRead timeToRead={postDetail.meta.timeToRead} />
               </div>
             </div>
