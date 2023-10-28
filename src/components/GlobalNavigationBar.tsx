@@ -7,7 +7,7 @@ export default function GlobalNavigationBar() {
     <nav className='flex w-full items-center justify-between border-b-[1px] bg-white p-4 lg:px-20 lg:py-3'>
       <div className='flex items-center gap-10'>
         <Link href={ROUTES.HOME} className='rounded-lg text-xl font-semibold italic'>
-          Jun&apos;s blog
+          {"<Jun />"}
         </Link>
         <ul className='flex justify-start gap-3 rounded-md px-2 py-1 leading-7 transition hover:bg-slate-100'>
           <li>
