@@ -1,6 +1,10 @@
+'use client';
+
 import Link from 'next/link';
 import ROUTES from '../constants/routes';
 import { CiSearch } from 'react-icons/ci';
+import cn from '@/src/utils/class-name';
+import { usePathname } from 'next/navigation';
 
 const NAVIGATION_LIST = [
   {
@@ -22,15 +26,30 @@ const NAVIGATION_LIST = [
 ];
 
 export default function GlobalNavigationBar() {
+  const pathname = usePathname();
+
   return (
-    <nav className='fixed flex w-full items-center justify-between p-4 text-white lg:px-20 lg:py-3'>
+    <nav
+      className={cn(
+        'fixed z-10 flex w-full items-center justify-between p-4 text-black lg:px-20 lg:py-3',
+        {
+          'text-white': pathname === ROUTES.HOME,
+          'border-b-[1px] border-slate-200': pathname !== ROUTES.HOME,
+          'backdrop-blur-xl': pathname !== ROUTES.HOME,
+        },
+      )}>
       <div className='flex items-center gap-10'>
         <Link href={ROUTES.HOME} className='rounded-lg text-xl font-semibold italic'>
           {'<Jun />'}
         </Link>
         <div className='flex justify-start gap-4 rounded-md px-2 text-sm leading-7'>
           {NAVIGATION_LIST.map(({ name, path }) => (
-            <Link className='py-1 opacity-70 hover:opacity-100' key={name} href={path}>
+            <Link
+              className={cn('rounded-md px-2 py-1 opacity-70 hover:opacity-100 transition', {
+                'hover:bg-slate-100': pathname !== ROUTES.HOME,
+              })}
+              key={name}
+              href={path}>
               {name}
             </Link>
           ))}

@@ -7,7 +7,7 @@ import Image from 'next/image';
 import Category from '@/src/components/post/Category';
 import TimeToRead from '@/src/components/post/TimeToRead';
 import Date from '@/src/components/post/Date';
-import formatDateWithDot from '@/src/utils/helpers/date';
+import formatDateWithDot from '@/src/utils/date';
 
 export default async function PostDetailPage({
   params: { postId },
