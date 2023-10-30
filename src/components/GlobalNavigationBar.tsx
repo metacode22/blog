@@ -2,33 +2,46 @@ import Link from 'next/link';
 import ROUTES from '../constants/routes';
 import { CiSearch } from 'react-icons/ci';
 
+const NAVIGATION_LIST = [
+  {
+    name: 'Home',
+    path: ROUTES.HOME,
+  },
+  {
+    name: 'Posts',
+    path: ROUTES.POSTS,
+  },
+  {
+    name: 'Diary',
+    path: ROUTES.DIARY,
+  },
+  {
+    name: 'About',
+    path: ROUTES.ABOUT,
+  },
+];
+
 export default function GlobalNavigationBar() {
   return (
-    <nav className='flex w-full items-center justify-between border-b-[1px] bg-white p-4 lg:px-20 lg:py-3'>
+    <nav className='fixed flex w-full items-center justify-between p-4 text-white lg:px-20 lg:py-3'>
       <div className='flex items-center gap-10'>
         <Link href={ROUTES.HOME} className='rounded-lg text-xl font-semibold italic'>
-          {"<Jun />"}
+          {'<Jun />'}
         </Link>
-        <ul className='flex justify-start gap-3 rounded-md px-2 py-1 leading-7 transition hover:bg-slate-100'>
-          <li>
-            <Link href={ROUTES.HOME} className=''>
-              Home
+        <div className='flex justify-start gap-4 rounded-md px-2 text-sm leading-7'>
+          {NAVIGATION_LIST.map(({ name, path }) => (
+            <Link className='py-1 opacity-70 hover:opacity-100' key={name} href={path}>
+              {name}
             </Link>
-          </li>
-          {/**
-           * @TODO
-           * About 페이지 만들어지면 주석 해제하기
-           */}
-          {/* <li>
-          <Link href={ROUTES.ABOUT}>About</Link>
-        </li> */}
-        </ul>
+          ))}
+        </div>
       </div>
       <ul>
         <li>
           {/**
            * @TODO
            * 검색 기능 구현하기
+           * command + k로 띄울 수 있게 구현하기(운영체제를 코드로 확인해서 윈도우에서는 ctrl + k로 표시하기)
            */}
           {/* <button className='relative h-8 w-60 rounded-2xl bg-slate-200 transition hover:bg-slate-300'>
             <CiSearch

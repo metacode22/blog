@@ -12,7 +12,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang='ko'>
       <body>
         <GlobalNavigationBar />
-        <main className='flex justify-center'>{children}</main>
+        <main>{children}</main>
       </body>
     </html>
   );
