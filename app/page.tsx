@@ -13,7 +13,7 @@ export default async function HomePage() {
         <Introduction />
       </div>
       <div className='w-full max-w-5xl px-4 py-6'>
-        <PostList postListName='주요 글' postMetas={postMetas} />
+        <PostList postMetas={postMetas} />
       </div>
     </div>
   );
