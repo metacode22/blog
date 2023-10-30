@@ -5,11 +5,11 @@ import useHover from '@/src/hooks/useHover';
 import { PostMeta } from '@/src/types/posts';
 import Image from 'next/image';
 import Link from 'next/link';
-import clsx from 'clsx';
 import Category from '@/src/components/post/Category';
 import TimeToRead from '@/src/components/post/TimeToRead';
 import Date from '@/src/components/post/Date';
 import formatDateWithDot from '@/src/utils/date';
+import cn from '@/src/utils/class-name';
 
 export default function PostListItem({ postMeta }: { postMeta: PostMeta }) {
   const { targetRef, isHovered } = useHover<HTMLAnchorElement>();
@@ -24,10 +24,9 @@ export default function PostListItem({ postMeta }: { postMeta: PostMeta }) {
           src={`${process.env.NEXT_PUBLIC_POSTS_SOURCE}/${postMeta.id}/thumbnail.png`}
           alt={`${postMeta.title} 썸네일`}
           fill
-          className={clsx(
-            'rounded-2xl bg-slate-500 p-2 shadow-2xl transition duration-300',
-            isHovered && '-translate-y-2',
-          )}
+          className={cn('rounded-2xl bg-slate-500 p-2 shadow-2xl transition duration-300 object-cover', {
+            '-translate-y-2': isHovered,
+          })}
         />
       </div>
       <div className='flex h-full flex-col justify-between self-start'>
@@ -37,10 +36,9 @@ export default function PostListItem({ postMeta }: { postMeta: PostMeta }) {
           ))}
         </div>
         <h3
-          className={clsx(
-            'text-3xl font-medium transition duration-300',
-            isHovered && 'text-blue-600',
-          )}>
+          className={cn('text-3xl font-medium transition duration-300', {
+            'text-blue-600': isHovered,
+          })}>
           {postMeta.title}
         </h3>
         <div>{postMeta.summary}</div>
