@@ -4,10 +4,9 @@ import { notFound } from 'next/navigation';
 
 import '@/src/styles/prism-one-dark.css';
 import Image from 'next/image';
-import Category from '@/src/components/post/Category';
-import TimeToRead from '@/src/components/post/TimeToRead';
-import Date from '@/src/components/post/Date';
-import formatDateWithDot from '@/src/utils/date';
+import Category from '@/src/components/Category';
+import TimeToRead from '@/src/components/TimeToRead';
+import Date from '@/src/components/Date';
 
 export default async function PostDetailPage({
   params: { postId },
@@ -20,7 +19,7 @@ export default async function PostDetailPage({
 
   return (
     <article className='prose flex w-full max-w-none flex-col'>
-      <div className='flex w-full justify-center bg-gradient-to-b from-indigo-50 px-4 py-8'>
+      <div className='bg-gradient-to-b flex w-full justify-center from-indigo-50 px-4 py-8'>
         <div className='flex w-full max-w-5xl flex-col gap-4'>
           <div className='relative min-h-[240px] overflow-hidden'>
             <Image
@@ -40,7 +39,7 @@ export default async function PostDetailPage({
             <div>
               <p className='m-0'>{postDetail.meta.summary}</p>
               <div className='flex justify-start gap-4'>
-                <Date>{formatDateWithDot(postDetail.meta.updatedAt)}</Date>
+                <Date date={postDetail.meta.updatedAt} />
                 <TimeToRead timeToRead={postDetail.meta.timeToRead} />
               </div>
             </div>

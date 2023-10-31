@@ -1,0 +1,59 @@
+'use client';
+
+import Bullet from '@/src/components/Bullet';
+import Category from '@/src/components/Category';
+import Date from '@/src/components/Date';
+import Summary from '@/src/components/Summary';
+import TimeToRead from '@/src/components/TimeToRead';
+import Title from '@/src/components/Title';
+import ROUTES from '@/src/constants/routes';
+import useHover from '@/src/hooks/useHover';
+import { PostMeta } from '@/src/types/posts';
+import cn from '@/src/utils/class-name';
+import Image from 'next/image';
+import Link from 'next/link';
+
+export default function FeaturedPostListItem({
+  postMeta: { id, title, categories, updatedAt, timeToRead, summary },
+}: {
+  postMeta: PostMeta;
+}) {
+  const { targetRef, isHovered } = useHover<HTMLAnchorElement>();
+
+  return (
+    <Link ref={targetRef} href={`${ROUTES.POSTS}/${id}`} className='flex items-center gap-10'>
+      <div
+        className={cn(
+          'relative h-80 flex-1 overflow-hidden rounded-lg bg-gray-900 transition duration-500 shadow-md',
+          {
+            'brightness-90': isHovered,
+          },
+        )}>
+        <Image
+          className={cn('object-contain transition duration-500', {
+            'scale-105': isHovered,
+          })}
+          src={`${process.env.NEXT_PUBLIC_POSTS_SOURCE}/${id}/thumbnail.png`}
+          alt={`${title} 썸네일`}
+          fill
+        />
+      </div>
+      <div className='flex w-96 flex-col gap-4'>
+        <div className='flex flex-col items-start gap-2'>
+          <div className='flex justify-start gap-2'>
+            {categories.map(category => (
+              <Category key={category}>{category}</Category>
+            ))}
+          </div>
+          <Title title={title} />
+        </div>
+        <Summary summary={summary} />
+        <div className='flex gap-2'>
+          <Date date={updatedAt} />
+          <Bullet />
+          <TimeToRead timeToRead={timeToRead} />
+        </div>
+      </div>
+    </Link>
+  );
+}

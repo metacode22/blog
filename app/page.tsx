@@ -1,6 +1,7 @@
 import { getPostMetas } from '@/src/services/post';
 import PostList from './components/PostList';
 import Introduction from './components/Introduction';
+import FeaturedPostListItem from './components/FeaturedPostListItem';
 
 export default async function HomePage() {
   const postMetas = await getPostMetas();
@@ -13,7 +14,8 @@ export default async function HomePage() {
         <Introduction />
       </div>
       <div className='w-full max-w-5xl px-4 py-6'>
-        <PostList postMetas={postMetas} />
+        <FeaturedPostListItem postMeta={postMetas[0]} />
+        {/* <PostList postMetas={postMetas} /> */}
       </div>
     </div>
   );
