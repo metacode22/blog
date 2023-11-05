@@ -1,12 +1,13 @@
-import { getPostMetas } from '@/src/services/post';
 import PostList from './components/PostList';
 import Introduction from './components/Introduction';
 import FeaturedPostListItem from './components/FeaturedPostListItem';
+import { allPosts, Post } from 'contentlayer/generated';
+import { compareDesc } from 'date-fns';
 
 export default async function HomePage() {
-  const postMetas = await getPostMetas();
+  const posts = allPosts.sort((a, b) => compareDesc(new Date(a.updatedAt), new Date(b.updatedAt)));
 
-  if (!postMetas) return <div>무언가 잘못됨!</div>;
+  if (!posts) return <div>무언가 잘못됨!</div>;
 
   return (
     <div className='flex flex-col items-center'>
@@ -14,8 +15,8 @@ export default async function HomePage() {
         <Introduction />
       </div>
       <div className='w-full max-w-5xl px-4 py-6'>
-        <FeaturedPostListItem postMeta={postMetas[0]} />
-        {/* <PostList postMetas={postMetas} /> */}
+        <FeaturedPostListItem post={posts[0]} />
+        <PostList posts={posts} />
       </div>
     </div>
   );

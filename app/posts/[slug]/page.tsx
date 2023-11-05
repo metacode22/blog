@@ -1,21 +1,16 @@
-import { getPostDetailByPostFileName } from '@/src/services/post';
-
 import { notFound } from 'next/navigation';
 
 import '@/src/styles/prism-one-dark.css';
 import Image from 'next/image';
 import Category from '@/src/components/Category';
-import TimeToRead from '@/src/components/TimeToRead';
+import ReadingTime from '@/src/components/ReadingTime';
 import Date from '@/src/components/Date';
+import { allPosts } from 'contentlayer/generated';
 
-export default async function PostDetailPage({
-  params: { postId },
-}: {
-  params: { postId: string };
-}) {
-  const postDetail = await getPostDetailByPostFileName(`${postId}/index.mdx`);
+export default async function postPage({ params: { slug } }: { params: { slug: string } }) {
+  const post = allPosts.find(post => post.slug === slug);
 
-  if (!postDetail) notFound();
+  if (!post) notFound();
 
   return (
     <article className='prose flex w-full max-w-none flex-col'>
@@ -23,31 +18,31 @@ export default async function PostDetailPage({
         <div className='flex w-full max-w-5xl flex-col gap-4'>
           <div className='relative min-h-[240px] overflow-hidden'>
             <Image
-              src={`${process.env.NEXT_PUBLIC_POSTS_SOURCE}/${postId}/thumbnail.png`}
-              alt={`${postDetail.meta.title} 썸네일`}
+              src={`${process.env.NEXT_PUBLIC_POSTS_SOURCE}/${post.slug}/thumbnail.png`}
+              alt={`${post.title} 썸네일`}
               fill
               className='m-0 object-contain'
             />
           </div>
           <div className='flex flex-col items-start gap-8'>
             <div className='flex justify-start gap-4'>
-              {postDetail.meta.categories.map(category => (
+              {post.categories.map(category => (
                 <Category key={category}>{category}</Category>
               ))}
             </div>
-            <h1 className='m-0'>{postDetail.meta.title}</h1>
+            <h1 className='m-0'>{post.title}</h1>
             <div>
-              <p className='m-0'>{postDetail.meta.summary}</p>
+              <p className='m-0'>{post.summary}</p>
               <div className='flex justify-start gap-4'>
-                <Date date={postDetail.meta.updatedAt} />
-                <TimeToRead timeToRead={postDetail.meta.timeToRead} />
+                <Date date={post.updatedAt} />
+                <ReadingTime readingTime={post.readingTime} />
               </div>
             </div>
           </div>
         </div>
       </div>
       <div className='flex w-full justify-center p-4'>
-        <div className='w-full max-w-5xl'>{postDetail.content}</div>
+        <div className='w-full max-w-5xl'>{}</div>
       </div>
     </article>
   );

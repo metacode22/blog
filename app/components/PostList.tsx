@@ -1,14 +1,14 @@
 import PostListItem from './PostListItem';
-import { PostMeta } from '@/src/types/posts';
+import { Post } from 'contentlayer/generated';
 
-export default async function PostList({ postMetas }: { postMetas: PostMeta[] }) {
-  if (!postMetas.length) return <div>글이 하나도 없음.</div>;
+export default async function PostList({ posts }: { posts: Post[] }) {
+  if (!posts.length) return <div>글이 하나도 없음.</div>;
 
   return (
     <section className='flex flex-col gap-8'>
       <ul>
-        {postMetas.map(postMeta => (
-          <PostListItem postMeta={postMeta} key={postMeta.id} />
+        {posts.map(post => (
+          <PostListItem post={post} key={post.slug} />
         ))}
       </ul>
     </section>

@@ -1,10 +1,11 @@
-import { defineDocumentType, makeSource } from 'contentlayer/source-files';
+import { defineDocumentType, defineNestedType, makeSource } from 'contentlayer/source-files';
+import readingTime from 'reading-time';
 import rehypePrettyCode from 'rehype-pretty-code';
 import rehypeSlug from 'rehype-slug';
 import remarkGfm from 'remark-gfm';
 
-export const Document = defineDocumentType(() => ({
-  name: 'Document',
+export const Post = defineDocumentType(() => ({
+  name: 'Post',
   contentType: 'mdx',
   filePathPattern: '**/*.mdx',
   fields: {
@@ -41,12 +42,16 @@ export const Document = defineDocumentType(() => ({
       type: 'string',
       resolve: document => document._raw.flattenedPath.split('/').slice(1).join('/'),
     },
+    readingTime: {
+      type: 'number',
+      resolve: document => readingTime(document._raw).minutes,
+    },
   },
 }));
 
 export default makeSource({
   contentDirPath: 'src/contents',
-  documentTypes: [Document],
+  documentTypes: [Post],
   mdx: {
     remarkPlugins: [remarkGfm],
     rehypePlugins: [
