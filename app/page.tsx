@@ -16,7 +16,6 @@ export default async function HomePage() {
       </div>
       <div className='w-full max-w-5xl px-4 py-6'>
         <FeaturedPostListItem post={posts[0]} />
-        <PostList posts={posts} />
       </div>
     </div>
   );

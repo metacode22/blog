@@ -44,7 +44,7 @@ export const Post = defineDocumentType(() => ({
     },
     thumbnailImagePath: {
       type: 'string',
-      resolve: document => `/images/${document._raw.flattenedPath}/thumbnail.png`,
+      resolve: document => `/images/posts/${document._raw.flattenedPath}/thumbnail.png`,
     },
   },
 }));
