@@ -1,4 +1,4 @@
-import { defineDocumentType, defineNestedType, makeSource } from 'contentlayer/source-files';
+import { defineDocumentType, makeSource } from 'contentlayer/source-files';
 import readingTime from 'reading-time';
 import rehypePrettyCode from 'rehype-pretty-code';
 import rehypeSlug from 'rehype-slug';
@@ -59,7 +59,7 @@ export default makeSource({
       [
         rehypePrettyCode,
         {
-          theme: 'github-dark',
+          theme: 'dark-plus',
         },
       ],
     ],
