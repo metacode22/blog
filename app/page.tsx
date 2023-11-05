@@ -1,7 +1,7 @@
 import PostList from './components/PostList';
 import Introduction from './components/Introduction';
 import FeaturedPostListItem from './components/FeaturedPostListItem';
-import { allPosts, Post } from 'contentlayer/generated';
+import { allPosts } from 'contentlayer/generated';
 import { compareDesc } from 'date-fns';
 
 export default async function HomePage() {

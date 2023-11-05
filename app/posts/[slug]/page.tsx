@@ -6,6 +6,7 @@ import Category from '@/src/components/Category';
 import ReadingTime from '@/src/components/ReadingTime';
 import Date from '@/src/components/Date';
 import { allPosts } from 'contentlayer/generated';
+import MDX from './components/MDX';
 
 export default async function postPage({ params: { slug } }: { params: { slug: string } }) {
   const post = allPosts.find(post => post.slug === slug);
@@ -18,7 +19,7 @@ export default async function postPage({ params: { slug } }: { params: { slug: s
         <div className='flex w-full max-w-5xl flex-col gap-4'>
           <div className='relative min-h-[240px] overflow-hidden'>
             <Image
-              src={`${process.env.NEXT_PUBLIC_POSTS_SOURCE}/${post.slug}/thumbnail.png`}
+              src={post.thumbnailImagePath}
               alt={`${post.title} 썸네일`}
               fill
               className='m-0 object-contain'
@@ -42,7 +43,9 @@ export default async function postPage({ params: { slug } }: { params: { slug: s
         </div>
       </div>
       <div className='flex w-full justify-center p-4'>
-        <div className='w-full max-w-5xl'>{}</div>
+        <div className='w-full max-w-5xl'>
+          <MDX code={post.body.code} />
+        </div>
       </div>
     </article>
   );

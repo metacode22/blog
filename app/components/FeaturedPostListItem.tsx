@@ -14,7 +14,7 @@ import Link from 'next/link';
 import { Post } from 'contentlayer/generated';
 
 export default function FeaturedPostListItem({
-  post: { slug, title, categories, summary, updatedAt, readingTime },
+  post: { slug, title, categories, summary, updatedAt, readingTime, thumbnailImagePath },
 }: {
   post: Post;
 }) {
@@ -33,7 +33,7 @@ export default function FeaturedPostListItem({
           className={cn('object-contain transition duration-500', {
             'scale-105': isHovered,
           })}
-          src={`${process.env.NEXT_PUBLIC_POSTS_SOURCE}/${slug}/thumbnail.png`}
+          src={thumbnailImagePath}
           alt={`${title} 썸네일`}
           fill
         />

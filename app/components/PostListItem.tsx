@@ -14,7 +14,7 @@ import Summary from '@/src/components/Summary';
 import { Post } from 'contentlayer/generated';
 
 export default function PostListItem({
-  post: { slug, title, summary, readingTime, categories, updatedAt },
+  post: { slug, title, summary, readingTime, categories, updatedAt, thumbnailImagePath },
 }: {
   post: Post;
 }) {
@@ -27,7 +27,7 @@ export default function PostListItem({
       className='flex h-60 w-full items-center gap-14 break-keep rounded-sm'>
       <div className='relative min-h-[240px] min-w-[240px]'>
         <Image
-          src={`${process.env.NEXT_PUBLIC_POSTS_SOURCE}/${slug}/thumbnail.png`}
+          src={thumbnailImagePath}
           alt={`${title} 썸네일`}
           fill
           className={cn(

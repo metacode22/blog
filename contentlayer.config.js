@@ -36,15 +36,15 @@ export const Post = defineDocumentType(() => ({
   computedFields: {
     slug: {
       type: 'string',
-      resolve: document => `/${document._raw.flattenedPath}`,
-    },
-    slugAsParams: {
-      type: 'string',
-      resolve: document => document._raw.flattenedPath.split('/').slice(1).join('/'),
+      resolve: document => document._raw.flattenedPath,
     },
     readingTime: {
       type: 'number',
-      resolve: document => readingTime(document._raw).minutes,
+      resolve: document => readingTime(document.body.raw).minutes,
+    },
+    thumbnailImagePath: {
+      type: 'string',
+      resolve: document => `/images/${document._raw.flattenedPath}/thumbnail.png`,
     },
   },
 }));
