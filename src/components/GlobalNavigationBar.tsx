@@ -39,13 +39,15 @@ export default function GlobalNavigationBar() {
         },
       )}>
       <div className='flex items-center gap-10'>
-        <Link href={ROUTES.HOME} className='rounded-lg text-xl font-semibold italic'>
+        <Link
+          href={ROUTES.HOME}
+          className='whitespace-nowrap rounded-lg text-xl font-semibold italic'>
           {'<Jun />'}
         </Link>
         <div className='flex justify-start gap-4 rounded-md px-2 text-sm leading-7'>
           {NAVIGATION_LIST.map(({ name, path }) => (
             <Link
-              className={cn('rounded-md px-2 py-1 opacity-70 hover:opacity-100 transition', {
+              className={cn('rounded-md px-2 py-1 opacity-70 transition hover:opacity-100', {
                 'hover:bg-slate-100': pathname !== ROUTES.HOME,
               })}
               key={name}
