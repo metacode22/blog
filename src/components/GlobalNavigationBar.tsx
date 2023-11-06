@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import ROUTES from '../constants/routes';
-import { CiSearch } from 'react-icons/ci';
+// import { CiSearch } from 'react-icons/ci';
 import cn from '@/src/utils/class-name';
 import { usePathname } from 'next/navigation';
 

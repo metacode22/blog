@@ -1,4 +1,3 @@
-import PostList from './components/PostList';
 import Introduction from './components/Introduction';
 import FeaturedPostListItem from './components/FeaturedPostListItem';
 import { allPosts } from 'contentlayer/generated';
