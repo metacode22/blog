@@ -1,6 +1,5 @@
 import { notFound } from 'next/navigation';
 
-import '@/src/styles/prism-one-dark.css';
 import Image from 'next/image';
 import Category from '@/src/components/Category';
 import ReadingTime from '@/src/components/ReadingTime';

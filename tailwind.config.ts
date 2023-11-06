@@ -5,7 +5,7 @@ const config: Config = {
   theme: {
     extend: {},
     backgroundImage: {
-      introduction: 'linear-gradient(rgb(0 0 0 / 0), white), url("/images/introduction-background2.jpg")',
+      introduction: 'linear-gradient(rgb(0 0 0 / 0), white), url("/images/introduction-background.jpg")',
     },
   },
   plugins: [require('@tailwindcss/typography')],
