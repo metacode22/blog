@@ -11,18 +11,18 @@ const NAVIGATION_LIST = [
     name: 'Home',
     path: ROUTES.HOME,
   },
-  {
-    name: 'Posts',
-    path: ROUTES.POSTS,
-  },
-  {
-    name: 'Diary',
-    path: ROUTES.DIARY,
-  },
-  {
-    name: 'About',
-    path: ROUTES.ABOUT,
-  },
+  // {
+  //   name: 'Posts',
+  //   path: ROUTES.POSTS,
+  // },
+  // {
+  //   name: 'Diary',
+  //   path: ROUTES.DIARY,
+  // },
+  // {
+  //   name: 'About',
+  //   path: ROUTES.ABOUT,
+  // },
 ];
 
 export default function GlobalNavigationBar() {
