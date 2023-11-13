@@ -16,14 +16,14 @@ export default async function postPage({ params: { slug } }: { params: { slug: s
     <article className='prose flex w-full max-w-none flex-col'>
       <div className='bg-gradient-to-b flex w-full justify-center from-indigo-50 px-4 py-8'>
         <div className='flex w-full max-w-5xl flex-col gap-4'>
-          <div className='relative min-h-[240px] overflow-hidden'>
+          {/* <div className='relative min-h-[240px] overflow-hidden'>
             <Image
               src={post.thumbnailImagePath}
               alt={`${post.title} 썸네일`}
               fill
               className='m-0 object-contain'
             />
-          </div>
+          </div> */}
           <div className='flex flex-col items-start gap-8'>
             <div className='flex justify-start gap-4'>
               {post.categories.map(category => (
