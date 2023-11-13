@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { notFound } from 'next/navigation';
 
 import Image from 'next/image';
