@@ -24,6 +24,10 @@ export const Post = defineDocumentType(() => ({
       },
       required: true,
     },
+    isPublished: {
+      type: 'boolean',
+      required: true,
+    },
     createdAt: {
       type: 'string',
       required: true,
