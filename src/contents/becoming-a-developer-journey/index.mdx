@@ -1,11 +1,15 @@
 ---
-title: 세 번째 글
-summary: 세 번째 글입니다.
-categories: ['blog', 'test', 'next']
-createdAt: 2023-11-03
-updatedAt: 2023-11-03
+title: 개발자가 되기까지
+summary:
+categories:
+  - 회고
+createdAt: 2023-11-14
+updatedAt: 2023-11-14
 ---
-> <strong>- 주의 -</strong> <br /> 정리하면서 저의 생각도 많이 넣는 편입니다. <br /> 혹시나 제 글을 읽으실 때 아리송한 부분이 생기신다면 해당하는 공식 문서를 꼭 참고하시길 바랍니다. <br /> 또한, 저에게 익숙한 내용들은 생략하고 정리합니다.
+
+> <strong>- 주의 -</strong> <br /> 정리하면서 저의 생각도 많이 넣는 편입니다. <br /> 혹시나 제 글을 읽으실
+> 때 아리송한 부분이 생기신다면 해당하는 공식 문서를 꼭 참고하시길 바랍니다. <br /> 또한, 저에게 익숙한
+> 내용들은 생략하고 정리합니다.
 
 JSX는 자바스크립트 파일에서 HTML스러운 마크업을 작성할 수 있도록 해주는, 자바스크립트를 확장한 문법이다. 많은 React 개발자들이 JSX의 간결함을 선호하여 많이 사용하고 있다.
 
@@ -43,7 +47,7 @@ export default async function postPage({ params: { slug } }: { params: { slug: s
 
   return (
     <article className='prose flex w-full max-w-none flex-col'>
-      <div className='bg-gradient-to-b flex w-full justify-center from-indigo-50 px-4 py-8'>
+      <div className='flex w-full justify-center bg-gradient-to-b from-indigo-50 px-4 py-8'>
         <div className='flex w-full max-w-5xl flex-col gap-4'>
           <div className='relative min-h-[240px] overflow-hidden'>
             <Image
@@ -78,5 +82,4 @@ export default async function postPage({ params: { slug } }: { params: { slug: s
     </article>
   );
 }
-
 ```
