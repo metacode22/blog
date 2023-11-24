@@ -8,7 +8,7 @@ import Date from '@/src/components/Date';
 import { allPosts } from 'contentlayer/generated';
 import MDX from './components/MDX';
 
-export default async function postPage({ params: { slug } }: { params: { slug: string } }) {
+export default async function PostPage({ params: { slug } }: { params: { slug: string } }) {
   const post = allPosts.find(post => post.slug === slug);
 
   if (!post) notFound();
