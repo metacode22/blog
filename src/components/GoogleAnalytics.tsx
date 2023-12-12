@@ -13,8 +13,7 @@ export default function GoogleAnalyticsScript() {
   useEffect(() => {
     if (isDev) return;
 
-    const url = new URL(pathname + searchParams.toString());
-    pageview(url);
+    pageview(pathname + searchParams.toString());
   }, [pathname, searchParams]);
 
   return (
