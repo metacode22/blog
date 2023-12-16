@@ -14,7 +14,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <GlobalNavigationBar />
         <main>{children}</main>
-
         <GoogleAnalyticsScript />
       </body>
     </html>
