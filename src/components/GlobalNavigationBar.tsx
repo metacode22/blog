@@ -11,10 +11,10 @@ const NAVIGATION_LIST = [
     name: 'Home',
     path: ROUTES.HOME,
   },
-  // {
-  //   name: 'Posts',
-  //   path: ROUTES.POSTS,
-  // },
+  {
+    name: 'Posts',
+    path: ROUTES.POSTS,
+  },
   // {
   //   name: 'Diary',
   //   path: ROUTES.DIARY,
