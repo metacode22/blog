@@ -1,7 +1,5 @@
-/* eslint-disable no-unused-vars */
 import { notFound } from 'next/navigation';
 
-import Image from 'next/image';
 import Category from '@/src/components/Category';
 import ReadingTime from '@/src/components/ReadingTime';
 import Date from '@/src/components/Date';
@@ -14,8 +12,8 @@ export default async function PostPage({ params: { slug } }: { params: { slug: s
   if (!post) notFound();
 
   return (
-    <article className='prose flex w-full max-w-none flex-col pt-20'>
-      <div className='bg-gradient-to-b flex w-full justify-center from-indigo-500 px-4 py-8'>
+    <article className='bg-gradient-to-b prose flex w-full max-w-none flex-col pt-20'>
+      <div className='flex w-full justify-center px-4 py-8'>
         <div className='flex w-full max-w-5xl flex-col gap-4'>
           {/* <div className='relative min-h-[240px] overflow-hidden'>
             <Image

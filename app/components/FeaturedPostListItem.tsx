@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 'use client';
 
 import Bullet from '@/src/components/Bullet';
@@ -9,8 +8,6 @@ import ReadingTime from '@/src/components/ReadingTime';
 import Title from '@/src/components/Title';
 import ROUTES from '@/src/constants/routes';
 import useHover from '@/src/hooks/useHover';
-import cn from '@/src/utils/class-name';
-import Image from 'next/image';
 import Link from 'next/link';
 import { Post } from 'contentlayer/generated';
 
