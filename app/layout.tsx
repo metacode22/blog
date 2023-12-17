@@ -11,9 +11,9 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang='ko'>
-      <body>
+      <body className='flex w-full flex-col items-center'>
         <GlobalNavigationBar />
-        <main>{children}</main>
+        <main className='w-full max-w-5xl'>{children}</main>
         <GoogleAnalyticsScript />
       </body>
     </html>
