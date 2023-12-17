@@ -31,14 +31,19 @@ export default function GlobalNavigationBar() {
   return (
     <nav
       className={cn(
-        'fixed z-10 flex w-full items-center justify-between p-4 text-black lg:px-20 lg:py-3',
+        'sticky top-0 z-10 flex w-full items-start justify-between p-4 text-black lg:px-20 lg:py-3',
         {
           'text-white': pathname === ROUTES.HOME,
           'border-b-[1px] border-slate-200': pathname !== ROUTES.HOME,
           'backdrop-blur-xl': pathname !== ROUTES.HOME,
+          'h-96': pathname === ROUTES.HOME,
+          'bg-introduction': pathname === ROUTES.HOME,
+          'bg-cover': pathname === ROUTES.HOME,
+          'bg-center': pathname === ROUTES.HOME,
+          'bg-no-repeat': pathname === ROUTES.HOME,
         },
       )}>
-      <div className='flex items-center gap-10'>
+      <div className='z-[1] flex items-center gap-10'>
         <Link
           href={ROUTES.HOME}
           className='whitespace-nowrap rounded-lg text-xl font-semibold italic'>

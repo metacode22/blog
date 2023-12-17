@@ -20,7 +20,7 @@ export default async function PostPage({ params: { slug } }: { params: { slug: s
   if (!post) notFound();
 
   return (
-    <article className='prose flex w-full max-w-none flex-col bg-gradient-to-b pt-20'>
+    <article className='prose flex w-full max-w-none flex-col bg-gradient-to-b'>
       <div className='flex w-full justify-center px-4 py-8'>
         <div className='flex w-full max-w-5xl flex-col gap-4'>
           {/* <div className='relative min-h-[240px] overflow-hidden'>
