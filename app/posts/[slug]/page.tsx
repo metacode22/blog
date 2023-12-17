@@ -6,13 +6,21 @@ import Date from '@/src/components/Date';
 import { allPosts } from 'contentlayer/generated';
 import MDX from './components/MDX';
 
+export async function generateStaticParams() {
+  const posts = allPosts.filter(post => post.isPublished);
+
+  return posts.map(post => ({
+    slug: post.slug,
+  }));
+}
+
 export default async function PostPage({ params: { slug } }: { params: { slug: string } }) {
   const post = allPosts.find(post => post.slug === slug);
 
   if (!post) notFound();
 
   return (
-    <article className='bg-gradient-to-b prose flex w-full max-w-none flex-col pt-20'>
+    <article className='prose flex w-full max-w-none flex-col bg-gradient-to-b pt-20'>
       <div className='flex w-full justify-center px-4 py-8'>
         <div className='flex w-full max-w-5xl flex-col gap-4'>
           {/* <div className='relative min-h-[240px] overflow-hidden'>
