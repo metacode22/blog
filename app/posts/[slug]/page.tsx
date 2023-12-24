@@ -20,7 +20,7 @@ export default async function PostPage({ params: { slug } }: { params: { slug: s
   if (!post) notFound();
 
   return (
-    <article className='prose w-full max-w-none p-4'>
+    <article className='prose w-full max-w-none'>
       <div className='flex w-full justify-start gap-4'>
         {post.categories.map(category => (
           <Category key={category}>{category}</Category>

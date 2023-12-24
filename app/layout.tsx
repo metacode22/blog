@@ -13,7 +13,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang='ko'>
       <body className='flex w-full flex-col items-center'>
         <GlobalNavigationBar />
-        <main className='w-full max-w-5xl'>{children}</main>
+        <main className='w-full max-w-5xl p-4'>{children}</main>
         <GoogleAnalyticsScript />
       </body>
     </html>

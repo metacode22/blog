@@ -1,13 +1,14 @@
 import { allPosts } from '@/.contentlayer/generated';
+import PostListItem from '../components/PostListItem';
 
 export default function Posts() {
   const posts = allPosts.filter(post => post.isPublished);
 
   return (
-    <div className='flex w-full max-w-none flex-col items-center pt-20'>
-      <div className='flex w-full max-w-5xl px-4'>
-        
-      </div>
+    <div className='flex w-full flex-col items-start'>
+      {posts.map(post => (
+        <PostListItem key={post._id} post={post} />
+      ))}
     </div>
   );
 }

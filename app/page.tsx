@@ -1,6 +1,7 @@
-import FeaturedPostListItem from './components/FeaturedPostListItem';
+import { isEmptyArray } from '@/src/utils/array';
 import { allPosts } from 'contentlayer/generated';
 import { compareDesc } from 'date-fns';
+import PostListItem from './components/PostListItem';
 
 export default async function HomePage() {
   const posts = allPosts
@@ -10,8 +11,8 @@ export default async function HomePage() {
   if (!posts || !posts.length) return <div>무언가 잘못됨!</div>;
 
   return (
-    <div className='w-full flex flex-col items-start px-4 py-6'>
-      {posts[0] && <FeaturedPostListItem post={posts[0]} />}
+    <div className='flex w-full flex-col items-start'>
+      {!isEmptyArray(posts) ? <PostListItem post={posts[0]} /> : null}
     </div>
   );
 }
