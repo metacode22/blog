@@ -2,6 +2,7 @@ import { isEmptyArray } from '@/src/utils/array';
 import { allPosts } from 'contentlayer/generated';
 import { compareDesc } from 'date-fns';
 import PostListItem from './components/PostListItem';
+import PostList from './components/PostList';
 
 export default async function HomePage() {
   const posts = allPosts
@@ -12,7 +13,8 @@ export default async function HomePage() {
 
   return (
     <div className='flex w-full flex-col items-start'>
-      {!isEmptyArray(posts) ? <PostListItem post={posts[0]} /> : null}
+      {/* {!isEmptyArray(posts) ? <PostListItem post={posts[0]} /> : null} */}
+      <PostList posts={posts} />
     </div>
   );
 }

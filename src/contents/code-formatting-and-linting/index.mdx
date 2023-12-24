@@ -1,0 +1,310 @@
+---
+title: eslint, prettier, commitlint, husky, lint-staged로 코드 품질 유지하기(+ stylelint)
+summary: 프로젝트의 코드 품질을 유지하기 위해 도입한 여러 도구들을 소개하며 저는 회사에서 어떻게 사용하고 있는지에 대해 작성하였습니다.
+categories:
+  - ESLint
+  - Prettier
+  - Commitlint
+  - Husky
+  - Lint-Staged
+  - Stylelint
+createdAt: 2023-12-24
+updatedAt: 2023-12-24
+isPublished: true
+---
+
+6개월 전 쯤 회사에 입사하고 나서 조금 놀라웠던 점은 .prettier 파일이 없었던 것이다. 저마다의 에디터(VSCode, Webstorm 등)에 내장된 prettier 룰을 사용하고 있었다. 한 프로젝트 당 거의 1명이 맡고 있었기에 이전에는 큰 문제가 되지 않았을 것 같다.
+
+그러나 점점 프로젝트가 커지고, 팀원이 늘어나면서 코드 스타일을 일관성 있게 유지하는 것이 중요질 것이라 판단했다. 그래서 이전에는 없던 코드 품질 유지를 위한 여러 도구들을 도입하게 되었다.
+
+> NextJS 프로젝트를 기준으로 작성하였습니다.
+
+## Husky
+
+husky는 git hook을 사용할 수 있게 해주는 도구이다. git hook은 git의 특정 이벤트가 발생했을 때 실행되는 스크립트이다. husky를 사용하면 git hook을 사용할 수 있게 되고, 이를 통해 git commit, push 등의 이벤트가 발생했을 때 스크립트를 실행할 수 있다.
+
+프로젝트에 husky를 설정해보자.
+
+### 설치
+
+```bash
+npm install --save-dev husky
+npx husky install # 이 명령어를 통해 .husky 폴더가 생성된다.
+```
+
+### postinstall script 추가
+
+package.json에 다음과 같이 명령어를 추가해주자. 이렇게 해주면 yarn install, npm install 등의 명령어를 실행할 때마다 husky install이 실행된다. 처음 husky를 세팅해주는 사람만 이 script를 넣어주면 된다. 이후 이 script가 추가된 레포를 받은 다른 사람은, 초기에 한 번만 npm install을 해주면 된다.
+
+```json
+"scripts": {
+	...
+
+    "postinstall": "husky install"
+
+    ...
+  },
+}
+```
+
+## ESLint
+
+eslint는 자바스크립트 코드의 문법을 검사해주는 도구이다. eslint를 사용하면 코드의 문법을 일관성 있게 유지할 수 있다. 정의한 rule과는 다르게 코드를 작성하면 경고나 에러를 내줄 수 있다. 이를 통하여 레포에 push 하기 전에, 사전에 합의되지 않은 코드가 올라가는 것을 막을 수 있다.
+
+### 설치
+
+프로젝트에 eslint가 없다면 다음과 같은 명령어를 통해 설치해주자.
+
+```bash
+npm install eslint
+```
+
+### rule 설정
+
+프로젝트에서 가장 최상단의 디렉토리에 .eslintrc 파일을 만들고 다음과 같이 현재 상황에 필요하다고 판단한 것들만 설정했다.
+
+```json
+{
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint", "simple-import-sort"], // simple-import-sort는 import 순서를 정해주는 plugin이다.
+  "extends": [
+    "eslint:recommended",
+    "next/core-web-vitals",
+    "prettier", // eslint와 prettier를 함께 사용하기 위해(eslint 다음에 prettier 관련 내용이 나올 예정)
+    "plugin:jsx-a11y/recommended", // 접근성
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "rules": {
+    "no-console": ["error", { "allow": ["warn", "error", "info"] }], // console은 warn, error, info만 허용하고 log는 허용하지 않는다.
+    "no-unused-vars": "off", // typescript-eslint/no-unused-vars를 사용하기 위해 기존의 no-unused-vars를 끈다.
+    "@typescript-eslint/no-unused-vars": "error", // 사용하지 않은 변수는 error를 내준다.
+    "no-var": "error", // var를 사용하지 않는다.
+    "no-debugger": "error", // debugger를 사용하지 않는다.
+    "simple-import-sort/imports": "warn", // import 순서를 정해준다.
+    "simple-import-sort/exports": "warn", // export 순서를 정해준다.
+    "react/jsx-curly-brace-presence": [
+      // jsx에서 넣을 값이 문자열일 경우 되도록 중괄호가 사용되지 않도록 한다.
+      "warn",
+      {
+        "props": "never",
+        "children": "never"
+      }
+    ]
+  }
+}
+```
+
+만약 위와 같이 설정하고 싶다면 다음과 같은 plugin들을 설치해주자.
+
+```bash
+npm install --save-dev @typescript-eslint/eslint-plugin @typescript-eslint/parser eslint-plugin-jsx-a11y eslint-plugin-simple-import-sort
+```
+
+다른 rule은 어떤 것들이 있는지 궁금하다면 다음 링크를 참고하자.
+
+- [eslint rules](https://eslint.org/docs/rules/)
+
+## Prettier
+
+prettier는 코드의 스타일을 일관성 있게 유지해주는 도구이다. eslint와 함께 사용하면 코드의 문법과 스타일을 모두 일관성 있게 유지할 수 있다.
+
+### 설치
+
+```bash
+npm install --save-dev prettier eslint-config-prettier
+```
+
+eslint-config-prettier는 eslint와 prettier가 충돌하는 rule을 끄기 위해 설치해주었다.(eslint도 코드 스타일을 체크하기 때문에 충돌하는 rule이 있다.)
+
+### option 설정
+
+프로젝트의 최상단 디렉토리에 .prettierrc 파일을 만들고 다음과 같이 설정해주었다.
+
+```json
+{
+  "singleQuote": true, // 작은 따옴표 사용
+  "jsxSingleQuote": true, // jsx에서 작은 따옴표 사용
+  "bracketSameLine": false, // jsx에서 컴포넌트의 마지막 괄호는 다음 줄에
+  "arrowParens": "always" // 화살표 함수의 인자는 항상 괄호로
+}
+```
+
+다른 option은 어떤 것들이 있는지 궁금하다면 다음 링크를 참고하자.
+
+- [prettier options](https://prettier.io/docs/en/options.html)
+
+## Lint-Staged
+
+lint-staged는 git에 staged된 파일만 lint를 돌려주는 도구이다. husky와 함께 사용하면 staged된 파일만 lint를 돌려주기 때문에 전체 파일을 lint하는 것보다 빠르게 lint를 돌릴 수 있다.
+
+### 설치
+
+```bash
+npm install --save-dev lint-staged
+```
+
+### lint-staged 설정
+
+lint-staged는 자바스크립트를 이용하기 위해 js 파일로 만들 것이다. 프로젝트의 최상단 디렉토리에 .lintstagedrc.js 파일을 만들고 다음과 같이 설정해주었다.
+
+```javascript
+const path = require('path');
+
+const buildEslintCommand = filenames =>
+  `next lint --file ${filenames // next의 경우이다. 그냥 React 프로젝트라면 next lint가 아니라 그냥 eslint라고만 해주자.
+    .map(f => path.relative(process.cwd(), f))
+    .join(' --file ')}`;
+
+const buildPrettierCommand = filenames =>
+  `prettier --write ${filenames.map(f => path.relative(process.cwd(), f)).join(' ')}`;
+
+module.exports = {
+  '*.{js,jsx,ts,tsx}': [buildEslintCommand, buildPrettierCommand],
+};
+```
+
+위 코드는 NextJS 공식 문서에 적혀져 있는 것을 가져와 조금 변형시킨 것이다. 원래 코드가 궁금하다면 다음 링크를 참고하자.
+
+- [NextJS 공식 문서](https://nextjs.org/docs/app/building-your-application/configuring/eslint#lint-staged
+
+### Git hook 걸기
+
+```bash
+npx husky add .husky/pre-commit "npx lint-staged"
+```
+
+위 명령어를 터미널에서 실행시켜주자. 이 명령어를 실행하면 .husky/pre-commit 파일이 생성되고, 이 파일에는 다음과 같은 내용이 들어간다.
+
+```bash
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+npx lint-staged
+```
+
+매 커밋마다, 커밋이 성공하기 전에 lint-staged 명령어가 실행된다. 즉 .lintstagedrc.js 파일에 설정한대로 staged 상태의 파일에 대해 lint와 prettier를 적용시킨다.
+
+## Commitlint
+
+commitlint는 커밋 메시지의 형식을 정해주는 도구이다. 커밋 메시지의 형식을 정해주면, 커밋 메시지를 일관성 있게 유지할 수 있다. 가끔 feat 등의 카테고리를 놓치기도 하고, 오타를 내기도 하는데 commitlint를 사용하면 이를 방지할 수 있다.
+
+### 설치
+
+```bash
+npm install --save-dev @commitlint/cli @commitlint/config-conventional
+```
+
+### commitlint 설정
+
+프로젝트의 최상단 디렉토리에 commitlint.config.js 파일을 만들고 다음과 같이 설정해주었다.
+
+```javascript
+module.exports = {
+  extends: ['@commitlint/config-conventional'],
+  rules: {
+    'type-enum': [
+      2,
+      'always',
+      [
+        // reference: https://github.com/angular/angular/blob/22b96b9/CONTRIBUTING.md#-commit-message-guidelines
+        'feat', // A new feature.
+        'fix', // A bug fix
+        'hotfix', // A critical bug fix
+        'chore', // Install package, package.json update, config update.
+        'docs', // Documentation only changes. ex. README.md
+        'refactor', // Code refactoring that doesn't change functionality.
+        'design', // Design changes.
+        'style', // Code style changes, formatting, etc.
+        'test', // Adding or modifying tests.
+      ],
+    ],
+    'header-max-length': [1, 'always', 50],
+    'subject-case': [0, 'always'],
+  },
+};
+```
+
+### Git hook 걸기
+
+```bash
+npx husky add .husky/commit-msg "npx --no-install commitlint --edit $1"
+```
+
+이제 커밋 메시지를 작성할 때마다 commitlint가 실행된다. commitlint는 커밋 메시지의 형식을 검사하고, 형식에 맞지 않는다면 커밋이 실패한다.
+
+## + Stylelint
+
+도입하지 못해 아쉬운 것은 Stylelint이다. 우리 회사에서는 스타일링을 위해 css-in-js 라이브러리인 Emotion을 사용하고 있고, 보통 다음과 같이 스타일 코드를 작성한다.
+
+```typescript
+export const Wrapper = styled.section`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  word-break: keep-all;
+
+  #{DESKTOP} {
+    // mdx로 현재 글을 작성 중인데, $ 달러 기호를 사용하면 에러가 발생해 #으로 바꾸었다.
+    width: 556px;
+  }
+`;
+```
+
+여기서 정말 아쉽게도, DESKTOP 부분을 stylelint가 잘 인식하지 못한다. styled-components의 경우 [공식 문서](https://styled-components.com/docs/tooling#interpolation-tagging-with-stylelint-processor-styled-components)에 stylelint를 어떻게 적용하면 되는지 나와 있고, 위와 같은 경우에 대해 어떻게 하면 되는지 나와 있다. stylelint-processor-styled-components를 사용하고 다음과 같이 주석을 달아주면 된다고 한다.
+
+```typescript
+const something = 'background';
+
+const Button = styled.div`
+  // Tell the processor that "something" is a property
+  ${/* sc-prop */ something}: papayawhip;
+`;
+```
+
+하지만 Emotion 공식 문서에는 따로 stylelint에 관해 언급되어 있지 않다. 유사한 css-in-js이기에 stylelint-processor-styled-components를 사용할 수 있더라도 매번 저렇게 주석을 붙여야 한다는 점이 큰 공수가 들 것 같아 stylelint는 도입하지 않기로 결정했다.
+
+혹여나 stylelint를 적용하고 싶다면, 다음과 같은 절차에 따라 쉽게 적용할 수 있다.
+
+### 설치
+
+```bash
+npm install stylelint stylelint-config-clean-order --save-dev
+```
+
+stylelint만 사용하면 따로 순서를 fix해주지 않는다. 순서를 fix해주기 위해 stylelint-config-clean-order를 설치해주면, stylelint-config-clean-order가 정해놓은 순서대로 속성들을 정렬해준다.
+
+### stylelint 설정
+
+프로젝트 최상단 디렉토리에 .stylelintrc 파일을 만들고 다음과 같이 설정해주자.
+
+```json
+{
+  "extends": ["stylelint-config-clean-order"]
+}
+```
+
+### lint-staged 설정
+
+```javascript
+const path = require('path');
+
+const buildEslintCommand = filenames =>
+  `next lint --file ${filenames.map(f => path.relative(process.cwd(), f)).join(' --file ')}`;
+
+const buildPrettierCommand = filenames =>
+  `prettier --write ${filenames.map(f => path.relative(process.cwd(), f)).join(' ')}`;
+
+const buildStylelintCommand = filenames =>
+  `stylelint --ignore-path .gitignore ${filenames.join(' ')}`;
+
+module.exports = {
+  '*.{js,jsx,ts,tsx}': [buildEslintCommand, buildPrettierCommand, buildStylelintCommand],
+};
+```
+
+## 마치며
+
+위 도구들을 도입하고 나서 약 5개월 간 느낀 바로는 확실히 이전보다 코드 리뷰가 원활해졌다. 불필요한 띄어쓰기에 대한 논쟁이 줄어들었고, 코드 스타일에 대한 논쟁도 줄어들었다. 또한, 코드 스타일을 일관성 있게 유지할 수 있어서 좋았다. 가끔 commit마다 시간이 조금 더 걸리는 것에 대해서는 조금 불편함을 느끼긴 한다.
+
+뿌듯하기도 한 것은 husky가 다른 곳에서 응용되기도 했던 점이다. 어떤 이유에서인지는 모르겠으나 백엔드 측에서 push 전에 integration test를 돌리길 원했고, 이를 위해 husky를 사용하셨다. 아직 내 파트에만 위와 같은 도구들을 사용하고 있다. 조금 더 다듬어서 패키지로 만들어 다른 프로젝트에서도 쉽게 적용할 수 있도록 만들어보고 싶다.
