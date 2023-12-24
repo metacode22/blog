@@ -1,5 +1,5 @@
 import GlobalNavigationBar from '@/src/components/GlobalNavigationBar';
-import GoogleAnalyticsScript from '@/src/components/GoogleAnalytics';
+import GoogleAnalyticsScript from '@/src/components/GoogleAnalyticsScript';
 import '@/src/styles/globals.css';
 import type { Metadata } from 'next';
 
