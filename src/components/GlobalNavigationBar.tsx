@@ -31,8 +31,9 @@ export default function GlobalNavigationBar() {
   return (
     <nav
       className={cn(
-        'sticky top-0 z-10 flex w-full items-start justify-between p-4 text-black lg:px-20 lg:py-3',
+        'top-0 z-10 flex w-full items-start justify-between p-4 text-black lg:px-20 lg:py-3',
         {
+          sticky: pathname !== ROUTES.HOME,
           'text-white': pathname === ROUTES.HOME,
           'border-b-[1px] border-slate-200': pathname !== ROUTES.HOME,
           'backdrop-blur-xl': pathname !== ROUTES.HOME,
