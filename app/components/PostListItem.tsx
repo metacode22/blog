@@ -31,11 +31,13 @@ export default function PostListItem({
         </div>
         <Title>{title}</Title>
       </div>
-      <Summary>{summary}</Summary>
-      <div className='flex gap-2'>
-        <Date date={updatedAt} />
-        <Bullet />
-        <ReadingTime readingTime={readingTime} />
+      <div className='flex flex-col items-start gap-1'>
+        <Summary>{summary}</Summary>
+        <div className='flex gap-2'>
+          <Date date={updatedAt} />
+          <Bullet />
+          <ReadingTime readingTime={readingTime} />
+        </div>
       </div>
     </Link>
   );

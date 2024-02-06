@@ -5,6 +5,8 @@ import ReadingTime from '@/src/components/ReadingTime';
 import Date from '@/src/components/Date';
 import { allPosts } from 'contentlayer/generated';
 import MDX from './components/MDX';
+import Bullet from '@/src/components/Bullet';
+import Summary from '@/src/components/Summary';
 
 export async function generateStaticParams() {
   const posts = allPosts.filter(post => post.isPublished);
@@ -27,10 +29,11 @@ export default async function PostPage({ params: { slug } }: { params: { slug: s
         ))}
       </div>
       <h1 className='m-0 py-4'>{post.title}</h1>
-      <div>
-        <p className='m-0'>{post.summary}</p>
-        <div className='flex justify-start gap-4'>
+      <div className='flex flex-col items-start gap-1'>
+        <Summary>{post.summary}</Summary>
+        <div className='flex justify-start gap-2'>
           <Date date={post.updatedAt} />
+          <Bullet />
           <ReadingTime readingTime={post.readingTime} />
         </div>
       </div>
