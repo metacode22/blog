@@ -1,3 +1,5 @@
-export default function Summary({ summary }: { summary: string }) {
-  return <p className="text-gray-600 text-lg">{summary}</p>;
+import { ReactNode } from "react";
+
+export default function Summary({ children }: { children: ReactNode  }) {
+  return <p className="text-gray-600 text-lg">{children}</p>;
 }

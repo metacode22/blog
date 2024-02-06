@@ -31,7 +31,7 @@ export default function PostListItem({
         </div>
         <Title title={title} />
       </div>
-      <Summary summary={summary} />
+      <Summary>{summary}</Summary>
       <div className='flex gap-2'>
         <Date date={updatedAt} />
         <Bullet />
