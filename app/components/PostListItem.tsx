@@ -29,7 +29,7 @@ export default function PostListItem({
             <Category key={category}>{category}</Category>
           ))}
         </div>
-        <Title title={title} />
+        <Title>{title}</Title>
       </div>
       <Summary>{summary}</Summary>
       <div className='flex gap-2'>
