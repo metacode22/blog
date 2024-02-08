@@ -2,12 +2,7 @@
 title: eslint, prettier, commitlint, husky, lint-staged로 코드 품질 유지하기(+ stylelint)
 summary: 프로젝트의 코드 품질을 유지하기 위해 도입한 여러 도구들을 소개하며 저는 회사에서 어떻게 사용하고 있는지에 대해 작성하였습니다.
 categories:
-  - ESLint
-  - Prettier
-  - Commitlint
-  - Husky
-  - Lint-Staged
-  - Stylelint
+  - 개발 환경
 createdAt: 2023-12-24
 updatedAt: 2023-12-24
 isPublished: true
@@ -156,7 +151,9 @@ const buildEslintCommand = filenames =>
     .join(' --file ')}`;
 
 const buildPrettierCommand = filenames =>
-  `prettier --write ${filenames.map(f => path.relative(process.cwd(), f)).join(' ')}`;
+  `prettier --write ${filenames
+    .map(f => path.relative(process.cwd(), f))
+    .join(' ')}`;
 
 module.exports = {
   '*.{js,jsx,ts,tsx}': [buildEslintCommand, buildPrettierCommand],
@@ -290,16 +287,24 @@ stylelint만 사용하면 따로 순서를 fix해주지 않는다. 순서를 fix
 const path = require('path');
 
 const buildEslintCommand = filenames =>
-  `next lint --file ${filenames.map(f => path.relative(process.cwd(), f)).join(' --file ')}`;
+  `next lint --file ${filenames
+    .map(f => path.relative(process.cwd(), f))
+    .join(' --file ')}`;
 
 const buildPrettierCommand = filenames =>
-  `prettier --write ${filenames.map(f => path.relative(process.cwd(), f)).join(' ')}`;
+  `prettier --write ${filenames
+    .map(f => path.relative(process.cwd(), f))
+    .join(' ')}`;
 
 const buildStylelintCommand = filenames =>
   `stylelint --ignore-path .gitignore ${filenames.join(' ')}`;
 
 module.exports = {
-  '*.{js,jsx,ts,tsx}': [buildEslintCommand, buildPrettierCommand, buildStylelintCommand],
+  '*.{js,jsx,ts,tsx}': [
+    buildEslintCommand,
+    buildPrettierCommand,
+    buildStylelintCommand,
+  ],
 };
 ```
 
