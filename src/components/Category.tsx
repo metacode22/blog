@@ -1,20 +1,30 @@
+'use client';
+
 import { ComponentPropsWithoutRef } from 'react';
 import cn from '../utils/class-name';
+import { useSearchParams } from 'next/navigation';
+import ROUTES from '../constants/routes';
+import Link from 'next/link';
 
-/**
- * @todo query string, categories=[category1, category2]
- * @todo router -> Link, use client -> use server
- */
 export default function Category({
   children,
   className,
+  category,
   ...props
-}: ComponentPropsWithoutRef<'span'>) {
+}: ComponentPropsWithoutRef<'span'> & { category: string }) {
+  const searchParams = useSearchParams();
+  const categoryQuery = searchParams.get('category');
+
   return (
-    <span
-      className={cn('cursor-pointer text-sm text-gray-500 hover:underline', className)}
+    <Link
+      href={`${ROUTES.POSTS}?category=${category}`}
+      className={cn(
+        'cursor-pointer text-sm text-gray-600 hover:underline',
+        { 'bg-slate-200': category === categoryQuery },
+        className,
+      )}
       {...props}>
       {children}
-    </span>
+    </Link>
   );
 }

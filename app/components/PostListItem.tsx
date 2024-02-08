@@ -8,7 +8,6 @@ import ReadingTime from '@/src/components/ReadingTime';
 import Summary from '@/src/components/Summary';
 import Title from '@/src/components/Title';
 import ROUTES from '@/src/constants/routes';
-import useHover from '@/src/hooks/useHover';
 import Link from 'next/link';
 
 export default function PostListItem({
@@ -16,29 +15,31 @@ export default function PostListItem({
 }: {
   post: Post;
 }) {
-  const { targetRef, isHovered } = useHover<HTMLAnchorElement>();
-
   return (
-    <Link
-      ref={targetRef}
-      href={`${ROUTES.POSTS}/${slug}`}
-      className='flex flex-col items-start gap-4'>
+    <li className='flex flex-col items-start gap-4'>
       <div className='flex flex-col items-start gap-2'>
         <div className='flex justify-start gap-2'>
           {categories.map(category => (
-            <Category key={category}>{category}</Category>
+            <Category
+              category={category}
+              key={category}
+              className='bg-transparent'>
+              {category}
+            </Category>
           ))}
         </div>
         <Title>{title}</Title>
       </div>
-      <div className='flex flex-col items-start gap-1'>
+      <Link
+        href={`${ROUTES.POSTS}/${slug}`}
+        className='flex flex-col items-start gap-1'>
         <Summary>{summary}</Summary>
         <div className='flex gap-2'>
           <Date date={updatedAt} />
           <Bullet />
           <ReadingTime readingTime={readingTime} />
         </div>
-      </div>
-    </Link>
+      </Link>
+    </li>
   );
 }
