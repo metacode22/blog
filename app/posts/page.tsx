@@ -1,6 +1,7 @@
 import { allPosts } from '@/.contentlayer/generated';
 import PostList from '../components/PostList';
 import { compareDesc } from 'date-fns';
+import Category from '@/src/components/Category';
 
 type Categories = Record<string, number>;
 
@@ -18,10 +19,12 @@ export default function Posts() {
 
   return (
     <div className='flex w-full flex-col items-start gap-6'>
-      <div>
-        {/** 
-         * @todo categories
-         */}
+      <div className='flex flex-wrap gap-2'>
+        {Object.entries(categories).map(([category, count]) => (
+          <Category className='rounded-full border border-slate-200 px-3 py-1 hover:no-underline' key={category}>
+            {category} {count}
+          </Category>
+        ))}
       </div>
       <PostList posts={posts} />
     </div>
