@@ -129,12 +129,12 @@ function getDividerStyle(
   return {
     horizontal: {
       width: '100%',
-      'border-top': `${size}px solid ${color}`,
+      borderTop: `${size}px solid ${color}`,
     },
     vertical: {
       height: isFlexItem ? 'auto' : '100%',
-      'border-left': `${size}px solid ${color}`,
-      'align-self': isFlexItem ? 'stretch' : 'auto',
+      borderLeft: `${size}px solid ${color}`,
+      alignSelf: isFlexItem ? 'stretch' : 'auto',
     },
   }[orientation];
 }
