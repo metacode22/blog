@@ -16,7 +16,11 @@ export async function generateStaticParams() {
   }));
 }
 
-export default async function PostPage({ params: { slug } }: { params: { slug: string } }) {
+export default async function PostPage({
+  params: { slug },
+}: {
+  params: { slug: string };
+}) {
   const post = allPosts.find(post => post.slug === slug);
 
   if (!post) notFound();
@@ -25,7 +29,9 @@ export default async function PostPage({ params: { slug } }: { params: { slug: s
     <article className='prose w-full max-w-none'>
       <div className='flex w-full justify-start gap-4'>
         {post.categories.map(category => (
-          <Category key={category}>{category}</Category>
+          <Category key={category} category={category}>
+            {category}
+          </Category>
         ))}
       </div>
       <h1 className='m-0 py-4'>{post.title}</h1>
