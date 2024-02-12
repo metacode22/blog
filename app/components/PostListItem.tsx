@@ -1,5 +1,3 @@
-'use client';
-
 import { Post } from '@/.contentlayer/generated';
 import Bullet from '@/src/components/Bullet';
 import Category from '@/src/components/Category';
@@ -28,7 +26,9 @@ export default function PostListItem({
             </Category>
           ))}
         </div>
-        <Title>{title}</Title>
+        <Link href={`${ROUTES.POSTS}/${slug}`}>
+          <Title>{title}</Title>
+        </Link>
       </div>
       <Link
         href={`${ROUTES.POSTS}/${slug}`}
