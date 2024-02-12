@@ -26,12 +26,12 @@ export default function PostListItem({
             </Category>
           ))}
         </div>
-        <Link href={`${ROUTES.POSTS}/${slug}`}>
+        <Link href={`${ROUTES.POSTS.DETAIL(slug)}`}>
           <Title>{title}</Title>
         </Link>
       </div>
       <Link
-        href={`${ROUTES.POSTS}/${slug}`}
+        href={`${ROUTES.POSTS.DETAIL(slug)}`}
         className='flex flex-col items-start gap-1'>
         <Summary>{summary}</Summary>
         <div className='flex gap-2'>

@@ -17,7 +17,7 @@ export default function Category({
 
   return (
     <Link
-      href={`${ROUTES.POSTS}?category=${category}`}
+      href={`${ROUTES.POSTS.ROOT}?category=${category}`}
       className={cn(
         'cursor-pointer text-sm text-gray-600 hover:underline',
         { 'bg-slate-200': category === categoryQuery },

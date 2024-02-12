@@ -13,7 +13,7 @@ const NAVIGATION_LIST = [
   },
   {
     name: 'Posts',
-    path: ROUTES.POSTS,
+    path: ROUTES.POSTS.ROOT,
   },
   // {
   //   name: 'Diary',
@@ -53,9 +53,12 @@ export default function GlobalNavigationBar() {
         <div className='flex justify-start gap-4 rounded-md px-2 text-sm leading-7'>
           {NAVIGATION_LIST.map(({ name, path }) => (
             <Link
-              className={cn('rounded-md px-2 py-1 opacity-70 transition hover:opacity-100', {
-                'hover:bg-slate-100': pathname !== ROUTES.HOME,
-              })}
+              className={cn(
+                'rounded-md px-2 py-1 opacity-70 transition hover:opacity-100',
+                {
+                  'hover:bg-slate-100': pathname !== ROUTES.HOME,
+                },
+              )}
               key={name}
               href={path}>
               {name}

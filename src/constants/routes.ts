@@ -1,6 +1,9 @@
 const ROUTES = {
   HOME: '/',
-  POSTS: '/posts',
+  POSTS: {
+    ROOT: '/posts',
+    DETAIL: (slug: string) => `${ROUTES.POSTS.ROOT}/${slug}`,
+  },
   ABOUT: '/about',
   DIARY: '/diary',
 };
