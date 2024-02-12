@@ -4,9 +4,10 @@ import Category from '@/src/components/Category';
 import ReadingTime from '@/src/components/ReadingTime';
 import Date from '@/src/components/Date';
 import { allPosts } from 'contentlayer/generated';
-import MDX from './components/MDX';
 import Bullet from '@/src/components/Bullet';
 import Summary from '@/src/components/Summary';
+import { Comments } from './components/Comments';
+import * as C from './components';
 
 export async function generateStaticParams() {
   const posts = allPosts.filter(post => post.isPublished);
@@ -44,7 +45,8 @@ export default async function PostPage({
         </div>
       </div>
       <div className='w-full py-8'>
-        <MDX code={post.body.code} />
+        <C.MDX code={post.body.code} />
+        <C.Comments />
       </div>
     </article>
   );

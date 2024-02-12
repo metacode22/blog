@@ -5,7 +5,7 @@ import Category from '@/src/components/Category';
 
 type Categories = Record<string, number>;
 
-export default function Posts() {
+export default function PostsPage() {
   const posts = allPosts
     .filter(post => post.isPublished)
     .sort((a, b) => compareDesc(new Date(a.updatedAt), new Date(b.updatedAt)));
