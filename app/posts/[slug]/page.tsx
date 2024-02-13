@@ -1,12 +1,12 @@
+import { allPosts } from 'contentlayer/generated';
 import { notFound } from 'next/navigation';
 
-import Category from '@/src/components/Category';
-import ReadingTime from '@/src/components/ReadingTime';
-import Date from '@/src/components/Date';
-import { allPosts } from 'contentlayer/generated';
 import Bullet from '@/src/components/Bullet';
+import Category from '@/src/components/Category';
+import Date from '@/src/components/Date';
+import ReadingTime from '@/src/components/ReadingTime';
 import Summary from '@/src/components/Summary';
-import { Comments } from './components/Comments';
+
 import * as C from './components';
 
 export async function generateStaticParams() {
