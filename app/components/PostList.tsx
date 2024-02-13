@@ -1,8 +1,9 @@
 'use client';
 
-import { useSearchParams } from 'next/navigation';
-import PostListItem from './PostListItem';
 import { Post } from 'contentlayer/generated';
+import { useSearchParams } from 'next/navigation';
+
+import PostListItem from './PostListItem';
 
 export default function PostList({ posts }: { posts: Post[] }) {
   const searchParams = useSearchParams();

@@ -1,10 +1,11 @@
 'use client';
 
-import Script from 'next/script';
-import { GA_TRACKING_ID, pageview } from '../utils/gtag';
-import { useEffect } from 'react';
-import { isDev } from '../constants/mode';
 import { usePathname, useSearchParams } from 'next/navigation';
+import Script from 'next/script';
+import { useEffect } from 'react';
+
+import { isDev } from '../constants/mode';
+import { GA_TRACKING_ID, pageview } from '../utils/gtag';
 
 export default function GoogleAnalyticsScript() {
   const pathname = usePathname();

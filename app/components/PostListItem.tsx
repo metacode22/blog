@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 import { Post } from '@/.contentlayer/generated';
 import Bullet from '@/src/components/Bullet';
 import Category from '@/src/components/Category';
@@ -6,7 +8,6 @@ import ReadingTime from '@/src/components/ReadingTime';
 import Summary from '@/src/components/Summary';
 import Title from '@/src/components/Title';
 import ROUTES from '@/src/constants/routes';
-import Link from 'next/link';
 
 export default function PostListItem({
   post: { slug, title, categories, summary, updatedAt, readingTime },

@@ -1,10 +1,11 @@
 'use client';
 
-import { ComponentPropsWithoutRef } from 'react';
-import cn from '../utils/class-name';
-import { useSearchParams } from 'next/navigation';
-import ROUTES from '../constants/routes';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
+import { ComponentPropsWithoutRef } from 'react';
+
+import ROUTES from '../constants/routes';
+import cn from '../utils/class-name';
 
 export default function Category({
   children,

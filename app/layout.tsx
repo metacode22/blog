@@ -1,7 +1,9 @@
+import '@/src/styles/globals.css';
+
+import type { Metadata } from 'next';
+
 import GlobalNavigationBar from '@/src/components/GlobalNavigationBar';
 import GoogleAnalyticsScript from '@/src/components/GoogleAnalyticsScript';
-import '@/src/styles/globals.css';
-import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: '신승준 블로그',

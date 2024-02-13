@@ -1,8 +1,10 @@
-import { isEmptyArray } from '@/src/utils/array';
 import { allPosts } from 'contentlayer/generated';
 import { compareDesc } from 'date-fns';
-import PostListItem from './components/PostListItem';
+
+import { isEmptyArray } from '@/src/utils/array';
+
 import PostList from './components/PostList';
+import PostListItem from './components/PostListItem';
 
 export default async function HomePage() {
   const posts = allPosts

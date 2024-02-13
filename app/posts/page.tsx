@@ -1,7 +1,9 @@
-import { allPosts } from '@/.contentlayer/generated';
-import PostList from '../components/PostList';
 import { compareDesc } from 'date-fns';
+
+import { allPosts } from '@/.contentlayer/generated';
 import Category from '@/src/components/Category';
+
+import PostList from '../components/PostList';
 
 type Categories = Record<string, number>;
 

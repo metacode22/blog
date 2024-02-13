@@ -1,10 +1,12 @@
 'use client';
 
 import Link from 'next/link';
-import ROUTES from '../constants/routes';
+import { usePathname } from 'next/navigation';
+
 // import { CiSearch } from 'react-icons/ci';
 import cn from '@/src/utils/class-name';
-import { usePathname } from 'next/navigation';
+
+import ROUTES from '../constants/routes';
 
 const NAVIGATION_LIST = [
   {
