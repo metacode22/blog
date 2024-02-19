@@ -26,6 +26,7 @@ export function Thumbnail({
         src={src}
         alt={alt ?? ''}
         className={cn('rounded-xl object-cover shadow-lg', classname)}
+        sizes='(max-width: 360px) 1vw, (max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1200px) 25vw, 20vw'
         {...props}
       />
     </Link>
