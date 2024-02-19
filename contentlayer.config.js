@@ -1,4 +1,6 @@
 import { defineDocumentType, makeSource } from 'contentlayer/source-files';
+import fs from 'fs';
+import path from 'path';
 import readingTime from 'reading-time';
 import rehypePrettyCode from 'rehype-pretty-code';
 import rehypeSlug from 'rehype-slug';
@@ -48,7 +50,15 @@ export const Post = defineDocumentType(() => ({
     },
     thumbnailImagePath: {
       type: 'string',
-      resolve: document => `/images/contents/${document._raw.flattenedPath}/thumbnail.webp`,
+      resolve: document => {
+        const __dirname = path.resolve();
+        const imagePath = `/public/images/contents/${document._raw.flattenedPath}/thumbnail.webp`;
+        const filePath = path.join(__dirname, imagePath);
+
+        return fs.existsSync(filePath)
+          ? `/images/contents/${document._raw.flattenedPath}/thumbnail.webp`
+          : '/images/default-thumbnail.webp';
+      },
     },
   },
 }));

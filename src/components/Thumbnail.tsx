@@ -13,7 +13,7 @@ export function Thumbnail({
   ...props
 }: {
   src: string;
-  alt: string;
+  alt?: string;
   slug: string;
   classname?: string;
 }) {
@@ -24,7 +24,7 @@ export function Thumbnail({
       <Image
         fill
         src={src}
-        alt={alt}
+        alt={alt ?? ''}
         className={cn('rounded-xl object-cover shadow-lg', classname)}
         {...props}
       />
