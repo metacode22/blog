@@ -22,7 +22,9 @@ export default async function PostPage({
 }: {
   params: { slug: string };
 }) {
-  const post = allPosts.find(post => post.slug === slug);
+  const post = allPosts.find(post => {
+    return post.slug === slug;
+  });
 
   if (!post) notFound();
 
