@@ -10,6 +10,9 @@ export const metadata: Metadata = {
   description: '프론트엔드 개발자 신승준의 개인 블로그입니다.',
   verification: {
     google: 'YP4UXQP92HR2Cwg7cRLU9g3OQ8OLVlzxNaASuYQbAzg',
+    other: {
+      'naver-site-verification': 'c77e3af6256377ff0343a93fb26812585a2217b7',
+    },
   },
 };
 
