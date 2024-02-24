@@ -1,3 +1,3 @@
 export * from './Comments';
 export * from './MDX';
-export * from './ProgressBar';
+export * from '../../../../src/components/ProgressBar';

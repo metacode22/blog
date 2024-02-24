@@ -30,7 +30,6 @@ export default async function PostPage({
 
   return (
     <>
-      <C.ProgressBar />
       <article className='prose w-full max-w-none'>
         <div className='flex w-full justify-start gap-4'>
           {post.categories.map(category => (
