@@ -7,7 +7,7 @@ import Date from '@/src/components/Date';
 import ReadingTime from '@/src/components/ReadingTime';
 import Summary from '@/src/components/Summary';
 
-import * as C from './components';
+import * as C from './_components';
 
 export async function generateStaticParams() {
   const posts = allPosts.filter(post => post.isPublished);

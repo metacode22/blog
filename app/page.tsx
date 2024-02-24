@@ -1,7 +1,7 @@
 import { allPosts } from 'contentlayer/generated';
 import { compareDesc } from 'date-fns';
 
-import PostList from './components/PostList';
+import PostList from './_components/PostList';
 
 export default async function HomePage() {
   const posts = allPosts
