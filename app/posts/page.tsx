@@ -3,7 +3,7 @@ import { compareDesc } from 'date-fns';
 import { allPosts } from '@/.contentlayer/generated';
 import Category from '@/src/components/Category';
 
-import PostList from '../_components/PostList';
+import PostList from '../../src/components/PostList';
 
 type Categories = Record<string, number>;
 
