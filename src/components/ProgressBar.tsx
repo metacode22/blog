@@ -25,8 +25,8 @@ export function ProgressBar() {
 
   return (
     <div
-      className='fixed left-0 top-0 h-4 w-full bg-gray-500'
-      style={{ width: `${progress}%` }}
+      className='h-1 w-full origin-left bg-slate-300'
+      style={{ transform: `scaleX(${progress / 100})` }}
     />
   );
 }
