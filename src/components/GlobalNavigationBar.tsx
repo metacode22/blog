@@ -33,7 +33,7 @@ export default function GlobalNavigationBar() {
         'bg-no-repeat': pathname === ROUTES.HOME,
       })}>
       <div
-        className={cn('flex justify-between p-4 text-black', {
+        className={cn('flex justify-between px-4 py-2 text-black', {
           'text-white': pathname === ROUTES.HOME,
           'backdrop-blur-xl': pathname !== ROUTES.HOME,
           'border-b-[1px] border-slate-200': pathname !== ROUTES.HOME,
