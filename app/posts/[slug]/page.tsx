@@ -17,14 +17,24 @@ export async function generateStaticParams() {
   }));
 }
 
+export async function generateMetadata({
+  params: { slug },
+}: {
+  params: { slug: string };
+}) {
+  const post = allPosts.find(post => post.slug === slug);
+
+  return {
+    title: post?.title ?? '신승준 블로그',
+  };
+}
+
 export default async function PostPage({
   params: { slug },
 }: {
   params: { slug: string };
 }) {
-  const post = allPosts.find(post => {
-    return post.slug === slug;
-  });
+  const post = allPosts.find(post => post.slug === slug);
 
   if (!post) notFound();
 
