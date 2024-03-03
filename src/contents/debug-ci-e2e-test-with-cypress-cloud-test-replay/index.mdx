@@ -1,25 +1,403 @@
 ---
-title: Cypress Cloud의 Test Replay 기능을 통해 CI E2E 테스트 디버깅하기
-summary: 회사 내부 디자인 시스템에 Divider 컴포넌트를 기여해보았습니다.
+title: Cypress Cloud의 Test Replay로 CI 단계에서 실패한 E2E 테스트 디버깅하기
+summary: ci에서 돌아가는 e2e 테스트가 실패했을 시 더욱 정확하고 효율적으로 디버깅할 수 있는 test replay 기능에 대해 알아보았습니다.
 categories:
   - Cypress
-  - E2E
+  - Test
 createdAt: 2024-03-03
 updatedAt: 2024-03-03
-isPublished: false
+isPublished: true
 ---
 
 ## 결론
-ci 단계에서 어떻게 e2e 테스트가 돌아갔는지 시각적으로 확인할 수 있는 cypress cloud의 test replay 기능을 통해 e2e 테스트를 좀 더 쉽게 디버깅할 수 있음.
+
+cypress cloud에 test replay를 기록한다면, ci 단계에서 실패한 e2e test를 더욱 정확하고 효율적으로 디버깅할 수 있다.
+
+<br />
+<br />
 
 ## 서문
 
-e2e 테스트 필요성
-우리 회사에 도입
-e2e 테스트를 통과하지 못하면 배포되지 않도록 github action을 이용해 구축한 ci(continuous integration) 단계에서도 테스트를 돌리고자 했음
+### E2E 테스트를 도입하고자 했던 이유
 
-## ci 단계에서 겪은 e2e 테스트의 어려움
-cypress에 대한 지식이 적은 상태에서 e2e 테스트를 작성하다보니 테스트가 자주 실패했음. 어쩔 땐 성공하고, 어쩔 땐 실패하는 경우가 있어 원인 파악을 명확히 분별하는 데에 어려움을 겪음.
-ci 단계에서의 e2e 테스트는 cypress의 경우 가상 브라우저를 설치하는 과정이 필요함. 여기에 시간이 다소 소모됨.
-시각적으로 어떻게 테스트가 돌아가는지 확인하기 어려움.
-당시의 네트워크 상태를 알기 어려움.
+내가 맡은 서비스는 고객으로부터 데이터를 입력받는 지원 과정이 중요하다. 이를 거치고 나서야 비로소 고객분들은 우리 서비스의 첫 퍼널에 진입할 수 있으며 결제까지 이루어지게 된다. 그리고 이 때 입력 받은 데이터를 바탕으로 다음엔 어떻게 개선할 수 있을지, 이 데이터로부터 얻을 수 있는 유용한 인사이트는 있는지 살펴보곤 한다.
+
+그만큼 중요하기에, 어떤 기능을 배포할 때 지원서 페이지랑 조금이라도 연관이 있다면 PM과 개발자 모두 수동으로 지원서를 작성해보곤 했다.(우리 회사에는 최근까지 QA 직무가 없었다) 이를 수행하는 PM과 개발자는 피로감을 느끼는 건 확실했다. 아이디와 비밀번호만 필요한 간단한 로그인도 귀찮아 소셜 로그인을 하는 것이 인간이다.
+
+시간 소모 또한 컸다. 매 수동 작업 시 20초 정도로 짧은 시간이 소모되었지만 둘이 합하면 40초이고 하루 5번 정도 배포한다면 200초, 한 달 근무일을 적어도 20일로 계산했을 때 한 달에 4000초, 즉 매달 67분 정도의 시간이 낭비되기 떄문이다. 또 중복적인 작업이기도 했다. 아이디, 비밀번호가 필요한 로그인에도 귀찮아서 소셜 로그인을 선택하는 것이 인간이지 않는가.
+
+이에 테스트 자동화에 대한 필요성을 느끼게 되었고, 다른 이유도 있지만 조금 더 친숙했던 cypress를 채택하여 e2e 테스트 환경을 구축하게 되었다. 그 과정에서 test replay까지 도입하게 되었다. 결론부터 말하자면 정말 시간을 많이 줄여준 기능이었는데, 어떤 어려움을 겪어 test replay까지 도입하게 되었고, 어떻게 도입했는지 말해보려 한다.
+
+<br />
+<br />
+
+## 겪은 어려움
+
+cypress는 현재 10년 가까이 유지되고 있으며 그만큼 많은 회사, 서비스에서 사용하고 있다. 따라서 안정적이며 공식 문서 또한 나름 잘 되어 있는 편이다. 그렇기에 환경 구축 및 e2e 테스트 작성까진 쉬웠다.
+
+반면 어려움을 겪은 부분은, ci 단계에서 실패한 e2e 테스트를 디버깅하는 과정이었다. github actions로 ci 환경을 구축했었는데 e2e 테스트가 실패하면 다음 이미지에 나오는 정보만 얻을 수 있다.
+
+<div
+  style={{
+    position: 'relative',
+    width: '100%',
+    aspectRatio: '2048 / 1067',
+  }}>
+  <Image
+    src='/images/contents/debug-ci-e2e-test-with-cypress-cloud-test-replay/failed-e2e-test.png'
+    alt='github actions에서 실패한 cypress e2e test'
+    fill
+    style={{ objectFit: 'cover', margin: 0 }}
+  />
+</div>
+
+data-testid attribute가 careerExperience인 요소를 제한 시간인 4000ms 내에 찾지 못했기 때문에 e2e 테스트가 실패했다. 이 요소는 왜 찾지 못했을까? getServerSideProps에서 에러가 발생해 렌더링 조차 안된 것일까, 새로운 기능을 구현하면서 사라진 휴먼 에러일까, e2e 테스트 자체를 잘못 작성한 것일까?
+
+디버깅을 위해서는 재현이 필요하고 이를 위해선 ci 환경과 동일하게 구축해 로컬에서 e2e 테스트를 다시 돌려봐야 했다. ci 환경과 동일하게 구축하는 것도 우리 팀 개발 환경 상 시간이 다소 소모되었다. 그리고 무엇보다 cypress open 명령어를 통해 브라우저에서 e2e 테스트가 어떻게 돌아가는지 시각적으로 테스트 과정과 결과를 관찰할 수 있는 기능을 사용할 수 없다는 것이 가장 큰 답답함이었다.
+
+cypress open 명령어를 통해 연 브라우저에서는 다음과 같이 e2e 테스트가 돌아가는 상세한 과정을 확인할 수 있다.
+
+<div
+  style={{
+    position: 'relative',
+    width: '100%',
+    aspectRatio: '2048 / 1277',
+  }}>
+  <Image
+    src='/images/contents/debug-ci-e2e-test-with-cypress-cloud-test-replay/e2e-test-in-browser.png'
+    alt='browser에서 e2e test를 확인하는 모습'
+    fill
+    style={{ objectFit: 'cover', margin: 0 }}
+  />
+</div>
+
+어찌 됐든 ci에서 실패한 e2e 테스트 그 때 당시의 상태를 볼 수 있다면 가장 정확히 디버깅할 수 있을 것이고 시간 또한 적게 걸릴 것이다.
+
+<br />
+<br />
+
+## Test Replay
+
+다행히 이러한 어려움과 답답함을 해소해주기 위해 cypress는 작년 9월에 test replay라는 기능을 포함한 13 버전을 release 했다. ci 단계에서 돌아간 e2e 테스트가 cypress cloud에 기록되는 것이다. 테스트가 실패했다면 cypress cloud에 접속하여 실패한 test를 시각적으로 확인할 수 있게 된다. 뿐만 아니라 네트워크 통신은 어땠는지, console에는 어떻게 찍히고 있는지도 확인할 수 있다.
+
+### 방법
+
+> NextJS 14 App Router, Shadcn UI, Cypress 13, PNPM 환경에서 진행. 빠르게 test replay만 맛 보기 위해 간략하게만 작성함.
+
+어떻게 하면 test replay 기능을 맛 볼 수 있는지 cypress 설치부터 github actions 설정까지 빠르게 알아보자.
+
+<br />
+
+- cypress 설치
+
+```bash
+pnpm add -D cypress
+```
+
+위 명령어를 입력하여 cypress를 설치하자.(참고로 test replay는 cypress 13 버전부터 지원한다)
+
+<br />
+
+그리고 root directory에 다음과 같은 파일을 생성하고 코드를 입력해주자.
+
+```typescript
+// cypress.config.ts
+
+import { defineConfig } from 'cypress';
+
+export default defineConfig({
+  e2e: {
+    specPattern: '__tests__/e2e',
+    baseUrl: 'http://localhost:3000',
+  },
+});
+```
+
+```typescript
+// cypress/support/commands.ts
+
+/// <reference types="cypress" />
+```
+
+```typescript
+// cypress/support/e2e.ts
+
+import './commands';
+```
+
+<br />
+
+- e2e 테스트 작성
+
+예시로 이메일과 패스워드를 입력해 로그인하면 Home으로 이동하는 간단한 코드와 테스트를 작성해보았다.
+
+```tsx
+// UI
+// app/login/page.tsx
+
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import Link from 'next/link';
+
+export default function Login() {
+  return (
+    <div className='min-w-80 flex flex-col gap-4 rounded-md border-2 border-slate-200 p-6'>
+      <Input type='email' placeholder='Email' />
+      <Input type='password' placeholder='Password' />
+      <Link href='/' className='w-full'>
+        <Button className='w-full'>로그인</Button>
+      </Link>
+    </div>
+  );
+}
+```
+
+```typescript
+// E2E Test
+// __tests__/e2e/login.cy.ts
+
+describe('로그인', () => {
+  it('로그인에 성공하면 Home으로 이동합니다.', () => {
+    cy.visit('/login');
+
+    cy.get('input[type=email]').type('cypress@test.replay');
+    cy.get('input[type=password]').type('test1234');
+    cy.get('button').click();
+
+    cy.url().should('eq', 'http://localhost:3000/');
+  });
+});
+```
+
+<br />
+
+- github actions workflow 작성
+
+```yaml
+# .github/workflows/e2e-test.yml
+
+name: Cypress e2e Test
+
+on: push
+
+jobs:
+  e2e-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v3
+
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: run end-to-end cypress test
+        id: run_end_to_end_cypress_test
+        uses: cypress-io/github-action@v6
+        with:
+          build: pnpm run build
+          start: pnpm run start
+          browser: chrome
+```
+
+<br />
+
+- cypress cloud에 test replay 기록하기
+
+[cypress cloud](https://cloud.cypress.io/login)에 로그인하자.
+
+이제 다음 사진처럼 새로운 프로젝트를 생성해주자.
+
+<div
+  style={{
+    position: 'relative',
+    width: '100%',
+    aspectRatio: '2048 / 677',
+  }}>
+  <Image
+    src='/images/contents/debug-ci-e2e-test-with-cypress-cloud-test-replay/create-project-in-cypress-cloud.png'
+    alt='새로운 프로젝트 클릭하기'
+    fill
+    style={{ objectFit: 'cover', margin: 0 }}
+  />
+</div>
+
+<br />
+
+그러면 projectId가 나온다. 이를 cypress.config.ts에 추가해주자.
+
+<div
+  style={{
+    position: 'relative',
+    width: '100%',
+    aspectRatio: '512 / 235',
+  }}>
+  <Image
+    src='/images/contents/debug-ci-e2e-test-with-cypress-cloud-test-replay/project-id.png'
+    alt='cypress cloud project id'
+    fill
+    style={{ objectFit: 'cover', margin: 0 }}
+  />
+</div>
+
+<br />
+
+다음 단계로 넘어가면 어떤 도구를 이용해 ci를 구축했는지 선택하는 단계가 나온다. 나는 github actions를 이용했기에 이를 선택했다. 그러면 드디어 test replay를 어떻게 기록할 수 있는지 알려준다.
+
+<div
+  style={{
+    position: 'relative',
+    width: '100%',
+    aspectRatio: '256 / 139',
+  }}>
+  <Image
+    src='/images/contents/debug-ci-e2e-test-with-cypress-cloud-test-replay/how-to-record.png'
+    alt='test replay를 기록하는 방법'
+    fill
+    style={{ objectFit: 'cover', margin: 0 }}
+  />
+</div>
+
+<br />
+
+pnpm dev 등의 명령어로 개발 서버를 켜고 Try it first에 나오는 명령어를 터미널에 입력해보자. 그러면 test replay가 cypress cloud에 기록되는 것을 확인할 수 있다.
+
+<div
+  style={{
+    position: 'relative',
+    width: '100%',
+    aspectRatio: '1024 / 601',
+  }}>
+  <Image
+    src='/images/contents/debug-ci-e2e-test-with-cypress-cloud-test-replay/recording-test-replay-process-to-cypress-cloud.png'
+    alt='로컬에서 돌린 e2e test가 cypress cloud에 기록되는 모습'
+    fill
+    style={{ objectFit: 'cover', margin: 0 }}
+  />
+</div>
+
+<br />
+
+이제 ci 단계에서 실행되는 e2e 테스트를 cypress cloud에 등록해보자.
+
+다음과 같이 다음 코드를 .github/workflows/cypress.yml에 추가해주자.
+
+```yaml
+name: Cypress Tests
+
+on: [push]
+
+jobs:
+  cypress-run:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        containers: [1, 2]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Cypress run
+        uses: cypress-io/github-action@v6
+        with:
+          build: pnpm run build
+          start: pnpm run start
+          wait-on: 'http://localhost:3000'
+          record: true
+          parallel: true
+        env:
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GIT_HUB_TOKEN }}
+```
+
+그리고 github token을 생성한 후 해당 토큰과 CYPRESS_RECORD_KEY를 레포지토리에 등록해주자.(cypress 안내로는 GITHUB_TOKEN으로 나와있지만, github에서는 GITHUB을 prefix로 사용할 수 없다고 떠서 GIT_HUB_TOKEN으로 변경했다)
+
+<div
+  style={{
+    position: 'relative',
+    width: '100%',
+    aspectRatio: '1024 / 601',
+  }}>
+  <Image
+    src='/images/contents/debug-ci-e2e-test-with-cypress-cloud-test-replay/repository-secrets.png'
+    alt='레포지토리에 secrets 등록하기'
+    fill
+    style={{ objectFit: 'cover', margin: 0 }}
+  />
+</div>
+
+<br />
+
+이제 레포지토리에 push 해보면 action이 돌아가고, cypress cloud에 test replay가 기록된 것을 확인할 수 있다. 얼른 test replay를 클릭해보자. ci 단계에서 돌아간 e2e 테스트를 확인할 수 있고, 당시 네트워크 통신과 console에 찍힌 로그들을 확인할 수 있다.
+
+<div
+  style={{
+    position: 'relative',
+    width: '100%',
+    aspectRatio: '1024 / 293',
+  }}>
+  <Image
+    src='/images/contents/debug-ci-e2e-test-with-cypress-cloud-test-replay/click-test-replay.png'
+    alt='test replay 클릭'
+    fill
+    style={{ objectFit: 'cover', margin: 0 }}
+  />
+</div>
+
+<br />
+
+<div
+  style={{
+    position: 'relative',
+    width: '100%',
+    aspectRatio: '512 / 271',
+  }}>
+  <Image
+    src='/images/contents/debug-ci-e2e-test-with-cypress-cloud-test-replay/test-replay.png'
+    alt='test replay'
+    fill
+    style={{ objectFit: 'cover', margin: 0 }}
+  />
+</div>
+
+<br />
+<br />
+
+## 주의
+
+cypress cloud free plan으로 매달 500개의 test replay까지 무료로 기록할 수 있다. 이를 넘어서면 기록은 되지만 볼 수는 없다.
+
+여기서 의심쩍었던 부분은 너무 빨리 500개가 된다는 것이었다. 알고보니, 한 action 당 1개 아니라 cypress로 작성한 e2e test context가 4개면 4개로 카운트되었다.
+
+```typescript
+describe('...', () => {
+  context('...', () => {
+    ...
+  });
+
+  context('...', () => {
+    ...
+  });
+
+  context('...', () => {
+    ...
+  });
+
+  context('...', () => {
+    ...
+  });
+});
+```
+
+위와 같이 작성했다면 4개로 count 된다. 따라서 생각보다 더 빨리 500개가 될 수 있으니 주의하자. 여유가 된다면, 매달 1일에 0개로 초기화되니 디버깅할 것들을 모아 놓았다가 매달 초에 하는 것도 방법이지 않을까 싶다.😇
+
+## 참고
+
+[Test Replay](https://docs.cypress.io/guides/cloud/test-replay)
+
+[Announcing Cypress 13 with Test Replay](https://www.cypress.io/blog/2023/09/15/announcing-cypress-13-test-replay)
