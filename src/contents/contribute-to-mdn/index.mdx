@@ -2,8 +2,77 @@
 title: MDN 문서 번역을 통해 오픈 소스 기여를 경험해보자
 summary: MDN의 HTML <menu> Element 번역을 통해 오픈 소스 기여 첫걸음을 내딛어봅니다.
 categories:
-  - 오픈 소스
+  - 오픈 소스 기여
+  - MDN
 createdAt: 2024-03-17
 updatedAt: 2024-03-17
-isPublished: false
+isPublished: true
 ---
+
+MDN에는 아직 한국어로 번역되지 않은 문서들이 많이 있다. 언어를 한국어로 설정하고 여러 페이지를 돌아다니다보면 Page not found가 자주 뜨는 것을 확인할 수 있다.
+
+나는 이번에 [<menu> 요소](https://developer.mozilla.org/ko/docs/Web/HTML/Element/menu)를 번역해보았다. 양이 적어서 처음 해보기에 적당하다고 판단했기 때문이다. 짧지만 오픈 소스에 처음 기여해보는 경험이 뜻깊었기에 과정과 약간의 팁을 소개해보려 한다.
+
+## 번역 방법
+
+1. 번역 환경 세팅
+
+영문의 원본 컨텐츠가 담긴 mdn/content와 이를 번역한 컨텐츠가 담긴 mdn/translate-content 레포를 fork한다.
+
+그리고 fork한 레포를 로컬에 clone한다.
+
+로컬 content 레포의 루트 디렉토리 경로에 .env를 생성한다.
+
+다음 코드를 삽입한다.
+
+```bash
+CONTENT_TRANSLATED_ROOT=/path/to/translate-content
+```
+
+이 때 주의할 점은 상대경로가 아니라 절대경로를 입력해야 한다는 점이다. 이는 content 레포의 루트 경로에서 터미널에 pwd를 입력하면 알 수 있다.
+
+로컬의 content 레포에서 yarn install, yarn start 명령어를 차례대로 터미널에서 실행하여 개발 서버를 연다.
+
+2. 번역
+
+- 이미 존재하는 번역본 수정하기
+
+위와 같이 실행했다면 localhost:5042에 접속해 개발 서버의 mdn 문서를 확인할 수 있다.
+
+번역을 수정하는 경우라면, 자신이 수정하고자 하는 md 파일을 찾아서 수정하면 된다.
+
+우리는 원본 컨텐츠를 수정하는 것이 아니라 번역 컨텐츠를 수정하는 것이니, mdn/translate-content를 수정해야 한다. 로컬의 해당 레포에서 branch를 생성하자.(ex. ko_menu_element)
+
+만약 수정하는 것이 예를 들어 <menu>라면 files/ko/docs/web/html/element/menu.md를 수정하면 된다. 이는 <menu> 요소에 대한 문서의 url 경로와 유사하다.
+
+수정하는 것이 아니라 애초에 번역 문서가 존재하지 않다면, 위의 경로에 md 파일을 만들어서 mdn/content의 원본 문서를 가져와 번역하면 된다.
+
+3. Pull Request 및 리뷰
+
+수정 혹은 번역이 완료되었다면 해당 branch를 push하고, 원본 레포에 PR을 생성한다.
+
+이후 라운드 로빈 방식으로 리뷰어가 자동으로 할당된다. 해당 리뷰어와 논의를 거쳐 수정이 필요하다면 수정하고, approve를 받아 merge하면 된다.
+
+참고로 나는 리뷰어의 리뷰가 늦어지는 감이 있어, 자주 활동하시는 분에게 메일을 보내 따로 리뷰를 요청했었다. 만약 이러한 경우를 겪게 된다면 나와 같이 다른 리뷰어에게 리뷰를 요청해보자.
+
+[[ko] translate: <menu>](https://github.com/mdn/translated-content/pull/18621)
+
+<br />
+<br />
+
+## 팁
+
+- GPT
+
+꽤나 GPT(4.0)가 번역을 잘해준다. GPT가 번역해준 것을 검토하고 수정하면 많은 시간을 아낄 수 있다.
+
+- sourceCommit
+
+metadata에 sourceCommit 정보를 넣어야 한다. 이는 내가 번역할 당시, 원본 레포(mdn/content)의 내가 번역 혹은 수정하고자 하는 파일의 가장 최신 commit hash 값을 말한다. 번역할 당시 원본 레포의 해당 컨텐츠가 어떠한 내용을 담고 있었는지 파악하기 위함이다.
+
+<br />
+<br />
+
+## 참고
+
+- [[ko] 한국 첫 기여자들을 위한 가이드라인](https://github.com/mdn/translated-content/issues/827)
