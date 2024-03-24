@@ -23,9 +23,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang='ko'>
-      <body className='flex w-full flex-col items-center'>
+      <body className='bg- flex w-full flex-col items-center'>
         <GlobalNavigationBar />
-        <main className='w-full max-w-5xl p-4 flex justify-center'>{children}</main>
+        <main className='flex w-full max-w-5xl justify-center p-4'>
+          {children}
+        </main>
         <GoogleAnalyticsScript />
       </body>
     </html>
