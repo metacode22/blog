@@ -24,9 +24,19 @@ export async function generateMetadata({
   params: { slug: string };
 }): Promise<Metadata> {
   const post = allPosts.find(post => post.slug === slug);
+  const title = post?.title ?? '신승준 블로그';
+  const description = post?.summary ?? '';
+  const keywords = post?.categories;
 
   return {
-    title: post?.title ?? '신승준 블로그',
+    title,
+    description,
+    keywords,
+    openGraph: {
+      title,
+      description,
+      url: `https://metacode22.vercel.app/posts/${slug}`,
+    },
   };
 }
 
@@ -40,29 +50,27 @@ export default async function PostPage({
   if (!post) notFound();
 
   return (
-    <>
-      <article className='prose w-full max-w-none'>
-        <div className='flex w-full justify-start gap-4'>
-          {post.categories.map(category => (
-            <Category key={category} category={category}>
-              {category}
-            </Category>
-          ))}
+    <article className='prose w-full max-w-none'>
+      <div className='flex w-full justify-start gap-4'>
+        {post.categories.map(category => (
+          <Category key={category} category={category}>
+            {category}
+          </Category>
+        ))}
+      </div>
+      <h1 className='m-0 py-4'>{post.title}</h1>
+      <div className='flex flex-col items-start gap-1'>
+        <Summary>{post.summary}</Summary>
+        <div className='flex justify-start gap-2'>
+          <Date date={post.updatedAt} />
+          <Bullet />
+          <ReadingTime readingTime={post.readingTime} />
         </div>
-        <h1 className='m-0 py-4'>{post.title}</h1>
-        <div className='flex flex-col items-start gap-1'>
-          <Summary>{post.summary}</Summary>
-          <div className='flex justify-start gap-2'>
-            <Date date={post.updatedAt} />
-            <Bullet />
-            <ReadingTime readingTime={post.readingTime} />
-          </div>
-        </div>
-        <div className='w-full py-8'>
-          <C.MDX code={post.body.code} />
-          <C.Comments />
-        </div>
-      </article>
-    </>
+      </div>
+      <div className='w-full py-8'>
+        <C.MDX code={post.body.code} />
+        <C.Comments />
+      </div>
+    </article>
   );
 }
