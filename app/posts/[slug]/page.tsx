@@ -1,4 +1,5 @@
 import { allPosts } from 'contentlayer/generated';
+import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import Bullet from '@/src/components/Bullet';
@@ -21,7 +22,7 @@ export async function generateMetadata({
   params: { slug },
 }: {
   params: { slug: string };
-}) {
+}): Promise<Metadata> {
   const post = allPosts.find(post => post.slug === slug);
 
   return {
