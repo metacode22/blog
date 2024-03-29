@@ -35,7 +35,7 @@ export async function generateMetadata({
     openGraph: {
       title,
       description,
-      url: `https://metacode22.vercel.app/posts/${slug}`,
+      url: `${process.env.SITE_URL}/posts/${slug}`,
     },
   };
 }
