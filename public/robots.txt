@@ -3,7 +3,7 @@ User-agent: *
 Allow: /
 
 # Host
-Host: https://metacode22.vercel.app/
+Host: https://metacode22.vercel.app
 
 # Sitemaps
 Sitemap: https://metacode22.vercel.app/sitemap.xml
