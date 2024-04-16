@@ -17,6 +17,10 @@ const NAVIGATION_LIST = [
     name: 'Posts',
     path: ROUTES.POSTS.ROOT,
   },
+  {
+    name: 'About',
+    path: ROUTES.ABOUT,
+  }
 ];
 
 export default function GlobalNavigationBar() {
