@@ -50,27 +50,29 @@ export default async function PostPage({
   if (!post) notFound();
 
   return (
-    <article className='prose w-full max-w-none'>
-      <div className='flex w-full justify-start gap-4'>
-        {post.categories.map(category => (
-          <Category key={category} category={category}>
-            {category}
-          </Category>
-        ))}
-      </div>
-      <h1 className='m-0 py-4'>{post.title}</h1>
-      <div className='flex flex-col items-start gap-1'>
-        <Summary>{post.summary}</Summary>
-        <div className='flex justify-start gap-2'>
-          <Date date={post.updatedAt} />
-          <Bullet />
-          <ReadingTime readingTime={post.readingTime} />
+    <div className='w-full max-w-3xl'>
+      <article className='prose w-full max-w-none'>
+        <div className='flex w-full justify-start gap-4'>
+          {post.categories.map(category => (
+            <Category key={category} category={category}>
+              {category}
+            </Category>
+          ))}
         </div>
-      </div>
-      <div className='w-full py-8'>
-        <C.MDX code={post.body.code} />
-        <C.Comments />
-      </div>
-    </article>
+        <h1 className='m-0 py-4'>{post.title}</h1>
+        <div className='flex flex-col items-start gap-1'>
+          <Summary>{post.summary}</Summary>
+          <div className='flex justify-start gap-2'>
+            <Date date={post.updatedAt} />
+            <Bullet />
+            <ReadingTime readingTime={post.readingTime} />
+          </div>
+        </div>
+        <div className='w-full py-8'>
+          <C.MDX code={post.body.code} />
+          <C.Comments />
+        </div>
+      </article>
+    </div>
   );
 }
