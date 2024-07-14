@@ -1,10 +1,13 @@
 import fs from 'fs';
 import matter from 'gray-matter';
 import path from 'path';
+import readingTime from 'reading-time';
+
+import { PostMeta } from '@/src/types/post';
 
 const CONTENT_PATH = path.join(process.cwd(), 'src/contents');
 
-export async function getPosts() {
+export function getPosts() {
   const files = getMDXFiles(CONTENT_PATH);
 
   return files.map((file) => {
@@ -15,6 +18,7 @@ export async function getPosts() {
       meta,
       content,
       slug,
+      readingTime: readingTime(content).minutes,
     };
   });
 }
@@ -28,7 +32,7 @@ function readMDXFile(filePath: string) {
   const { data, content } = matter(rawContent);
 
   return {
-    meta: data,
+    meta: data as PostMeta,
     content,
   };
 }
