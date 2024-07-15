@@ -4,10 +4,10 @@ import { serialize } from 'next-mdx-remote/serialize';
 import rehypePrettyCode from 'rehype-pretty-code';
 
 import Bullet from '@/src/components/bullet';
-import Time from '@/src/components/time';
 import { MDX } from '@/src/components/mdx';
 import ReadingTime from '@/src/components/reading-time';
 import Summary from '@/src/components/summary';
+import Time from '@/src/components/time';
 import { getPosts } from '@/src/utils/post';
 
 export async function generateStaticParams() {
@@ -51,7 +51,7 @@ export default async function PostPage({
   if (!post) notFound();
 
   const { readingTime, content } = post;
-  const { title, summary, categories, updatedAt } = post.meta;
+  const { title, summary, updatedAt } = post.meta;
 
   const { compiledSource } = await serialize(content, {
     mdxOptions: {
@@ -67,7 +67,7 @@ export default async function PostPage({
 
   return (
     <div className='w-full max-w-3xl'>
-      <article className='prose w-full max-w-none'>
+      <article className='prose prose-neutral w-full max-w-none dark:prose-invert'>
         <h1 className='m-0 py-4'>{title}</h1>
         <div className='flex flex-col items-start gap-1'>
           <Summary>{summary}</Summary>

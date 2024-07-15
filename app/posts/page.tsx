@@ -5,9 +5,5 @@ import PostList from '../../src/components/post-list';
 export default function PostsPage() {
   const posts = getPosts();
 
-  return (
-    <div className='flex w-full flex-col items-start gap-6'>
-      <PostList posts={posts} />
-    </div>
-  );
+  return <PostList posts={posts} />;
 }

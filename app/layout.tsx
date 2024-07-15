@@ -3,6 +3,7 @@ import '@/src/styles/globals.css';
 import type { Metadata } from 'next';
 
 import GoogleAnalyticsScript from '@/src/components/google-analytics-script';
+import cn from '@/src/utils/class-name';
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.SITE_URL),
@@ -25,9 +26,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang='ko'>
-      <body className='bg- flex w-full flex-col items-center'>
-        <main className='flex w-full max-w-5xl justify-center p-4'>
+    <html
+      lang='ko'
+      className={cn('bg-white text-black dark:bg-[#111010] dark:text-white')}>
+      <body className='mx-auto mb-40 mt-8 flex max-w-[704px] flex-col antialiased md:flex-row'>
+        <main className='flex min-w-0 flex-auto flex-col px-4 pt-6'>
           {children}
         </main>
         <GoogleAnalyticsScript />
