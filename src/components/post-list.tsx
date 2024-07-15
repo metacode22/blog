@@ -1,7 +1,7 @@
 'use client';
 
 import { Post } from '../types/post';
-import PostListItem from './PostListItem';
+import PostListItem from './post-list-item';
 
 export default function PostList({ posts }: { posts: Post[] }) {
   return (

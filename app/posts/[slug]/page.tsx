@@ -3,11 +3,11 @@ import { notFound } from 'next/navigation';
 import { serialize } from 'next-mdx-remote/serialize';
 import rehypePrettyCode from 'rehype-pretty-code';
 
-import Bullet from '@/src/components/Bullet';
-import Time from '@/src/components/Date';
+import Bullet from '@/src/components/bullet';
+import Time from '@/src/components/time';
 import { MDX } from '@/src/components/mdx';
-import ReadingTime from '@/src/components/ReadingTime';
-import Summary from '@/src/components/Summary';
+import ReadingTime from '@/src/components/reading-time';
+import Summary from '@/src/components/summary';
 import { getPosts } from '@/src/utils/post';
 
 export async function generateStaticParams() {

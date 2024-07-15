@@ -1,10 +1,10 @@
 import Link from 'next/link';
 
-import Bullet from '@/src/components/Bullet';
-import Time from '@/src/components/Date';
-import ReadingTime from '@/src/components/ReadingTime';
-import Summary from '@/src/components/Summary';
-import Title from '@/src/components/Title';
+import Bullet from '@/src/components/bullet';
+import Time from '@/src/components/time';
+import ReadingTime from '@/src/components/reading-time';
+import Summary from '@/src/components/summary';
+import Title from '@/src/components/title';
 import ROUTES from '@/src/constants/routes';
 
 import { Post } from '../types/post';

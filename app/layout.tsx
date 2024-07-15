@@ -2,7 +2,7 @@ import '@/src/styles/globals.css';
 
 import type { Metadata } from 'next';
 
-import GoogleAnalyticsScript from '@/src/components/GoogleAnalyticsScript';
+import GoogleAnalyticsScript from '@/src/components/google-analytics-script';
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.SITE_URL),
