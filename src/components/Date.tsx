@@ -1,10 +1,14 @@
+import { format } from 'date-fns';
+
 /**
  * @param date - YYYY-MM-DD와 같은 형식으로 들어와야 함.
  */
-export default function Date({ date }: { date: string }) {
+export default function Time({ date }: { date: Date | string }) {
+  const formattedDate = format(new Date(date), 'yyyy-MM-dd');
+
   return (
-    <time dateTime={date} className='text-sm text-gray-400'>
-      {date}
+    <time dateTime={formattedDate} className='text-sm text-gray-400'>
+      {formattedDate}
     </time>
   );
 }

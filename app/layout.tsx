@@ -2,7 +2,6 @@ import '@/src/styles/globals.css';
 
 import type { Metadata } from 'next';
 
-import GlobalNavigationBar from '@/src/components/GlobalNavigationBar';
 import GoogleAnalyticsScript from '@/src/components/GoogleAnalyticsScript';
 
 export const metadata: Metadata = {
@@ -28,7 +27,6 @@ export default function RootLayout({
   return (
     <html lang='ko'>
       <body className='bg- flex w-full flex-col items-center'>
-        <GlobalNavigationBar />
         <main className='flex w-full max-w-5xl justify-center p-4'>
           {children}
         </main>

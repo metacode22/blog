@@ -1,12 +1,9 @@
-import { allPosts } from 'contentlayer/generated';
-import { compareDesc } from 'date-fns';
+import { getPosts } from '@/src/utils/post';
 
 import PostList from '../src/components/PostList';
 
 export default async function HomePage() {
-  const posts = allPosts
-    .filter(post => post.isPublished)
-    .sort((a, b) => compareDesc(new Date(a.updatedAt), new Date(b.updatedAt)));
+  const posts = getPosts();
 
   return (
     <div className='flex w-full flex-col items-start'>
