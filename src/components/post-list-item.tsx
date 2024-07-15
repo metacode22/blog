@@ -1,9 +1,9 @@
 import Link from 'next/link';
 
 import Bullet from '@/src/components/bullet';
-import Time from '@/src/components/time';
 import ReadingTime from '@/src/components/reading-time';
 import Summary from '@/src/components/summary';
+import Time from '@/src/components/time';
 import Title from '@/src/components/title';
 import ROUTES from '@/src/constants/routes';
 
