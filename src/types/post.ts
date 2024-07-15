@@ -6,3 +6,10 @@ export type PostMeta = {
   createdAt: Date;
   updatedAt: Date;
 };
+
+export type Post = {
+  content: string;
+  meta: PostMeta;
+  readingTime: number;
+  slug: string;
+}
