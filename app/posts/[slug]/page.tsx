@@ -4,7 +4,6 @@ import { serialize } from 'next-mdx-remote/serialize';
 import rehypePrettyCode from 'rehype-pretty-code';
 
 import Bullet from '@/src/components/Bullet';
-import Category from '@/src/components/Category';
 import Time from '@/src/components/Date';
 import { MDX } from '@/src/components/mdx';
 import ReadingTime from '@/src/components/ReadingTime';
