@@ -2,6 +2,7 @@ import '@/src/styles/globals.css';
 
 import type { Metadata } from 'next';
 
+import { GNB } from '@/src/components/gnb';
 import GoogleAnalyticsScript from '@/src/components/google-analytics-script';
 import cn from '@/src/utils/class-name';
 
@@ -31,6 +32,7 @@ export default function RootLayout({
       className={cn('bg-white text-black dark:bg-[#111010] dark:text-white')}>
       <body className='mx-auto mb-40 mt-8 flex max-w-[704px] flex-col antialiased md:flex-row'>
         <main className='flex min-w-0 flex-auto flex-col px-4 pt-6'>
+          <GNB />
           {children}
         </main>
         <GoogleAnalyticsScript />
