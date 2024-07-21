@@ -7,7 +7,7 @@ import Time from '@/src/components/time';
 import Title from '@/src/components/title';
 import { routes } from '@/src/constants/routes';
 
-import { Post } from '../types/post';
+import { Post } from '../../../src/types/post';
 
 export default function PostListItem({
   post: {
@@ -26,9 +26,7 @@ export default function PostListItem({
             <Title>{title}</Title>
           </Link>
         </div>
-        <Link
-          href={`${routes.posts.detail(slug)}`}
-          className='flex flex-col items-start gap-1'>
+        <Link href={`${routes.posts.detail(slug)}`} className='flex flex-col items-start gap-1'>
           <Summary>{summary}</Summary>
           <div className='flex gap-2'>
             <Time date={updatedAt} />

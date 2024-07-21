@@ -1,6 +1,7 @@
 'use client';
 
-import { Post } from '../types/post';
+import { Post } from '@/src/types/post';
+
 import PostListItem from './post-list-item';
 
 export default function PostList({ posts }: { posts: Post[] }) {
