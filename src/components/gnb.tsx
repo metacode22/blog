@@ -10,16 +10,13 @@ const LINKS = {
 export function GNB() {
   return (
     <aside className='mb-16 tracking-tight'>
-      <nav className='flex flex-row items-end gap-8'>
-        <Link href={routes.home} className='text-2xl font-medium'>
-          Seungjun Shin
+      <nav className='flex flex-row items-center gap-8'>
+        <Link href={routes.home} className='text-xl font-semibold'>
+          SeungJun Shin
         </Link>
-        <div className='flex flex-row items-end'>
+        <div className='flex flex-row items-center'>
           {Object.entries(LINKS).map(([name, path]) => (
-            <Link
-              key={path}
-              href={path}
-              className='flex px-2 py-1 hover:text-neutral-800 dark:hover:text-neutral-200'>
+            <Link key={path} href={path} className='flex px-2 opacity-50'>
               {name}
             </Link>
           ))}
