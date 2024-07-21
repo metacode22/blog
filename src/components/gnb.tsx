@@ -3,8 +3,8 @@ import Link from 'next/link';
 import { routes } from '../constants/routes';
 
 const LINKS = {
-  home: routes.home,
   posts: routes.posts.root,
+  books: routes.books.root,
 } as const;
 
 export function GNB() {

@@ -7,7 +7,7 @@ export default function Time({ date }: { date: Date | string }) {
   const formattedDate = format(new Date(date), 'yyyy-MM-dd');
 
   return (
-    <time dateTime={formattedDate} className='text-sm text-gray-400'>
+    <time dateTime={formattedDate} className='text-xs text-gray-400'>
       {formattedDate}
     </time>
   );

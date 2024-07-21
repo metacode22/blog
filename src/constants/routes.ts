@@ -4,4 +4,7 @@ export const routes = {
     root: '/posts',
     detail: (slug: string) => `${routes.posts.root}/${slug}`,
   },
+  books: {
+    root: '/books',
+  },
 };

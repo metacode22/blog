@@ -21,7 +21,7 @@ export function Footer() {
       <div className='flex w-full flex-col items-end gap-4'>
         <div className='flex w-full  justify-end pt-4'>
           {LINKS.map(({ name, href, icon }) => (
-            <Link key={name} href={href} className='px-2 py-1'>
+            <Link key={name} href={href} className='px-2 py-1' target='_blank' rel='noopener noreferrer'>
               {icon}
             </Link>
           ))}
