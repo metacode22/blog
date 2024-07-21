@@ -5,7 +5,7 @@ import ReadingTime from '@/src/components/reading-time';
 import Summary from '@/src/components/summary';
 import Time from '@/src/components/time';
 import Title from '@/src/components/title';
-import ROUTES from '@/src/constants/routes';
+import { routes } from '@/src/constants/routes';
 
 import { Post } from '../types/post';
 
@@ -22,12 +22,12 @@ export default function PostListItem({
     <li className='flex items-start gap-10'>
       <div className='flex flex-col items-start gap-4'>
         <div className='flex flex-col items-start gap-2'>
-          <Link href={`${ROUTES.POSTS.DETAIL(slug)}`}>
+          <Link href={`${routes.posts.detail(slug)}`}>
             <Title>{title}</Title>
           </Link>
         </div>
         <Link
-          href={`${ROUTES.POSTS.DETAIL(slug)}`}
+          href={`${routes.posts.detail(slug)}`}
           className='flex flex-col items-start gap-1'>
           <Summary>{summary}</Summary>
           <div className='flex gap-2'>

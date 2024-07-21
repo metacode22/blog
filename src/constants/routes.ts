@@ -1,11 +1,7 @@
-const ROUTES = {
-  HOME: '/',
-  POSTS: {
-    ROOT: '/posts',
-    DETAIL: (slug: string) => `${ROUTES.POSTS.ROOT}/${slug}`,
+export const routes = {
+  home: '/',
+  posts: {
+    root: '/posts',
+    detail: (slug: string) => `${routes.posts.root}/${slug}`,
   },
-  ABOUT: '/about',
-  DIARY: '/diary',
 };
-
-export default ROUTES;

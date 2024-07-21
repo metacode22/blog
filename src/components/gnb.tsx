@@ -1,35 +1,30 @@
 import Link from 'next/link';
 
-const navItems = {
-  '/': {
-    name: 'home',
-  },
-  '/posts': {
-    name: 'posts',
-  },
-};
+import { routes } from '../constants/routes';
+
+const LINKS = {
+  home: routes.home,
+  posts: routes.posts.root,
+} as const;
 
 export function GNB() {
   return (
-    <aside className='-ml-[8px] mb-16 tracking-tight'>
-      <div className='lg:sticky lg:top-20'>
-        <nav
-          className='fade relative flex scroll-pr-6 flex-row items-start px-0 pb-0 md:relative md:overflow-auto'
-          id='nav'>
-          <div className='flex flex-row space-x-0 pr-10'>
-            {Object.entries(navItems).map(([path, { name }]) => {
-              return (
-                <Link
-                  key={path}
-                  href={path}
-                  className='relative flex px-2 py-1 align-middle transition-all hover:text-neutral-800 dark:hover:text-neutral-200'>
-                  {name}
-                </Link>
-              );
-            })}
-          </div>
-        </nav>
-      </div>
+    <aside className='mb-16 tracking-tight'>
+      <nav className='flex flex-row items-end gap-8'>
+        <Link href={routes.home} className='text-2xl font-medium'>
+          Seungjun Shin
+        </Link>
+        <div className='flex flex-row items-end'>
+          {Object.entries(LINKS).map(([name, path]) => (
+            <Link
+              key={path}
+              href={path}
+              className='flex px-2 py-1 hover:text-neutral-800 dark:hover:text-neutral-200'>
+              {name}
+            </Link>
+          ))}
+        </div>
+      </nav>
     </aside>
   );
 }
