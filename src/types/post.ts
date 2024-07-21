@@ -2,7 +2,7 @@ export type PostMeta = {
   title: string;
   summary: string;
   categories: string[];
-  isPublised: boolean;
+  published: boolean;
   createdAt: Date;
   updatedAt: Date;
 };
@@ -12,4 +12,4 @@ export type Post = {
   meta: PostMeta;
   readingTime: number;
   slug: string;
-}
+};

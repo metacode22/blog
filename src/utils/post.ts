@@ -10,17 +10,23 @@ const CONTENT_PATH = path.join(process.cwd(), 'src/contents');
 export function getPosts() {
   const files = getMDXFiles(CONTENT_PATH);
 
-  return files.map((file) => {
-    const { meta, content } = readMDXFile(path.join(CONTENT_PATH, file));
-    const slug = path.basename(file, path.extname(file));
+  return files
+    .filter((file) => {
+      const { meta } = readMDXFile(path.join(CONTENT_PATH, file));
 
-    return {
-      meta,
-      content,
-      slug,
-      readingTime: readingTime(content).minutes,
-    };
-  });
+      return meta.published;
+    })
+    .map((file) => {
+      const { meta, content } = readMDXFile(path.join(CONTENT_PATH, file));
+      const slug = path.basename(file, path.extname(file));
+
+      return {
+        meta,
+        content,
+        slug,
+        readingTime: readingTime(content).minutes,
+      };
+    });
 }
 
 function getMDXFiles(dir: string) {

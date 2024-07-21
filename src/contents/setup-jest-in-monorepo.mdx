@@ -6,7 +6,7 @@ categories:
   - Monorepo
 createdAt: 2024-03-31
 updatedAt: 2024-03-31
-isPublished: true
+published: true
 ---
 
 ## 개요
@@ -72,10 +72,7 @@ babel.config.js를 root directory 경로에 만들고 다음과 같은 코드를
 ```typescript
 // babel.config.js
 module.exports = {
-  presets: [
-    ['@babel/preset-env', { targets: { node: 'current' } }],
-    '@babel/preset-typescript',
-  ],
+  presets: [['@babel/preset-env', { targets: { node: 'current' } }], '@babel/preset-typescript'],
 };
 ```
 
