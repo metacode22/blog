@@ -4,6 +4,12 @@ export default function BooksPage() {
       <div>
         <h3 className='m-0'>2024년</h3>
         <ul>
+          <h4>7월</h4>
+          <ul>
+            <li>이동 평균선 투자법</li>
+          </ul>
+        </ul>
+        <ul>
           <h4>6월</h4>
           <ul>
             <li>부자 아빠 가난한 아빠</li>
