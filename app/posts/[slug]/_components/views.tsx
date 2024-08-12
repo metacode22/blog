@@ -8,6 +8,8 @@ export function Views({ slug }: { slug: string }) {
   const [views, setViews] = useState(0);
 
   useEffect(() => {
+    if (process.env.NODE_ENV !== 'production') return;
+
     (async () => {
       const { views } = await increaseViews(slug);
       setViews(views);
