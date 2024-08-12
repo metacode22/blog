@@ -65,7 +65,7 @@ export default async function PostPage({ params: { slug } }: { params: { slug: s
         <h1 className='m-0 py-4'>{title}</h1>
         <div className='flex flex-col items-start gap-1'>
           <Summary>{summary}</Summary>
-          <div className='flex justify-start gap-2'>
+          <div className='flex justify-start gap-2 items-center'>
             <Time date={updatedAt} />
             <Bullet />
             <ReadingTime readingTime={readingTime} />

@@ -28,7 +28,7 @@ export default function PostListItem({
         </div>
         <Link href={`${routes.posts.detail(slug)}`} className='flex flex-col items-start gap-1'>
           <Summary>{summary}</Summary>
-          <div className='flex gap-2'>
+          <div className='flex gap-2 items-center'>
             <Time date={updatedAt} />
             <Bullet />
             <ReadingTime readingTime={readingTime} />
