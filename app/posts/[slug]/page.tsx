@@ -10,6 +10,8 @@ import Summary from '@/src/components/summary';
 import Time from '@/src/components/time';
 import { getPosts } from '@/src/utils/post';
 
+import { Views } from './_components/views';
+
 export async function generateStaticParams() {
   const posts = getPosts();
 
@@ -18,11 +20,7 @@ export async function generateStaticParams() {
   }));
 }
 
-export async function generateMetadata({
-  params: { slug },
-}: {
-  params: { slug: string };
-}): Promise<Metadata> {
+export async function generateMetadata({ params: { slug } }: { params: { slug: string } }): Promise<Metadata> {
   const post = getPosts().find((post) => post.slug === slug);
 
   if (!post) return {};
@@ -41,11 +39,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function PostPage({
-  params: { slug },
-}: {
-  params: { slug: string };
-}) {
+export default async function PostPage({ params: { slug } }: { params: { slug: string } }) {
   const post = getPosts().find((post) => post.slug === slug);
 
   if (!post) notFound();
@@ -78,6 +72,7 @@ export default async function PostPage({
           </div>
         </div>
         <div className='w-full py-8'>
+          <Views slug={slug} />
           <MDX compiledSource={compiledSource} frontmatter={post.meta} />
         </div>
       </article>
