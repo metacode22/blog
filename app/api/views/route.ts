@@ -24,6 +24,10 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Slug is required' }, { status: 400 });
   }
 
+  if (ip && isLocalhost(ip)) {
+    return NextResponse.json({}, { status: 200 });
+  }
+
   const views = await prisma.$transaction(async (transaction) => {
     let shouldIncreaseViews = true;
 
@@ -45,10 +49,6 @@ export async function POST(request: NextRequest) {
       } else {
         await transaction.view.create({ data: { ip: hashedIP, slug } });
       }
-    }
-
-    if (ip && isLocalhost(ip)) {
-      shouldIncreaseViews = false;
     }
 
     const updatedPost = await transaction.post.upsert({
