@@ -5,7 +5,7 @@ import readingTime from 'reading-time';
 
 import { PostMeta } from '@/src/types/post';
 
-const CONTENT_PATH = path.join(process.cwd(), 'src/contents');
+const CONTENT_PATH = path.join(process.cwd(), 'src/contents/posts');
 
 export function getPosts() {
   const files = getMDXFiles(CONTENT_PATH);
