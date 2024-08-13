@@ -1,6 +1,7 @@
 import '@/src/styles/globals.css';
 
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 
 import { Footer } from '@/src/components/footer';
 import { GNB } from '@/src/components/gnb';
@@ -30,7 +31,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {children}
           <Footer />
         </main>
-        <GoogleAnalyticsScript />
+        <Suspense>
+          <GoogleAnalyticsScript />
+        </Suspense>
       </body>
     </html>
   );
