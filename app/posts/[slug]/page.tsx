@@ -3,14 +3,14 @@ import { notFound } from 'next/navigation';
 import { serialize } from 'next-mdx-remote/serialize';
 import rehypePrettyCode from 'rehype-pretty-code';
 
+import { increaseViews } from '@/src/apis/view';
 import Bullet from '@/src/components/bullet';
 import { MDX } from '@/src/components/mdx';
 import ReadingTime from '@/src/components/reading-time';
 import Summary from '@/src/components/summary';
 import Time from '@/src/components/time';
+import { Views } from '@/src/components/view';
 import { getPosts } from '@/src/utils/post';
-
-import { Views } from './_components/views';
 
 export async function generateStaticParams() {
   const posts = getPosts();
@@ -59,20 +59,23 @@ export default async function PostPage({ params: { slug } }: { params: { slug: s
     },
   });
 
+  await increaseViews(slug);
+
   return (
     <div className='w-full max-w-3xl'>
       <article className='prose prose-neutral w-full max-w-none dark:prose-invert'>
         <h1 className='m-0 py-4'>{title}</h1>
         <div className='flex flex-col items-start gap-1'>
           <Summary>{summary}</Summary>
-          <div className='flex justify-start gap-2 items-center'>
+          <div className='flex items-center justify-start gap-2'>
             <Time date={updatedAt} />
             <Bullet />
             <ReadingTime readingTime={readingTime} />
+            <Bullet />
+            <Views slug={slug} />
           </div>
         </div>
         <div className='w-full py-8'>
-          <Views slug={slug} />
           <MDX compiledSource={compiledSource} frontmatter={post.meta} />
         </div>
       </article>

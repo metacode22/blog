@@ -1,7 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 import { hash } from '@/src/utils/hash';
+import { isLocalhost } from '@/src/utils/localhost';
 import { prisma } from '@/src/utils/prisma';
+
+export async function GET(request: NextRequest) {
+  const slug = request.nextUrl.searchParams.get('slug');
+
+  if (!slug) {
+    return NextResponse.json({ error: 'Slug is required' }, { status: 400 });
+  }
+
+  const post = await prisma.post.findUnique({ where: { slug } });
+
+  return NextResponse.json({ views: post?.views ?? 0 });
+}
 
 export async function POST(request: NextRequest) {
   const slug = request.nextUrl.searchParams.get('slug');
@@ -14,7 +27,7 @@ export async function POST(request: NextRequest) {
   const views = await prisma.$transaction(async (transaction) => {
     let shouldIncreaseViews = true;
 
-    if (ip) {
+    if (ip && !isLocalhost(ip)) {
       const hashedIP = hash(ip);
 
       const existingView = await transaction.view.findFirst({

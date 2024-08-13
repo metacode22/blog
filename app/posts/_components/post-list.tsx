@@ -1,5 +1,3 @@
-'use client';
-
 import { Post } from '@/src/types/post';
 
 import PostListItem from './post-list-item';
