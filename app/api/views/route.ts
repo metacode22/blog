@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
   const views = await prisma.$transaction(async (transaction) => {
     let shouldIncreaseViews = true;
 
-    if (ip && !isLocalhost(ip)) {
+    if (ip) {
       const hashedIP = hash(ip);
 
       const existingView = await transaction.view.findFirst({
@@ -45,6 +45,10 @@ export async function POST(request: NextRequest) {
       } else {
         await transaction.view.create({ data: { ip: hashedIP, slug } });
       }
+    }
+
+    if (ip && isLocalhost(ip)) {
+      shouldIncreaseViews = false;
     }
 
     const updatedPost = await transaction.post.upsert({

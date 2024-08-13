@@ -3,7 +3,6 @@ import { notFound } from 'next/navigation';
 import { serialize } from 'next-mdx-remote/serialize';
 import rehypePrettyCode from 'rehype-pretty-code';
 
-import { increaseViews } from '@/src/apis/view';
 import Bullet from '@/src/components/bullet';
 import { MDX } from '@/src/components/mdx';
 import ReadingTime from '@/src/components/reading-time';
@@ -59,8 +58,6 @@ export default async function PostPage({ params: { slug } }: { params: { slug: s
     },
   });
 
-  await increaseViews(slug);
-
   return (
     <div className='w-full max-w-3xl'>
       <article className='prose prose-neutral w-full max-w-none dark:prose-invert'>
@@ -72,7 +69,7 @@ export default async function PostPage({ params: { slug } }: { params: { slug: s
             <Bullet />
             <ReadingTime readingTime={readingTime} />
             <Bullet />
-            <Views slug={slug} />
+            <Views slug={slug} increase />
           </div>
         </div>
         <div className='w-full py-8'>

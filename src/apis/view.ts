@@ -1,5 +1,5 @@
 export async function getViews(slug: string): Promise<{ views: number }> {
-  const response = await fetch(`${process.env.SITE_URL}/api/views?slug=${slug}`);
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/views?slug=${slug}`);
 
   if (!response.ok) {
     throw new Error('Failed to get views');
@@ -9,7 +9,7 @@ export async function getViews(slug: string): Promise<{ views: number }> {
 }
 
 export async function increaseViews(slug: string): Promise<{ views: number }> {
-  const response = await fetch(`${process.env.SITE_URL}/api/views?slug=${slug}`, {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/views?slug=${slug}`, {
     method: 'POST',
   });
 
