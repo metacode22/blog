@@ -23,5 +23,5 @@ model View {
   ip         String
   slug       String
 
-  @@unique([ip, slug])
+  @@unique([ip, slug, created_at])
 }
