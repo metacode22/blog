@@ -8,7 +8,9 @@ export default function BooksPage() {
         <ul>
           <h4>8월</h4>
           <ul>
-            <Link href='/books/money-hot-love-and-cold-treat'>돈, 뜨겁게 사랑하고 차갑게 다루어라</Link>
+            <li>
+              <Link href='/books/money-hot-love-and-cold-treat'>돈, 뜨겁게 사랑하고 차갑게 다루어라</Link>
+            </li>
           </ul>
         </ul>
         <ul>
