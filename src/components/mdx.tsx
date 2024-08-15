@@ -7,16 +7,19 @@ export function MDX({ scope = {}, ...props }: Omit<MDXRemoteProps, 'scope'> & { 
   return <MDXRemote {...props} scope={scope} components={{ Image: RoundedImage }} />;
 }
 
-function RoundedImage({ alt, src, ...props }: ImageProps) {
+function RoundedImage({ alt, src, source, ...props }: ImageProps & { source?: string }) {
   return (
-    <Image
-      alt={alt ?? ''}
-      src={src}
-      width={0}
-      height={0}
-      sizes='100vw'
-      className='h-auto w-full rounded-lg'
-      {...props}
-    />
+    <div className='flex flex-col items-center'>
+      <Image
+        alt={alt ?? ''}
+        src={src}
+        width={0}
+        height={0}
+        sizes='100vw'
+        className='h-auto w-full rounded-lg'
+        {...props}
+      />
+      {source && <p className='text-xs text-gray-500'>[출처: {source}]</p>}
+    </div>
   );
 }

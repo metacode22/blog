@@ -31,7 +31,7 @@ cypress는 현재 10년 가까이 유지되고 있으며 그만큼 많은 회사
 반면 어려움을 겪은 부분은, ci 단계에서 실패한 e2e 테스트를 디버깅하는 과정이었다. github actions로 ci 환경을 구축했었는데 e2e 테스트가 실패하면 다음 이미지에 나오는 정보만 얻을 수 있다.
 
 <Image
-  src='/images/contents/debug-ci-e2e-test-with-cypress-cloud-test-replay/failed-e2e-test.png'
+  src='/images/contents/posts/debug-ci-e2e-test-with-cypress-cloud-test-replay/failed-e2e-test.png'
   alt='github actions에서 실패한 cypress e2e test'
 />
 
@@ -42,7 +42,7 @@ data-testid attribute가 careerExperience인 요소를 제한 시간인 4000ms �
 cypress open 명령어를 통해 연 브라우저에서는 다음과 같이 e2e 테스트가 돌아가는 상세한 과정을 확인할 수 있다.
 
 <Image
-  src='/images/contents/debug-ci-e2e-test-with-cypress-cloud-test-replay/e2e-test-in-browser.png'
+  src='/images/contents/posts/debug-ci-e2e-test-with-cypress-cloud-test-replay/e2e-test-in-browser.png'
   alt='browser에서 e2e test를 확인하는 모습'
 />
 
@@ -184,7 +184,7 @@ jobs:
 이제 다음 사진처럼 새로운 프로젝트를 생성해주자.
 
 <Image
-  src='/images/contents/debug-ci-e2e-test-with-cypress-cloud-test-replay/create-project-in-cypress-cloud.png'
+  src='/images/contents/posts/debug-ci-e2e-test-with-cypress-cloud-test-replay/create-project-in-cypress-cloud.png'
   alt='새로운 프로젝트 클릭하기'
 />
 
@@ -193,7 +193,7 @@ jobs:
 그러면 projectId가 나온다. 이를 cypress.config.ts에 추가해주자.
 
 <Image
-  src='/images/contents/debug-ci-e2e-test-with-cypress-cloud-test-replay/project-id.png'
+  src='/images/contents/posts/debug-ci-e2e-test-with-cypress-cloud-test-replay/project-id.png'
   alt='cypress cloud project id'
 />
 
@@ -202,7 +202,7 @@ jobs:
 다음 단계로 넘어가면 어떤 도구를 이용해 ci를 구축했는지 선택하는 단계가 나온다. 나는 github actions를 이용했기에 이를 선택했다. 그러면 드디어 test replay를 어떻게 기록할 수 있는지 알려준다.
 
 <Image
-  src='/images/contents/debug-ci-e2e-test-with-cypress-cloud-test-replay/how-to-record.png'
+  src='/images/contents/posts/debug-ci-e2e-test-with-cypress-cloud-test-replay/how-to-record.png'
   alt='test replay를 기록하는 방법'
 />
 
@@ -211,7 +211,7 @@ jobs:
 pnpm dev 등의 명령어로 개발 서버를 켜고 Try it first에 나오는 명령어를 터미널에 입력해보자. 그러면 test replay가 cypress cloud에 기록되는 것을 확인할 수 있다.
 
 <Image
-  src='/images/contents/debug-ci-e2e-test-with-cypress-cloud-test-replay/recording-test-replay-process-to-cypress-cloud.png'
+  src='/images/contents/posts/debug-ci-e2e-test-with-cypress-cloud-test-replay/recording-test-replay-process-to-cypress-cloud.png'
   alt='로컬에서 돌린 e2e test가 cypress cloud에 기록되는 모습'
 />
 
@@ -257,7 +257,7 @@ jobs:
 그리고 github token을 생성한 후 해당 토큰과 CYPRESS_RECORD_KEY를 레포지토리에 등록해주자.(cypress 안내로는 GITHUB_TOKEN으로 나와있지만, github에서는 GITHUB을 prefix로 사용할 수 없다고 떠서 GIT_HUB_TOKEN으로 변경했다)
 
 <Image
-  src='/images/contents/debug-ci-e2e-test-with-cypress-cloud-test-replay/repository-secrets.png'
+  src='/images/contents/posts/debug-ci-e2e-test-with-cypress-cloud-test-replay/repository-secrets.png'
   alt='레포지토리에 secrets 등록하기'
 />
 
@@ -266,13 +266,13 @@ jobs:
 이제 레포지토리에 push 해보면 action이 돌아가고, cypress cloud에 test replay가 기록된 것을 확인할 수 있다. 얼른 test replay를 클릭해보자. ci 단계에서 돌아간 e2e 테스트를 확인할 수 있고, 당시 네트워크 통신과 console에 찍힌 로그들을 확인할 수 있다.
 
 <Image
-  src='/images/contents/debug-ci-e2e-test-with-cypress-cloud-test-replay/click-test-replay.png'
+  src='/images/contents/posts/debug-ci-e2e-test-with-cypress-cloud-test-replay/click-test-replay.png'
   alt='test replay 클릭'
 />
 
 <br />
 
-<Image src='/images/contents/debug-ci-e2e-test-with-cypress-cloud-test-replay/test-replay.png' alt='test replay' />
+<Image src='/images/contents/posts/debug-ci-e2e-test-with-cypress-cloud-test-replay/test-replay.png' alt='test replay' />
 
 <br />
 <br />
