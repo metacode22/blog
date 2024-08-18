@@ -26,5 +26,9 @@ function RoundedImage({ alt, src, source, ...props }: ImageProps & { source?: st
 }
 
 function Resource({ children }: { children: ReactNode }) {
-  return <p className='text-xs text-gray-500'>{children}</p>;
+  return (
+    <div className='flex w-full justify-end'>
+      <p className='text-xs text-gray-500'>{children}</p>
+    </div>
+  );
 }
