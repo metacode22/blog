@@ -17,28 +17,30 @@ export function ListItem({
     meta: { title, summary, updatedAt },
     readingTime,
   },
+  href,
 }: {
   item: Item<Meta>;
+  href: string;
 }) {
   return (
     <li className='flex items-start gap-10'>
-      <div className={cn('flex flex-col items-start', summary ? 'gap-4' : 'gap-1')}>
-        <div className='flex flex-col items-start gap-2'>
-          <Link href={`${routes.posts.detail(slug)}`}>
+      <Link href={href}>
+        <div className={cn('flex flex-col items-start', summary ? 'gap-4' : 'gap-1')}>
+          <div className='flex flex-col items-start gap-2'>
             <Title>{title}</Title>
-          </Link>
-        </div>
-        <Link href={`${routes.posts.detail(slug)}`} className='flex flex-col items-start gap-1'>
-          {summary && <Summary>{summary}</Summary>}
-          <div className='flex items-center gap-2'>
-            <Time date={updatedAt} />
-            <Bullet />
-            <ReadingTime readingTime={readingTime} />
-            <Bullet />
-            <Views slug={slug} />
           </div>
-        </Link>
-      </div>
+          <div className='flex flex-col items-start gap-1'>
+            {summary && <Summary>{summary}</Summary>}
+            <div className='flex items-center gap-2'>
+              <Time date={updatedAt} />
+              <Bullet />
+              <ReadingTime readingTime={readingTime} />
+              <Bullet />
+              <Views slug={slug} />
+            </div>
+          </div>
+        </div>
+      </Link>
     </li>
   );
 }

@@ -9,22 +9,22 @@ import ReadingTime from '@/src/components/reading-time';
 import Summary from '@/src/components/summary';
 import Time from '@/src/components/time';
 import { Views } from '@/src/components/view';
-import { getBooks } from '@/src/utils/contents/book';
+import { getLogs } from '@/src/utils/contents/log';
 
 export async function generateStaticParams() {
-  const books = getBooks();
+  const logs = getLogs();
 
-  return books.map(({ slug }) => ({
+  return logs.map(({ slug }) => ({
     slug,
   }));
 }
 
 export async function generateMetadata({ params: { slug } }: { params: { slug: string } }): Promise<Metadata> {
-  const book = getBooks().find((book) => book.slug === slug);
+  const log = getLogs().find((log) => log.slug === slug);
 
-  if (!book) return {};
+  if (!log) return {};
 
-  const { title, summary, categories } = book.meta;
+  const { title, summary, categories } = log.meta;
 
   return {
     title,
@@ -33,18 +33,18 @@ export async function generateMetadata({ params: { slug } }: { params: { slug: s
     openGraph: {
       title,
       description: summary,
-      url: `${process.env.SITE_URL}/books/${slug}`,
+      url: `${process.env.SITE_URL}/logs/${slug}`,
     },
   };
 }
 
-export default async function BookPage({ params: { slug } }: { params: { slug: string } }) {
-  const book = getBooks().find((book) => book.slug === slug);
+export default async function LogPage({ params: { slug } }: { params: { slug: string } }) {
+  const log = getLogs().find((log) => log.slug === slug);
 
-  if (!book) notFound();
+  if (!log) notFound();
 
-  const { readingTime, content } = book;
-  const { title, summary, updatedAt } = book.meta;
+  const { readingTime, content } = log;
+  const { title, summary, updatedAt } = log.meta;
 
   const { compiledSource } = await serialize(content, {
     mdxOptions: {
@@ -73,7 +73,7 @@ export default async function BookPage({ params: { slug } }: { params: { slug: s
           </div>
         </div>
         <div className='w-full py-8'>
-          <MDX compiledSource={compiledSource} frontmatter={book.meta} />
+          <MDX compiledSource={compiledSource} frontmatter={log.meta} />
         </div>
       </article>
     </div>

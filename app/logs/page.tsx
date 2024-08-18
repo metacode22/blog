@@ -1,4 +1,5 @@
 import { List } from '@/src/components/post-list';
+import { routes } from '@/src/constants/routes';
 import { getLogs } from '@/src/utils/contents/log';
 
 export default function LogsPage() {
@@ -6,7 +7,7 @@ export default function LogsPage() {
 
   return (
     <section>
-      <List items={logs} />
+      <List items={logs} baseUrl={routes.logs.root} />
     </section>
   );
 }
