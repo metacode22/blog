@@ -8,7 +8,7 @@ import Title from '@/src/components/title';
 import { Views } from '@/src/components/view';
 import { routes } from '@/src/constants/routes';
 
-import { Post } from '../../../src/types/post';
+import { Post } from '../types/post';
 
 export default function PostListItem({
   post: {
