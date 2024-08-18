@@ -7,28 +7,29 @@ import Time from '@/src/components/time';
 import Title from '@/src/components/title';
 import { Views } from '@/src/components/view';
 import { routes } from '@/src/constants/routes';
+import { Item } from '@/src/types/contents/shared/item';
+import { Meta } from '@/src/types/contents/shared/meta';
+import { cn } from '@/src/utils/class-name';
 
-import { Post } from '../types/post';
-
-export default function PostListItem({
-  post: {
+export function ListItem({
+  item: {
     slug,
     meta: { title, summary, updatedAt },
     readingTime,
   },
 }: {
-  post: Post;
+  item: Item<Meta>;
 }) {
   return (
     <li className='flex items-start gap-10'>
-      <div className='flex flex-col items-start gap-4'>
+      <div className={cn('flex flex-col items-start', summary ? 'gap-4' : 'gap-1')}>
         <div className='flex flex-col items-start gap-2'>
           <Link href={`${routes.posts.detail(slug)}`}>
             <Title>{title}</Title>
           </Link>
         </div>
         <Link href={`${routes.posts.detail(slug)}`} className='flex flex-col items-start gap-1'>
-          <Summary>{summary}</Summary>
+          {summary && <Summary>{summary}</Summary>}
           <div className='flex items-center gap-2'>
             <Time date={updatedAt} />
             <Bullet />

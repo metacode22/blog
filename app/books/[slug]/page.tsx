@@ -9,7 +9,7 @@ import ReadingTime from '@/src/components/reading-time';
 import Summary from '@/src/components/summary';
 import Time from '@/src/components/time';
 import { Views } from '@/src/components/view';
-import { getBooks } from '@/src/utils/book';
+import { getBooks } from '@/src/utils/contents/book';
 
 export async function generateStaticParams() {
   const books = getBooks();

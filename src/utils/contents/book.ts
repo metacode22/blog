@@ -1,6 +1,6 @@
 import path from 'path';
 
-import { BookMeta } from '@/src/types/book';
+import { BookMeta } from '@/src/types/contents/book';
 import { getContents } from '@/src/utils/file';
 
 const CONTENTS_PATH = path.join(process.cwd(), 'src/contents/books');

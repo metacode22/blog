@@ -1,8 +1,8 @@
 import path from 'path';
 
-import { PostMeta } from '@/src/types/post';
+import { PostMeta } from '@/src/types/contents/post';
 
-import { getContents } from './file';
+import { getContents } from '../file';
 
 const CONTENTS_PATH = path.join(process.cwd(), 'src/contents/posts');
 

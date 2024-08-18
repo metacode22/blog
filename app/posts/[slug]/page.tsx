@@ -9,7 +9,7 @@ import ReadingTime from '@/src/components/reading-time';
 import Summary from '@/src/components/summary';
 import Time from '@/src/components/time';
 import { Views } from '@/src/components/view';
-import { getPosts } from '@/src/utils/post';
+import { getPosts } from '@/src/utils/contents/post';
 
 export async function generateStaticParams() {
   const posts = getPosts();

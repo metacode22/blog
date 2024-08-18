@@ -7,4 +7,7 @@ export const routes = {
   books: {
     root: '/books',
   },
+  logs: {
+    root: '/logs',
+  },
 };

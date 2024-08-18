@@ -1,13 +1,13 @@
-import { getPosts } from '@/src/utils/post';
+import { getPosts } from '@/src/utils/contents/post';
 
-import PostList from '../../src/components/post-list';
+import { List } from '../../src/components/post-list';
 
 export default function PostsPage() {
   const posts = getPosts();
 
   return (
     <section>
-      <PostList posts={posts} />
+      <List items={posts} />
     </section>
   );
 }

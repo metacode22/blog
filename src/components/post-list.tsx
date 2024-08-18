@@ -1,12 +1,13 @@
-import { Post } from '@/src/types/post';
+import { Item } from '@/src/types/contents/shared/item';
+import { Meta } from '@/src/types/contents/shared/meta';
 
-import PostListItem from './post-list-item';
+import { ListItem } from './post-list-item';
 
-export default function PostList({ posts }: { posts: Post[] }) {
+export function List({ items }: { items: Item<Meta>[] }) {
   return (
     <ul className='flex flex-col gap-14'>
-      {posts.map((post) => (
-        <PostListItem post={post} key={post.slug} />
+      {items.map((item) => (
+        <ListItem item={item} key={item.slug} />
       ))}
     </ul>
   );

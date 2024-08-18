@@ -5,6 +5,7 @@ import { routes } from '../constants/routes';
 const LINKS = {
   posts: routes.posts.root,
   books: routes.books.root,
+  logs: routes.logs.root,
 } as const;
 
 export function GNB() {
