@@ -6,6 +6,12 @@ export default function BooksPage() {
       <div>
         <h3 className='m-0'>2024년</h3>
         <ul>
+          <h4>9월</h4>
+          <ul>
+            <li>실용주의 프로그래머</li>
+          </ul>
+        </ul>
+        <ul>
           <h4>8월</h4>
           <ul>
             <li>원씽(The One Thing)</li>
