@@ -1,11 +1,12 @@
 'use client';
 
 import Image, { ImageProps } from 'next/image';
+import Link from 'next/link';
 import { MDXRemote, MDXRemoteProps } from 'next-mdx-remote';
 import { ReactNode } from 'react';
 
 export function MDX({ scope = {}, ...props }: Omit<MDXRemoteProps, 'scope'> & { scope?: Record<string, any> }) {
-  return <MDXRemote {...props} scope={scope} components={{ Image: RoundedImage, Resource }} />;
+  return <MDXRemote {...props} scope={scope} components={{ Image: RoundedImage, Resource, MyThought }} />;
 }
 
 function RoundedImage({ alt, src, source, ...props }: ImageProps & { source?: string }) {
@@ -25,10 +26,20 @@ function RoundedImage({ alt, src, source, ...props }: ImageProps & { source?: st
   );
 }
 
-function Resource({ children }: { children: ReactNode }) {
+function Resource({ href, children }: { href?: string; children: ReactNode }) {
   return (
     <div className='flex w-full justify-end'>
-      <p className='text-xs text-gray-500'>{children}</p>
+      {href ? (
+        <Link target='_blank' rel='noopener noreferrer' href={href} className='text-xs text-gray-500'>
+          {children}
+        </Link>
+      ) : (
+        <p className='text-xs text-gray-500'>{children}</p>
+      )}
     </div>
   );
+}
+
+function MyThought({ children }: { children: ReactNode }) {
+  return <div className='bg-gray-50 px-4 py-1 text-gray-500 rounded-lg text-sm'>{children}</div>;
 }

@@ -8,7 +8,9 @@ export default function BooksPage() {
         <ul>
           <h4>9월</h4>
           <ul>
-            <li>실용주의 프로그래머</li>
+            <li>
+              <Link href='/books/the-pragmatic-programmer'>실용주의 프로그래머</Link>
+            </li>
           </ul>
         </ul>
         <ul>
