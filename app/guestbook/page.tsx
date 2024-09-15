@@ -2,6 +2,8 @@ import { getGuestbooks } from '@/src/apis/guestbooks';
 
 import { GuestbookForm } from './_components/guestbook-form';
 
+export const dynamic = 'force-dynamic';
+
 export default async function GuestbookPage() {
   const { guestbooks } = await getGuestbooks();
 

@@ -1,39 +1,16 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { flushSync } from 'react-dom';
 
-import { createGuestbook } from '@/src/apis/guestbooks';
 import { cn } from '@/src/utils/class-name';
-import { revalidatePath } from 'next/cache';
+
+import { createGuestbookAction } from './actions';
 
 export function GuestbookForm() {
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState('');
   const [message, setMessage] = useState('');
-  const router = useRouter();
-
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setLoading(true);
-
-    const formData = new FormData(event.currentTarget);
-    const name = formData.get('name')?.toString();
-    const message = formData.get('message')?.toString();
-
-    if (!name || !message) {
-      alert('이름 혹은 메세지를 입력해주세요.');
-      setLoading(false);
-      return;
-    }
-
-    await createGuestbook({ name, message });
-
-    setLoading(false);
-    setName('');
-    setMessage('');
-    router.refresh();
-  }
 
   function handleChangeName(event: React.ChangeEvent<HTMLInputElement>) {
     setName(event.target.value);
@@ -47,8 +24,26 @@ export function GuestbookForm() {
     setName(pickRandomName());
   }
 
+  async function handleSubmit(formData: FormData) {
+    flushSync(() => setLoading(true));
+
+    try {
+      await createGuestbookAction(formData);
+      setName('');
+      setMessage('');
+    } catch (error) {
+      if (error instanceof Error) alert(error.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    setName(pickRandomName());
+  }, []);
+
   return (
-    <form className='flex flex-col gap-2' onSubmit={handleSubmit}>
+    <form className='flex flex-col gap-2' action={handleSubmit}>
       <div className='flex gap-2'>
         <input
           name='name'
@@ -61,7 +56,10 @@ export function GuestbookForm() {
         <button
           type='button'
           onClick={handleClickRandomName}
-          className='w-fit rounded-md bg-gray-500 px-2 py-1 text-sm text-white'>
+          className={cn(
+            'w-fit rounded-md bg-gray-500 px-2 py-1 text-sm text-white',
+            loading && 'cursor-not-allowed opacity-50',
+          )}>
           랜덤 변경
         </button>
       </div>
@@ -102,10 +100,50 @@ const ADJECTIVES = [
   '냄새나는',
   '향긋한',
   '말안듣는',
+  '깜찍한',
   '하마닮은',
   '쓰다버린',
   '회생불가',
   '건실한',
+  '깐죽대는',
+  '엉뚱한',
+  '뿔난',
+  '옹골찬',
+  '평화로운',
+  '구닥다리',
+  '기이한',
+  '특이한',
+  '평범한',
+  '순수한',
+  '비범한',
+  '잡종',
+  '축복받은',
+  '희귀한',
+  '최첨단',
+  '최초의',
+  '최후의',
+  '최고의',
+  '화난',
+  '용맹한',
+  '엉망진창',
+  '느긋한',
+  '사악한',
+  '비실비실',
+  '날렵한',
+  '거친',
+  '꼬질꼬질',
+  '근육질',
+  '마른',
+  '바삭한',
+  '비린내',
+  '훤칠한',
+  '조잡한',
+  '비참한',
+  '비통한',
+  '죽여주는',
+  '대단한',
+  '대담한',
+  '용감한',
 ];
 
 const NOUNS = [
@@ -124,4 +162,31 @@ const NOUNS = [
   '메뚜기',
   '인력거',
   '호랑이',
+  '뚱땡이',
+  '펭귄',
+  '뿡뿡이',
+  '돈까스',
+  '간디',
+  '고릴라',
+  '침팬지',
+  '오징어',
+  '불가사리',
+  '버섯',
+  '피망',
+  '원숭이',
+  '코끼리',
+  '오랑우탄',
+  '숨결',
+  '콧바람',
+  '콧물',
+  '닭발',
+  '곰발바닥',
+  '마카롱',
+  '부리또',
+  '햄버거',
+  '순두부',
+  '짬뽕',
+  '족발',
+  '보쌈',
+  '핫도그',
 ];
