@@ -10,4 +10,7 @@ export const routes = {
   logs: {
     root: '/logs',
   },
+  guestbook: {
+    root: '/guestbook',
+  },
 };

@@ -3,17 +3,18 @@ import Link from 'next/link';
 import { routes } from '../constants/routes';
 
 const LINKS = {
-  posts: routes.posts.root,
-  books: routes.books.root,
-  logs: routes.logs.root,
+  post: routes.posts.root,
+  book: routes.books.root,
+  log: routes.logs.root,
+  guestbook: routes.guestbook.root,
 } as const;
 
 export function GNB() {
   return (
     <aside className='mb-16 tracking-tight'>
-      <nav className='flex flex-row items-center gap-8'>
+      <nav className='flex flex-row items-center gap-4'>
         <Link href={routes.home} className='text-xl font-semibold'>
-          SeungJun Shin
+          SeungJun
         </Link>
         <div className='flex flex-row items-center'>
           {Object.entries(LINKS).map(([name, path]) => (

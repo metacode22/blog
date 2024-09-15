@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 
-import { getViews, increaseViews } from '../apis/view';
+import { getViews, increaseViews } from '../apis/views';
 
 export function Views({ slug, increase = false }: { slug: string; increase?: boolean }) {
   const [views, setViews] = useState<number | null>(null);
