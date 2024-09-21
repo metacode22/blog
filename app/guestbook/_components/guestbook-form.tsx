@@ -47,7 +47,7 @@ export function GuestbookForm() {
       <div className='flex gap-2'>
         <input
           name='name'
-          className='w-full max-w-[120px] self-start rounded-md border border-gray-300 p-2 text-sm'
+          className='w-full max-w-[120px] self-start rounded-md border border-gray-300 p-2 text-sm dark:border-gray-600 dark:bg-gray-800 dark:text-white'
           maxLength={12}
           placeholder='name'
           value={name}
@@ -65,7 +65,7 @@ export function GuestbookForm() {
       </div>
       <textarea
         name='message'
-        className='w-full rounded-md border border-gray-300 p-2 text-sm'
+        className='w-full rounded-md border border-gray-300 p-2 text-sm dark:border-gray-600 dark:bg-gray-800 dark:text-white'
         maxLength={200}
         placeholder='Hello!'
         value={message}
