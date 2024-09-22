@@ -6,7 +6,6 @@ import Summary from '@/src/components/summary';
 import Time from '@/src/components/time';
 import Title from '@/src/components/title';
 import { Views } from '@/src/components/view';
-import { routes } from '@/src/constants/routes';
 import { Item } from '@/src/types/contents/shared/item';
 import { Meta } from '@/src/types/contents/shared/meta';
 import { cn } from '@/src/utils/class-name';
@@ -25,7 +24,7 @@ export function ListItem({
   return (
     <li className='flex items-start gap-10'>
       <Link href={href}>
-        <div className={cn('flex flex-col items-start', summary ? 'gap-4' : 'gap-1')}>
+        <div className={cn('flex flex-col items-start', summary ? 'gap-2' : 'gap-1')}>
           <div className='flex flex-col items-start gap-2'>
             <Title>{title}</Title>
           </div>
