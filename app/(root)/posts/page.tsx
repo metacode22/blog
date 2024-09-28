@@ -1,7 +1,7 @@
 import { routes } from '@/src/constants/routes';
 import { getPosts } from '@/src/utils/contents/post';
 
-import { List } from '../../src/components/post-list';
+import { List } from '../../../src/components/post-list';
 
 export default function PostsPage() {
   const posts = getPosts();
