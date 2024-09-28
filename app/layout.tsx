@@ -2,7 +2,6 @@ import '@/src/styles/globals.css';
 
 import type { Metadata } from 'next';
 
-
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.SITE_URL),
   title: '신승준 블로그',
@@ -21,8 +20,8 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang='ko' className='bg-white text-black dark:bg-[#111010] dark:text-white'>
-      <body className='mx-auto mb-40 mt-8 flex max-w-[704px] flex-col antialiased md:flex-row'>
-        <main className='flex min-w-0 flex-auto flex-col px-4 pt-6'>{children}</main>
+      <body className='mx-auto flex max-w-[704px] antialiased'>
+        <main className='flex min-w-0 flex-auto flex-col px-4'>{children}</main>
       </body>
     </html>
   );
