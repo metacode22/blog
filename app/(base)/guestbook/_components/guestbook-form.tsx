@@ -32,6 +32,7 @@ export function GuestbookForm() {
 
     if (!name || !message) {
       alert('이름 혹은 메시지를 입력해주세요.');
+      setLoading(false);
       return;
     }
 
