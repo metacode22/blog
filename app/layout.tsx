@@ -1,6 +1,9 @@
 import '@/src/styles/globals.css';
 
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
+
+import GoogleAnalyticsScript from '@/src/components/google-analytics-script';
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.SITE_URL),
@@ -20,8 +23,11 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang='ko' className='bg-white text-black dark:bg-[#111010] dark:text-white'>
-      <body className='mx-auto flex max-w-[704px] antialiased'>
-        <main className='flex min-w-0 flex-auto flex-col px-4'>{children}</main>
+      <body className='mx-auto flex max-w-[704px] pt-6 antialiased'>
+        <main className='flex min-w-0 flex-auto flex-col px-4 pt-6'>{children}</main>
+        <Suspense>
+          <GoogleAnalyticsScript />
+        </Suspense>
       </body>
     </html>
   );
