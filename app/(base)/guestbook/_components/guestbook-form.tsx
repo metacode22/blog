@@ -27,8 +27,16 @@ export function GuestbookForm() {
   async function handleSubmit(formData: FormData) {
     flushSync(() => setLoading(true));
 
+    const name = formData.get('name')?.toString();
+    const message = formData.get('message')?.toString();
+
+    if (!name || !message) {
+      alert('이름 혹은 메시지를 입력해주세요.');
+      return;
+    }
+
     try {
-      await createGuestbookAction(formData);
+      await createGuestbookAction({ name, message });
       setName('');
       setMessage('');
     } catch (error) {
