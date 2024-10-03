@@ -4,10 +4,16 @@ import { Activity } from 'lucide-react';
 import Image, { ImageProps } from 'next/image';
 import Link from 'next/link';
 import { MDXRemote, MDXRemoteProps } from 'next-mdx-remote';
-import { ReactNode } from 'react';
+import { DetailedHTMLProps, ReactNode, VideoHTMLAttributes } from 'react';
 
 export function MDX({ scope = {}, ...props }: Omit<MDXRemoteProps, 'scope'> & { scope?: Record<string, any> }) {
-  return <MDXRemote {...props} scope={scope} components={{ Image: RoundedImage, Resource, MyThought, Short, Long }} />;
+  return (
+    <MDXRemote
+      {...props}
+      scope={scope}
+      components={{ Image: RoundedImage, Video: RoundedVideo, Resource, MyThought, Short, Long }}
+    />
+  );
 }
 
 function RoundedImage({ alt, src, source, ...props }: ImageProps & { source?: string }) {
@@ -25,6 +31,10 @@ function RoundedImage({ alt, src, source, ...props }: ImageProps & { source?: st
       {source && <p className='text-xs text-gray-500'>[출처: {source}]</p>}
     </div>
   );
+}
+
+function RoundedVideo({ src, ...props }: DetailedHTMLProps<VideoHTMLAttributes<HTMLVideoElement>, HTMLVideoElement>) {
+  return <video src={src} className='h-auto w-full rounded-lg' {...props} />;
 }
 
 function Resource({ href, children }: { href?: string; children: ReactNode }) {
