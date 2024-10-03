@@ -16,7 +16,7 @@ const LINKS = [
 
 export function Footer() {
   return (
-    <footer className='mt-40 flex w-full flex-col items-end gap-8'>
+    <footer className='mb-12 mt-40 flex w-full flex-col items-end gap-8'>
       <hr className='w-full border-t border-gray-100' />
       <div className='flex w-full flex-col items-end gap-4'>
         <div className='flex w-full  justify-end pt-4'>
