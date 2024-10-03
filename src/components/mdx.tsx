@@ -52,7 +52,11 @@ function Resource({ href, children }: { href?: string; children: ReactNode }) {
 }
 
 function MyThought({ children }: { children: ReactNode }) {
-  return <div className='rounded-lg bg-gray-50 px-4 py-1 text-sm text-gray-500 dark:bg-gray-800 dark:text-gray-400'>{children}</div>;
+  return (
+    <div className='rounded-lg bg-gray-50 px-4 py-1 text-sm text-gray-500 dark:bg-gray-800 dark:text-gray-400'>
+      {children}
+    </div>
+  );
 }
 
 function Short() {
@@ -68,7 +72,7 @@ function Long() {
   return (
     <div className='flex w-full items-center gap-1 border-b border-gray-200 pb-2'>
       <span className='text-xl font-semibold '>롱</span>
-      <Activity size={20} color='#ed1d65' />
+      <Activity size={20} color='#ed1d65' className='transform scale-x-[-1]' />
     </div>
   );
 }
