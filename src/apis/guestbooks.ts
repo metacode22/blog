@@ -1,6 +1,6 @@
 type Guestbook = {
   id: number;
-  created_at: Date;
+  created_at: string;
   name: string;
   message: string;
 };
