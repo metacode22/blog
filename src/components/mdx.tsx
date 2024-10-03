@@ -1,12 +1,13 @@
 'use client';
 
+import { Activity } from 'lucide-react';
 import Image, { ImageProps } from 'next/image';
 import Link from 'next/link';
 import { MDXRemote, MDXRemoteProps } from 'next-mdx-remote';
 import { ReactNode } from 'react';
 
 export function MDX({ scope = {}, ...props }: Omit<MDXRemoteProps, 'scope'> & { scope?: Record<string, any> }) {
-  return <MDXRemote {...props} scope={scope} components={{ Image: RoundedImage, Resource, MyThought }} />;
+  return <MDXRemote {...props} scope={scope} components={{ Image: RoundedImage, Resource, MyThought, Short, Long }} />;
 }
 
 function RoundedImage({ alt, src, source, ...props }: ImageProps & { source?: string }) {
@@ -41,5 +42,23 @@ function Resource({ href, children }: { href?: string; children: ReactNode }) {
 }
 
 function MyThought({ children }: { children: ReactNode }) {
-  return <div className='bg-gray-50 px-4 py-1 text-gray-500 rounded-lg text-sm'>{children}</div>;
+  return <div className='rounded-lg bg-gray-50 px-4 py-1 text-sm text-gray-500'>{children}</div>;
+}
+
+function Short() {
+  return (
+    <div className='flex w-full items-center gap-1 border-b border-gray-200 pb-2'>
+      <span className='text-xl font-semibold '>숏</span>
+      <Activity size={20} color='#98a3cd' />
+    </div>
+  );
+}
+
+function Long() {
+  return (
+    <div className='flex w-full items-center gap-1 border-b border-gray-200 pb-2'>
+      <span className='text-xl font-semibold '>롱</span>
+      <Activity size={20} color='#ed1d65' />
+    </div>
+  );
 }
