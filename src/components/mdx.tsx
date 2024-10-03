@@ -52,7 +52,7 @@ function Resource({ href, children }: { href?: string; children: ReactNode }) {
 }
 
 function MyThought({ children }: { children: ReactNode }) {
-  return <div className='rounded-lg bg-gray-50 px-4 py-1 text-sm text-gray-500'>{children}</div>;
+  return <div className='rounded-lg bg-gray-50 px-4 py-1 text-sm text-gray-500 dark:bg-gray-800 dark:text-gray-400'>{children}</div>;
 }
 
 function Short() {
