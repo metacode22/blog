@@ -1,5 +1,9 @@
-import { GithubIcon, LinkedinIcon } from 'lucide-react';
+'use client';
+
+import { GithubIcon, LinkedinIcon, Mail } from 'lucide-react';
 import Link from 'next/link';
+
+import { Tooltip } from './tooltip';
 
 const LINKS = [
   {
@@ -20,6 +24,16 @@ export function Footer() {
       <hr className='w-full border-t border-gray-100' />
       <div className='flex w-full flex-col items-end gap-4'>
         <div className='flex w-full  justify-end pt-4'>
+          <Tooltip
+            text='alohajune22@gmail.com'
+            onClick={() => {
+              navigator.clipboard.writeText('alohajune22@gmail.com');
+              alert('이메일이 복사되었습니다.');
+            }}>
+            <span className='inline-block cursor-pointer px-2 py-1'>
+              <Mail size={16} className='text-gray-400' />
+            </span>
+          </Tooltip>
           {LINKS.map(({ name, href, icon }) => (
             <Link key={name} href={href} className='px-2 py-1' target='_blank' rel='noopener noreferrer'>
               {icon}
