@@ -28,7 +28,7 @@ function Image({ alt, src, source, ...props }: NextImageProps & { source?: strin
 }
 
 function Video({ src, ...props }: DetailedHTMLProps<VideoHTMLAttributes<HTMLVideoElement>, HTMLVideoElement>) {
-  return <video src={src} className='h-auto w-full rounded-lg' {...props} />;
+  return <video src={src} className='h-auto w-full rounded-lg' playsInline {...props} />;
 }
 
 function Resource({ href, children }: { href?: string; children: ReactNode }) {
