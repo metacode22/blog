@@ -1,25 +1,19 @@
 'use client';
 
 import { Activity } from 'lucide-react';
-import Image, { ImageProps } from 'next/image';
+import NextImage, { ImageProps as NextImageProps } from 'next/image';
 import Link from 'next/link';
 import { MDXRemote, MDXRemoteProps } from 'next-mdx-remote';
 import { DetailedHTMLProps, ReactNode, VideoHTMLAttributes } from 'react';
 
 export function MDX({ scope = {}, ...props }: Omit<MDXRemoteProps, 'scope'> & { scope?: Record<string, any> }) {
-  return (
-    <MDXRemote
-      {...props}
-      scope={scope}
-      components={{ Image: RoundedImage, Video: RoundedVideo, Resource, MyThought, Short, Long }}
-    />
-  );
+  return <MDXRemote {...props} scope={scope} components={{ Image, Video, Resource, MyThought, Short, Long }} />;
 }
 
-function RoundedImage({ alt, src, source, ...props }: ImageProps & { source?: string }) {
+function Image({ alt, src, source, ...props }: NextImageProps & { source?: string }) {
   return (
     <div className='flex flex-col items-center'>
-      <Image
+      <NextImage
         alt={alt ?? ''}
         src={src}
         width={0}
@@ -33,7 +27,7 @@ function RoundedImage({ alt, src, source, ...props }: ImageProps & { source?: st
   );
 }
 
-function RoundedVideo({ src, ...props }: DetailedHTMLProps<VideoHTMLAttributes<HTMLVideoElement>, HTMLVideoElement>) {
+function Video({ src, ...props }: DetailedHTMLProps<VideoHTMLAttributes<HTMLVideoElement>, HTMLVideoElement>) {
   return <video src={src} className='h-auto w-full rounded-lg' {...props} />;
 }
 
@@ -72,7 +66,7 @@ function Long() {
   return (
     <div className='flex w-full items-center gap-1 border-b border-gray-200 pb-2'>
       <span className='text-xl font-semibold '>롱</span>
-      <Activity size={20} color='#ed1d65' className='transform scale-x-[-1]' />
+      <Activity size={20} color='#ed1d65' className='scale-x-[-1] transform' />
     </div>
   );
 }
