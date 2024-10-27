@@ -19,7 +19,7 @@ function Image({ alt, src, source, ...props }: NextImageProps & { source?: strin
         width={0}
         height={0}
         sizes='100vw'
-        className='h-auto w-full rounded-lg'
+        className='h-auto w-full rounded-lg mt-8 mb-1'
         {...props}
       />
       {source && <p className='text-xs text-gray-500'>[출처: {source}]</p>}
