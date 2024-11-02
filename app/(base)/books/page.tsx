@@ -8,7 +8,9 @@ export default function BooksPage() {
         <ul>
           <h4>10월</h4>
           <ul>
-            <li>레버리지</li>
+            <li>
+              <Link href='/books/leverage'>레버리지</Link>
+            </li>
           </ul>
         </ul>
         <ul>
