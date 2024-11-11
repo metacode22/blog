@@ -6,6 +6,16 @@ export default function BooksPage() {
       <div>
         <h3 className='m-0'>2024년</h3>
         <ul>
+          <h4>11월</h4>
+          <ul>
+            <li>
+              <Link href='/books/why-do-you-sacrifice-your-life-for-others'>
+                왜 당신은 다른 사람을 위해 살고 있는가
+              </Link>
+            </li>
+          </ul>
+        </ul>
+        <ul>
           <h4>10월</h4>
           <ul>
             <li>
