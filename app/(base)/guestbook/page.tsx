@@ -1,6 +1,5 @@
 'use client';
 
-import { Guestbook } from '@prisma/client';
 import { format } from 'date-fns';
 import { useEffect, useState } from 'react';
 
