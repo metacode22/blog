@@ -1,17 +1,23 @@
+'use client';
+
+import { Guestbook } from '@prisma/client';
 import { format } from 'date-fns';
+import { useEffect, useState } from 'react';
 
 import { getGuestbooks } from '@/src/apis/guestbooks';
 
 import { GuestbookForm } from './_components/guestbook-form';
 
-export const dynamic = 'force-dynamic';
+export default function GuestbookPage() {
+  const [guestbooks, setGuestbooks] = useState<{ id: number; name: string; message: string; created_at: string }[]>([]);
 
-export default async function GuestbookPage() {
-  const { guestbooks } = await getGuestbooks();
+  useEffect(() => {
+    getGuestbooks().then(({ guestbooks }) => setGuestbooks(guestbooks));
+  }, []);
 
   return (
     <section className='flex flex-col gap-6'>
-      <GuestbookForm />
+      <GuestbookForm onSubmitSuccess={() => getGuestbooks().then(({ guestbooks }) => setGuestbooks(guestbooks))} />
       <ul className='flex flex-col gap-6'>
         {guestbooks.map(({ id, name, message, created_at }) => (
           <li key={id} className='flex items-start gap-4'>

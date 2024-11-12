@@ -10,9 +10,6 @@ const nextConfig = {
       },
     ],
   },
-  env: {
-    TZ: 'Asia/Seoul',
-  },
 };
 
 module.exports = nextConfig;

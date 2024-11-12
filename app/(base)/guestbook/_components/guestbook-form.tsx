@@ -7,7 +7,7 @@ import { cn } from '@/src/utils/class-name';
 
 import { createGuestbookAction } from './actions';
 
-export function GuestbookForm() {
+export function GuestbookForm({ onSubmitSuccess }: { onSubmitSuccess: () => void }) {
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState('');
   const [message, setMessage] = useState('');
@@ -40,6 +40,7 @@ export function GuestbookForm() {
       await createGuestbookAction({ name, message });
       setName('');
       setMessage('');
+      onSubmitSuccess();
     } catch (error) {
       if (error instanceof Error) alert(error.message);
     } finally {
