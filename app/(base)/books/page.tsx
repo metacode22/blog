@@ -9,6 +9,9 @@ export default function BooksPage() {
           <h4>11월</h4>
           <ul>
             <li>
+              <Link href='/books/tesla-reboot'>테슬라 리부트</Link>
+            </li>
+            <li>
               <Link href='/books/why-do-you-sacrifice-your-life-for-others'>
                 왜 당신은 다른 사람을 위해 살고 있는가
               </Link>
