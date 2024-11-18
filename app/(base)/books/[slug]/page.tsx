@@ -1,7 +1,5 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { serialize } from 'next-mdx-remote/serialize';
-import rehypePrettyCode from 'rehype-pretty-code';
 
 import Bullet from '@/src/components/bullet';
 import { MDX } from '@/src/components/mdx';
@@ -10,6 +8,7 @@ import Summary from '@/src/components/summary';
 import Time from '@/src/components/time';
 import { Views } from '@/src/components/view';
 import { getBooks } from '@/src/utils/contents/book';
+import { serialize } from '@/src/utils/mdx';
 
 export async function generateStaticParams() {
   const books = getBooks();
@@ -46,17 +45,7 @@ export default async function BookPage({ params: { slug } }: { params: { slug: s
   const { readingTime, content } = book;
   const { title, summary, updatedAt } = book.meta;
 
-  const { compiledSource } = await serialize(content, {
-    mdxOptions: {
-      /**
-       * 다음 link와 같은 TS error로 인해 next-remote-mdx의 버전을 4.4.1로 사용
-       * @link https://github.com/hashicorp/next-mdx-remote/issues/423
-       *
-       * @todo serialize하는 로직을 따로 분리하기
-       */
-      rehypePlugins: [[rehypePrettyCode, { theme: 'dark-plus' }]],
-    },
-  });
+  const { compiledSource } = await serialize(content);
 
   return (
     <div className='w-full max-w-3xl'>
