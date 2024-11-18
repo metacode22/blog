@@ -1,7 +1,9 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { serialize } from 'next-mdx-remote/serialize';
+import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypePrettyCode from 'rehype-pretty-code';
+import rehypeSlug from 'rehype-slug';
 
 import Bullet from '@/src/components/bullet';
 import { MDX } from '@/src/components/mdx';
@@ -54,7 +56,20 @@ export default async function PostPage({ params: { slug } }: { params: { slug: s
        *
        * @todo serialize하는 로직을 따로 분리하기
        */
-      rehypePlugins: [[rehypePrettyCode, { theme: 'dark-plus' }]],
+      rehypePlugins: [
+        rehypeSlug,
+        [
+          rehypeAutolinkHeadings,
+          {
+            behavior: 'wrap',
+            properties: {
+              className: ['anchor'],
+              ariaLabel: 'anchor',
+            },
+          },
+        ],
+        [rehypePrettyCode, { theme: 'dark-plus' }],
+      ],
     },
   });
 
