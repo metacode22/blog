@@ -6,6 +6,12 @@ export default function BooksPage() {
       <div>
         <h3 className='m-0'>2024년</h3>
         <ul>
+          <h4>12월</h4>
+          <ul>
+            <li>데일 카네기 자기관리론</li>
+          </ul>
+        </ul>
+        <ul>
           <h4>11월</h4>
           <ul>
             <li>
