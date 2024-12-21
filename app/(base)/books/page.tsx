@@ -8,6 +8,7 @@ export default function BooksPage() {
         <ul>
           <h4>12월</h4>
           <ul>
+            <li>절박함을 버린 남자들</li>
             <li>데일 카네기 자기관리론</li>
           </ul>
         </ul>
