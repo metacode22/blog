@@ -9,8 +9,6 @@ export async function serialize(content: string) {
       /**
        * 다음 link와 같은 TS error로 인해 next-remote-mdx의 버전을 4.4.1로 사용
        * @link https://github.com/hashicorp/next-mdx-remote/issues/423
-       *
-       * @todo serialize하는 로직을 따로 분리하기
        */
       rehypePlugins: [
         rehypeSlug,
