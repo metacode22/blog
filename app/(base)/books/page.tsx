@@ -9,7 +9,9 @@ export default function BooksPage() {
           <h4>12월</h4>
           <ul>
             <li>절박함을 버린 남자들</li>
-            <li>데일 카네기 자기관리론</li>
+            <li>
+              <Link href='/books/how-to-stop-worrying-and-start-living'>데일 카네기 자기관리론</Link>
+            </li>
           </ul>
         </ul>
         <ul>
