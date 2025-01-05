@@ -19,6 +19,8 @@ const LINKS = [
 ];
 
 export function Footer() {
+  const year = new Date().getFullYear();
+
   return (
     <footer className='mb-12 mt-40 flex w-full flex-col items-end gap-8'>
       <hr className='w-full border-t border-gray-100' />
@@ -46,7 +48,7 @@ export function Footer() {
             </Link>
           ))}
         </div>
-        <span className='text-xs text-gray-400'>© 신승준 2024</span>
+        <span className='text-xs text-gray-400'>© 신승준 {year}</span>
       </div>
     </footer>
   );
