@@ -1,0 +1,164 @@
+---
+title: crxjs와 함께 한 chrome extension 개발기
+summary: 회사에서 chrome extension을 만들어야 했는데 동료의 추천으로 crxjs를 도입하여 개발해보았습니다.
+categories:
+  - 확장 프로그램
+  - 크롬 익스텐션
+createdAt: 2025-01-05
+updatedAt: 2025-01-05
+published: true
+---
+
+<Short />
+[crxjs](https://github.com/crxjs/chrome-extension-tools)를 사용하면 chrome extension 개발에도 HMR을 접목시킬 수 있습니다.
+
+```bash
+npm install --save-dev @crxjs/vite-plugin
+```
+
+<br />
+<br />
+
+<Long />
+이전에 짧게 chrome extension을 만들어본 적이 있어요. 각 사이트에서 사용할 수 있는 단축키들을 보여주는 모달(단축키 리스트
+모달)을 하나의 단축키로 띄우는 chrome extension이었어요.
+
+짧게나마 예를 들자면, 유튜브에서 사용할 수 있는 단축키 리스트 모달을 보려면 shift + /를 눌러야 했고 ChatGPT에서는 command + /를 눌러야 했어요. 저처럼 단축키를 애용하는 사람에겐 이게 불편했어요. 단축키 리스트 모달을 띄우기 위한 단축키를 검색해서 일일이 찾아야 했기 때문이었습니다.
+
+그래서 어떤 사이트든 단축키 리스트 모달은 shift + option + s로 볼 수 있게 하자!라는 생각에 chrome extension을 만들었었어요.(아직 배포는 하지 못했습니다 >\_ㅇ) 이 때 개발을 하면서 겪은 불편함이 있었어요. **코드를 변경하면 chrome://extensions/에서 매번 업데이트 버튼을 눌러주거나 dist 폴더와 같은 결과물을 계속 새로 업로드해야 수정된 화면을 확인할 수 있다**는 점이었어요.
+
+그리고 마침 회사에서 chrome extension을 개발해야 할 일이 생겼고, 앞서 겪었던 불편함에 대해서 동료에게 공유를 하니 crxjs를 사용해볼 것을 추천해주셨어요. 바로 써보았는데 도입도 전혀 어렵지 않고 HMR도 잘 되어 개발 시간 단축을 체감할 수 있었습니다. 제대로 꿀 빨았습니다.
+
+서문이 길었는데요! crxjs를 어떻게 사용했는지, 부가적으로 chrome extension을 개발하며 겪은 것들을 공유해보겠습니다.
+
+<br />
+
+## crxjs
+
+crxjs는 HMR과 같은 현대적인 개발 경험을 chrome extension 생태계에도 적용할 수 있도록 도와주는 프로젝트입니다. crxjs를 어떻게 적용할 수 있는지 vite와 함께 알아보겠습니다.
+
+먼저 vite 프로젝트를 생성해줍니다. pnpm을 선호해서 이를 기준으로 설명하겠습니다.
+
+```bash
+pnpm create vite
+```
+
+그리고 crxjs를 설치합니다.
+
+```bash
+pnpm install --save-dev @crxjs/vite-plugin
+```
+
+이제 manifest를 설정해줍시다. crxjs에서 제공하는 defineManifest 함수를 사용하면 타입 지원을 받으며 조금 더 편하게 manifest를 작성할 수 있습니다.
+
+```typescript
+// /src/manifest.ts
+import { defineManifest } from '@crxjs/vite-plugin';
+
+export default defineManifest({
+  name: 'extension',
+  description: 'chrome extension with crxjs',
+  version: '0.0.1',
+  manifest_version: 3,
+  action: {
+    default_popup: 'index.html',
+  },
+});
+```
+
+이제 vite.config.ts를 수정해서 앞서 만든 manifest와 함께 crxjs를 적용해보겠습니다.
+
+```typescript
+// vite.config.ts
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react-swc';
+import { crx } from '@crxjs/vite-plugin';
+import manifest from './src/manifest';
+
+export default defineConfig({
+  plugins: [react(), crx({ manifest })],
+});
+```
+
+그리고 개발 서버를 돌려줍니다.
+
+```bash
+pnpm dev
+```
+
+그리고 사진과 같이 chrome 브라우저에서 url에 chrome://extensions/를 입력하여 접속한 다음, 개발자 모드를 켜고 dist 폴더를 업로드해주면 끝납니다!
+
+<Image
+  src='/images/contents/posts/chrome-extension-with-crxjs/upload-dist.png'
+  alt='chrome://extensions/에 방문해 dist 폴더를 업로드'
+/>
+
+이제 코드를 수정해보세요. chrome://extensions/에서 업데이트 버튼을 누르거나 dist 폴더를 다시 업로드하지 않아도 수정된 코드가 반영된 것을 확인할 수 있을 겁니다.
+
+<br />
+
+## chrome extension을 만들며 알게 된 것들
+
+- 결과물을 제출하고 심사(review)가 완료되기까지는 보통 3일이 걸린다.
+
+주변도르로, 몇 시간 만에 승인될 수도 있다라는 얘기를 들었는데 저의 경우는 그렇지 않았습니다. 보통 2~3일이 걸렸어요. [이 링크](https://developer.chrome.com/docs/webstore/review-process#review-time)를 확인해보시면 90%의 review가 3일 이내로 완료되었다고 하네요. 여기서 놓치면 안될 점은 review에서 거부를 당해 시간이 더 걸릴 수도 있다는 점입니다. 다행히도 review의 강도가 app store처럼 강한 것 같진 않습니다.
+
+<br />
+
+- review에서 거부를 당하기도 한다.
+
+하지만 이번에 review에서 거부를 당하는 경험을 할 수 있었습니다. 바로 Red Argon?을 위반했기 때문인데요, 왜 Red Argon이라고 칭하는지는 모르겠습니다.
+
+<Image
+  src='/images/contents/posts/chrome-extension-with-crxjs/red-argon.png'
+  alt='chrome extension review에서 거부 당함'
+/>
+
+어쨌든 거부 당한 이유는 사용자의 검색 환경을 지켜주지 못했기 때문입니다. 제가 개발한 chrome extension은 chrome의 새 탭 화면을 커스터마이징합니다. 예를 들자면 [surfit의 extension](https://chromewebstore.google.com/detail/%EC%84%9C%ED%95%8F-%EB%A7%A4%EC%9D%BC-%EC%84%B1%EC%9E%A5%ED%95%98%EB%8A%94-%EC%82%AC%EB%9E%8C%EB%93%A4%EC%9D%98-%EC%BB%A4%EB%A6%AC%EC%96%B4-%ED%94%8C%EB%9E%AB%ED%8F%BC/ipjibgkeofiedbfcfekfggdmjhhljgjn?pli=1)과 유사합니다. 이 때 google 검색이 가능하도록 검색바 또한 구현을 했는데 여기서 chrome search api를 쓰지 않았기에 거부를 당한 겁니다. 저는 chrome.tab.update 메서드를 통해 단순히 url을 이동시켰는데, 이렇게 하면 사용자의 기존 검색 설정을 유지하지 못하나봅니다.
+
+다음과 같이 수정한 이후에는 review를 무사히 통과할 수 있었습니다.
+
+```typescript
+// before
+function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  event.preventDefault();
+
+  chrome.tabs.update({
+    url: `https://www.google.com/search?q=${inputRef.current?.value}`,
+  });
+}
+
+// after
+function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  event.preventDefault();
+
+  chrome.search.query({
+    text: inputRef.current?.value,
+    disposition: 'CURRENT_TAB',
+  });
+}
+```
+
+<br />
+
+## 앞으로 해보고 싶은 것
+
+- 자동 배포
+
+chrome extension도 자동 배포가 가능할까?라는 궁금증이 생겨서 찾아보았는데요! **zip 파일로 압축한 다음 업로드하는 것까지는 코드로 할 수 있으나, 최종 제출은 수동으로 해줘야 한다**라고 합니다. [관련 링크](https://jam.dev/blog/automating-chrome-extension-publishing/)
+
+chrome extension을 배포하기 위해서는 매번 dist 폴더를 zip 파일로 압축한 다음, 이 zip 파일을 제출해야 합니다. 매번 압축하는 수고로움을 거쳐야 하는데요, 링크의 github actions workflow를 적용한다면 zip 파일로 압축하고 그걸 chrome web store의 developer dashboard에 반영하는 과정을 없앨 수 있겠다는 생각을 할 수 있었습니다. 그러면 최종 제출 버튼만 누르면 review를 맡길 수 있는 형태가 되는 것이겠죠!
+
+---
+
+이번에 만든 chrome extension은 알고리즘 문제를 매일 학습할 수 있는 탭고리즘이라는 서비스입니다. PM분께서 알고리즘 문제를 조금 더 쉽게 풀 수 있게 하기 위해, 알고리즘 문제에 객관식을 접목시키셨어요. 이걸 어떻게 구현해야 하나 싶으면서도 다른 서비스에서는 찾아보지 못한 기능인 것 같아 꽤 재밌게 만들었습니다. 그리고 디자인도 이쁩니다! 배경화면으로 쓰기에도 좋을 것 같아요. 사용해보시고 피드백 많이 남겨주시면 감사드리겠습니다.
+
+[탭고리즘](https://chromewebstore.google.com/detail/%ED%83%AD%EA%B3%A0%EB%A6%AC%EC%A6%98-%EC%83%88-%ED%83%AD%EC%9C%BC%EB%A1%9C-%EA%B9%A8%EC%9A%B0%EB%8A%94-%EC%95%8C%EA%B3%A0%EB%A6%AC%EC%A6%98-%EB%91%90%EB%87%8C/ggaphhaodhanhegkgpdlibmchahdfngh?hl=ko)
+
+<br />
+
+<MyThought>
+
+현재 crxjs 공식 문서 사이트에 접속하면 404 페이지가 뜨네요... >\_ㅇ
+
+</MyThought>
