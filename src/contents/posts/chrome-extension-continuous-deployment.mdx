@@ -355,6 +355,21 @@ export function isNewVersion(previousVersion: string, currentVersion: string) {
     (currentMajor === previousMajor && currentMinor === previousMinor && currentPatch > previousPatch)
   );
 }
+
+// scripts/publish-extension/env.ts
+import { config } from 'dotenv';
+import { z } from 'zod';
+
+config();
+
+export const envSchema = z.object({
+  EXTENSION_ID: z.string(),
+  GOOGLE_CLIENT_ID: z.string(),
+  GOOGLE_CLIENT_SECRET: z.string(),
+  GOOGLE_REFRESH_TOKEN: z.string(),
+});
+
+export const env = envSchema.parse(process.env);
 ```
 
 <Image
@@ -371,6 +386,7 @@ export function isNewVersion(previousVersion: string, currentVersion: string) {
 
 <MyThought>
   이 작업을 하고 나서 계속 드는 의문은 '이 자동화가 과연 큰 효용성이 있을까?'였습니다. 웹은 배포가 완료되면 곧바로
-  사용자들에게 새로운 화면과 기능을 제공해줄 수 있습니다. 반면 chrome extension은 2~3일의 review 과정을 거쳐야하고 기다려야 합니다.
-  즉 웹처럼 배포 과정을 많이 겪진 않으니 효용성은 다소 떨어지지 않을까라는 의문이 들었던 것 같습니다. 이 chrome extension을 꾸준히 개선시키면서 효용성을 판단해볼 예정입니다.
+  사용자들에게 새로운 화면과 기능을 제공해줄 수 있습니다. 반면 chrome extension은 2~3일의 review 과정을 거쳐야하고
+  기다려야 합니다. 즉 웹처럼 배포 과정을 많이 겪진 않으니 효용성은 다소 떨어지지 않을까라는 의문이 들었던 것 같습니다.
+  이 chrome extension을 꾸준히 개선시키면서 효용성을 판단해볼 예정입니다.
 </MyThought>
