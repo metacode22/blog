@@ -1,0 +1,376 @@
+---
+title: chrome extension 개발기 - 2. 자동 배포
+summary: chrome extension도 자동으로 배포할 수 있을까요? 한 번 시도해보았습니다.
+categories:
+  - 확장 프로그램
+  - 크롬 익스텐션
+  - chrome extension
+  - continuous deployment
+  - cd
+createdAt: 2025-02-02
+updatedAt: 2025-02-02
+published: true
+---
+
+<Short />
+Github Actions와 Chrome Web Store API를 사용하면 chrome extension도 자동 배포가 가능합니다.
+
+```yaml
+- name: Build
+  run: pnpm build
+
+- name: Zip
+  run: zip -r extension.zip dist
+
+- name: Publish to Chrome Web Store
+  run: pnpm publish-extension
+  env:
+    EXTENSION_ID: ${{ secrets.EXTENSION_ID }}
+    GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+    GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+    GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
+```
+
+<br />
+<br />
+
+<Long />
+
+<Image
+  src='/images/contents/posts/chrome-extension-continuous-deployment/chrome-extension-deploy-process.png'
+  alt='chrome extension 배포 과정'
+  description='chrome extension 배포 과정'
+/>
+
+chrome extension은 웹 사이트와는 조금 다른 배포 과정을 거칩니다. 코딩 작업을 마쳤으면 먼저 package.json의 version을 수정하구요,
+빌드된 결과물을 zip 파일로 압축합니다. 그리고 Chrome Web Store에서 로그인을 한 다음 이 zip 파일을 Developer Dashboard에 업로드하고 제출하면 review 단계로 넘어갑니다! 그리고
+2~3일의 심사 기간을 거쳐서 승인이 되면 새로운 버전의 chrome extension을 배포할 수 있게 되죠.
+
+현재 개발 중인 chrome extension은 0.0.1부터 0.0.8까지 총 8번의 배포를 거쳤어요. 그러다보니 압축을 하거나 업로드, 제출하는 과정을 매번 수동으로 번거롭게 진행했습니다. 그러다보니 이것도 자동화할 수 있을까라는 호기심과 더불어, 해보면 조금 더 근사한 환경에서 개발할 수 있지 않을까라는 욕망에 자동 배포 파이프라인 구축을 시도하게 되었어요.(말은 거창하지만 막상 해보니 간단했습니다!)
+
+## chrome extension 자동 배포
+
+**자동화한 부분은 그림에서 Zip output과 Login, Upload, Publish**입니다.
+
+다행히 [Chrome Web Store API](https://developer.chrome.com/docs/webstore/api)에서 파일을 업로드하고 제출하는 과정을 API로 제공해주고 있었습니다. 이 API는 JWT 기반인데 이후 소개해드릴 과정을 통해 로그인 과정도 생략할 수 있었어요. 이 API와 Github Actions를 바탕으로 어떻게 자동 배포 파이프라인을 구축해보았는지 소개해보겠습니다.
+
+### 권한 얻기
+
+먼저 Chrome Web Store API를 이용하기 위해서는 권한이 필요합니다. [이 링크](https://developer.chrome.com/docs/webstore/using-api)에서 안내해주는 절차를 그대로 따라하면 쉽게 권한을 얻을 수 있습니다.
+
+요약을 하자면 계정의 2단계 인증을 활성화시키고 Google Cloud Console에서 client ID와 client secret을 얻은 다음, Google OAuth Playground에서 refresh token까지 얻어내는 과정입니다. 이것들이 있어야 Chrome Web Store API를 이용할 수 있습니다.
+
+### 워크플로우 구성
+
+워크플로우는 다음과 같이 구성했습니다.
+
+```yaml
+name: Publish
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-publish:
+    if: github.event.pull_request.merged # PR이 main에 merge 될 때 동작
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code # 코드를 가져옴
+        uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v2 # pnpm setup
+        with:
+          version: 10
+
+      - name: Setup node.js # node setup
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: Install dependencies # 의존성 설치
+        run: pnpm install
+
+      - name: Configure aws credentials # AWS 인증
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ap-northeast-2
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: Pull env # AWS Parameter Store로부터 env 가져오기
+        run: pnpm env-pull:production
+
+      - name: Build # 결과물 산출
+        run: pnpm build
+
+      - name: Zip # 압축
+        run: zip -r extension.zip dist
+
+      - name: Publish to Chrome Web Store # Upload, Publish
+        run: pnpm publish-extension
+        env:
+          EXTENSION_ID: ${{ secrets.EXTENSION_ID }}
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          GOOGLE_REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
+```
+
+워크플로우는 위와 같이 작성했습니다. 여기서 TypeScript로 스크립트를 작성한 부분이 2곳 있습니다.
+
+1. Pull env
+
+저희 회사는 env(environment variables)를 [AWS Parameter Store](https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-parameter-store.html)로 관리하고 있습니다. 그래서 이 chrome extension에서 사용하는 env 또한 Parameter Store에 저장해두었고, 워크플로우가 동작할 때마다 매번 가져오기 위해 따로 스크립트를 작성했습니다.
+
+pnpm env-pull:production에 의해 동작하는 스크립트는 다음과 같습니다.
+
+```json
+// package.json
+"scripts": {
+  "env-pull:development": "tsx scripts/fetch-env/development.ts", // 개발 환경
+  "env-pull:production": "tsx scripts/fetch-env/production.ts"
+},
+```
+
+```typescript
+// scripts/fetch-env/production.ts
+import { GetParameterCommand, SSMClient } from '@aws-sdk/client-ssm';
+import fs from 'fs';
+
+const MODE = 'production';
+
+async function main() {
+  const client = new SSMClient({ region: 'ap-northeast-2' });
+  const command = new GetParameterCommand({
+    Name: `/tabgorithm/${MODE}`,
+    WithDecryption: true,
+  });
+  const { Parameter } = await client.send(command);
+  if (!Parameter?.Value) {
+    throw new Error('Parameter not found');
+  }
+  const envJson = JSON.parse(Parameter.Value);
+
+  try {
+    fs.unlinkSync(`.env.${MODE}`);
+  } catch (error) {
+    // ENOENT는 "error no entry"의 약자로, 파일이 존재하지 않는 경우를 의미. 해당 에러가 아닐 경우 throw error.
+    if (error.code !== 'ENOENT') {
+      throw error;
+    }
+  }
+
+  let content = '';
+  for (const [key, value] of Object.entries(envJson)) {
+    content += `${key}=${value}\n`;
+  }
+  fs.writeFileSync(`.env.${MODE}`, content);
+}
+
+main().catch(console.error);
+```
+
+최신 env가 반영되도록 기존 .env.production은 지워버리고 새로운 .env.production 파일을 만드는 과정입니다. vite의 경우 build할 때 이 .env.production을 바탕으로 production용 env가 주입됩니다.
+
+근데 만약 이 env가 누락된 상태로 build가 되면 어떻게 될까요? env가 누락되었음에도 build는 성공할 것이고 이후의 과정을 통해 배포가 진행될 것입니다. 그렇다면 제대로 서비스가 동작하지 않을텐데요, 다행히 chrome extension의 경우 review 단계에서 심사자에 의해 거부를 당하게 되어 사용자가 에러를 마주하진 않을 것입니다. 하지만 review에 2~3일이 걸리기 때문에 시간을 낭비하게 됩니다.(chrome extension은 review 단계에 들어가면 수정을 할 수 없습니다)
+
+사실 이러한 시간 낭비를 한 번 겪었습니다. 워크플로우를 실험하다가 발생했는데 env가 누락된 상태로 제출되어 심사에서 거부를 받았죠. 그래서 vite 설정을 건드려 build 전에 Zod로 env의 유효성을 검증해, 이 검증을 통과하지 못한다면 build가 실패하도록 했습니다.
+
+```typescript
+// vite.config.ts
+import { defineConfig, loadEnv } from 'vite';
+import react from '@vitejs/plugin-react-swc';
+import { crx } from '@crxjs/vite-plugin';
+import manifest from './src/manifest';
+import { ZodError, z } from 'zod';
+
+const envSchema = z.object({
+  VITE_FLOUNDER_KEY: z.string(),
+  VITE_AMPLITUDE_KEY: z.string(),
+  VITE_HACKLE_SDK_KEY: z.string(),
+});
+
+export default defineConfig(({ mode }) => ({
+  plugins: [
+    react(),
+    crx({ manifest }),
+    {
+      name: 'env-validator',
+      buildStart: () => {
+        const env = loadEnv(mode, process.cwd(), '');
+
+        try {
+          envSchema.parse(env);
+        } catch (error) {
+          if (error instanceof ZodError) {
+            const missingEnvs = error.errors.map((err) => err.path.join('.')).join(', ');
+            console.error('❌ environment variables are missing:', missingEnvs);
+          }
+
+          throw error;
+        }
+      },
+    },
+  ],
+  resolve: {
+    alias: {
+      '@': '/src',
+    },
+  },
+}));
+```
+
+<br />
+
+2. Publish to Chrome Web Store
+
+pnpm publish-extension에 의해 동작하는 스크립트는 다음과 같습니다.
+
+```json
+"scripts": {
+  "publish-extension": "tsx scripts/publish-extension/index.ts",
+},
+```
+
+```typescript
+// scripts/publish-extension/index.ts
+import packageJson from '../../package.json';
+import { getAccessToken } from './auth';
+import { getStoreItem, publish, upload } from './chrome-web-store-api';
+import { isNewVersion } from './helper';
+
+async function main() {
+  const accessToken = await getAccessToken();
+  const storeItem = await getStoreItem(accessToken);
+
+  if (!isNewVersion(storeItem.crxVersion, packageJson.version)) {
+    console.log(
+      `Current version ${packageJson.version} is not new than ${storeItem.crxVersion}\n So publish is skipped`,
+    );
+    return;
+  }
+
+  if (storeItem.uploadState === 'IN_PROGRESS') {
+    console.log('Already in review. So publish is skipped.');
+    return;
+  }
+
+  await upload(accessToken, 'extension.zip');
+  await publish(accessToken);
+}
+
+main().catch(console.error);
+```
+
+[권한 얻기](/posts/chrome-extension-continuous-deployment#권한-얻기) 과정을 통해 얻어온 것들을 바탕으로 access token을 얻은 후 만약 version이 이전의 version보다 높다면, access token을 이용해 Chrome Web Store API를 이용하여 압축된 zip 파일을 업로드하고 제출하는 과정입니다.
+
+위 main 함수를 실행하기 위해 사용된 함수들은 다음과 같습니다.
+
+```typescript
+// scripts/publish-extension/auth.ts
+import { env } from './env';
+
+export async function getAccessToken() {
+  const response = await fetch('https://accounts.google.com/o/oauth2/token', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: new URLSearchParams({
+      client_id: env.GOOGLE_CLIENT_ID,
+      client_secret: env.GOOGLE_CLIENT_SECRET,
+      refresh_token: env.GOOGLE_REFRESH_TOKEN,
+      grant_type: 'refresh_token',
+    }),
+  });
+  const data = await response.json();
+
+  return data.access_token as string;
+}
+
+// scripts/publish-extension/chrome-web-store-api.ts
+/**
+ * @see https://developer.chrome.com/docs/webstore/api
+ */
+import { env } from './env';
+import fs from 'fs';
+
+type StoreItem = {
+  id: string;
+  kind: string;
+  publicKey: string;
+  crxVersion: string;
+  uploadState: 'FAILURE' | 'IN_PROGRESS' | 'NOT_FOUND' | 'SUCCESS';
+};
+
+export async function getStoreItem(accessToken: string): Promise<StoreItem> {
+  const response = await fetch(
+    `https://www.googleapis.com/chromewebstore/v1.1/items/${env.EXTENSION_ID}?projection=DRAFT`,
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    },
+  );
+  const data = await response.json();
+
+  return data as StoreItem;
+}
+
+export async function upload(accessToken: string, zipFilePath: string) {
+  const response = await fetch(`https://www.googleapis.com/upload/chromewebstore/v1.1/items/${env.EXTENSION_ID}`, {
+    method: 'PUT',
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'x-goog-api-version': '2',
+    },
+    body: fs.readFileSync(zipFilePath),
+  });
+  const data = await response.json();
+
+  return data;
+}
+
+export async function publish(accessToken: string) {
+  const response = await fetch(`https://www.googleapis.com/chromewebstore/v1.1/items/${env.EXTENSION_ID}/publish`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  const data = await response.json();
+
+  return data;
+}
+
+// scripts/publish-extension/helper.ts
+export function isNewVersion(previousVersion: string, currentVersion: string) {
+  const [previousMajor, previousMinor, previousPatch] = previousVersion.split('.').map(Number);
+  const [currentMajor, currentMinor, currentPatch] = currentVersion.split('.').map(Number);
+
+  return (
+    currentMajor > previousMajor ||
+    (currentMinor === previousMinor && currentPatch > previousPatch) ||
+    (currentMajor === previousMajor && currentMinor === previousMinor && currentPatch > previousPatch)
+  );
+}
+```
+
+<Image
+  src='/images/contents/posts/chrome-extension-continuous-deployment/chrome-extension-deploy-process-by-github-actions.png'
+  alt='Github Actions에 의해 자동화된 chrome extension 배포 과정'
+  description='Github Actions에 의해 자동화된 chrome extension 배포 과정'
+/>
+
+끝입니다! 이제 배포 과정이 위와 같이 단순해졌습니다.
+
+---
+
+사실 Chrome Web Store API를 사용하기 위해 저처럼 코드를 작성하는 것이 아니라 [이미 잘 구현되어 있는 actions](https://github.com/marketplace/actions/publish-chrome-extension-to-chrome-web-store)를 이용하는 방법도 존재합니다. 하지만 조금 더 이 과정을 잘 알고 싶은 마음에 기존의 actions보다는 직접 코드를 작성해보는 과정을 거쳤습니다.
+
+<MyThought>
+  이 작업을 하고 나서 계속 드는 의문은 '이 자동화가 과연 큰 효용성이 있을까?'였습니다. 웹은 배포가 완료되면 곧바로
+  사용자들에게 새로운 화면과 기능을 제공해줄 수 있습니다. 반면 chrome extension은 2~3일의 review 과정을 거쳐야하고 기다려야 합니다.
+  즉 웹처럼 배포 과정을 많이 겪진 않으니 효용성은 다소 떨어지지 않을까라는 의문이 들었던 것 같습니다. 이 chrome extension을 꾸준히 개선시키면서 효용성을 판단해볼 예정입니다.
+</MyThought>
