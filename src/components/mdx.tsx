@@ -10,7 +10,13 @@ export function MDX({ scope = {}, ...props }: Omit<MDXRemoteProps, 'scope'> & { 
   return <MDXRemote {...props} scope={scope} components={{ Image, Video, Resource, MyThought, Short, Long }} />;
 }
 
-function Image({ alt, src, source, ...props }: NextImageProps & { source?: string }) {
+function Image({
+  alt,
+  src,
+  source,
+  description,
+  ...props
+}: NextImageProps & { source?: string; description?: string }) {
   return (
     <div className='flex flex-col items-center'>
       <NextImage
@@ -19,10 +25,11 @@ function Image({ alt, src, source, ...props }: NextImageProps & { source?: strin
         width={0}
         height={0}
         sizes='100vw'
-        className='h-auto w-full rounded-lg mt-8 mb-1'
+        className='mb-1 mt-8 h-auto w-full rounded-lg'
         {...props}
       />
       {source && <p className='text-xs text-gray-500'>[출처: {source}]</p>}
+      {description && <p className='text-xs text-gray-500'>{description}</p>}
     </div>
   );
 }
