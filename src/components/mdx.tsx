@@ -39,6 +39,7 @@ function Image({
         <Dialog.Portal>
           <div className='fixed inset-0 z-50 bg-black/50' />
           <Dialog.Content className='fixed left-1/2 top-1/2 z-50 flex h-[90vh] w-[90vw] -translate-x-1/2 -translate-y-1/2 transform items-center justify-center outline-none'>
+            <Dialog.Title className='sr-only'>{alt ?? ''}</Dialog.Title>
             <NextImage
               alt={alt ?? ''}
               src={src}
