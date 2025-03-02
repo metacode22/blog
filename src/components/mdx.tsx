@@ -1,10 +1,13 @@
 'use client';
 
+import * as Dialog from '@radix-ui/react-dialog';
 import { Activity } from 'lucide-react';
 import NextImage, { ImageProps as NextImageProps } from 'next/image';
 import Link from 'next/link';
 import { MDXRemote, MDXRemoteProps } from 'next-mdx-remote';
 import { DetailedHTMLProps, ReactNode, VideoHTMLAttributes } from 'react';
+
+import { useBoolean } from '../hooks/useBoolean';
 
 export function MDX({ scope = {}, ...props }: Omit<MDXRemoteProps, 'scope'> & { scope?: Record<string, any> }) {
   return <MDXRemote {...props} scope={scope} components={{ Image, Video, Resource, MyThought, Short, Long }} />;
@@ -17,17 +20,36 @@ function Image({
   description,
   ...props
 }: NextImageProps & { source?: string; description?: string }) {
+  const { value: opened, toggle, setFalse: close } = useBoolean(false);
+
   return (
     <div className='flex flex-col items-center'>
-      <NextImage
-        alt={alt ?? ''}
-        src={src}
-        width={0}
-        height={0}
-        sizes='100vw'
-        className='mb-1 mt-8 h-auto w-full rounded-lg'
-        {...props}
-      />
+      <Dialog.Root modal={false} open={opened} onOpenChange={toggle}>
+        <Dialog.Trigger asChild>
+          <NextImage
+            alt={alt ?? ''}
+            src={src}
+            width={0}
+            height={0}
+            sizes='100vw'
+            className='mb-1 mt-8 h-auto w-full cursor-pointer rounded-lg'
+            {...props}
+          />
+        </Dialog.Trigger>
+        <Dialog.Portal>
+          <div className='fixed inset-0 z-50 bg-black/50' />
+          <Dialog.Content className='fixed left-1/2 top-1/2 z-50 flex h-[90vh] w-[90vw] -translate-x-1/2 -translate-y-1/2 transform items-center justify-center outline-none'>
+            <NextImage
+              alt={alt ?? ''}
+              src={src}
+              sizes='100vw'
+              fill
+              className='h-auto max-h-full w-auto max-w-full object-contain'
+              onClick={close}
+            />
+          </Dialog.Content>
+        </Dialog.Portal>
+      </Dialog.Root>
       {source && <p className='text-xs text-gray-500'>[출처: {source}]</p>}
       {description && <p className='text-xs text-gray-500'>{description}</p>}
     </div>
