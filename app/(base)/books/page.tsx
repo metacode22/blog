@@ -7,7 +7,9 @@ export default function BooksPage() {
         <h3 className='m-0'>2025년</h3>
         <ul>
           <h4>3월</h4>
-          <li>사피엔스</li>
+          <ul>
+            <li>사피엔스</li>
+          </ul>
         </ul>
       </div>
       <hr />
