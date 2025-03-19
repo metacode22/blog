@@ -17,7 +17,7 @@ export function Views({ slug, increase = false }: { slug: string; increase?: boo
 
   if (views == null) return <Skeleton />;
 
-  return <span className='text-xs text-gray-400'>{views?.toLocaleString('ko-KR')} views</span>;
+  return <span className='text-xs text-gray-400'>{views?.toLocaleString('ko-KR')} 조회</span>;
 }
 
 function Skeleton() {
