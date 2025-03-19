@@ -24,7 +24,7 @@ function Skeleton() {
   return (
     <div className='flex animate-pulse self-stretch items-center gap-1'>
       <span className='w-2 h-4 rounded bg-slate-200' />
-      <span className='text-xs text-gray-400'>views</span>
+      <span className='text-xs text-gray-400'>조회</span>
     </div>
   );
 }
