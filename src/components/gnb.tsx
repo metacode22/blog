@@ -3,10 +3,10 @@ import Link from 'next/link';
 import { routes } from '../constants/routes';
 
 const LINKS = {
-  post: routes.posts.root,
-  book: routes.books.root,
-  log: routes.logs.root,
-  guestbook: routes.guestbook.root,
+  개발: routes.posts.root,
+  '읽은 책': routes.books.root,
+  생각: routes.logs.root,
+  방명록: routes.guestbook.root,
 } as const;
 
 export function GNB() {
@@ -14,9 +14,9 @@ export function GNB() {
     <aside className='mb-16 tracking-tight'>
       <nav className='flex flex-row items-center gap-4'>
         <Link href={routes.home} className='text-xl font-semibold'>
-          SeungJun
+          신승준
         </Link>
-        <div className='flex flex-row items-center'>
+        <div className='flex flex-row items-center gap-2'>
           {Object.entries(LINKS).map(([name, path]) => (
             <Link key={path} href={path} className='flex px-2 opacity-50'>
               {name}
