@@ -1,5 +1,6 @@
 'use client';
 
+import { RotateCw } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { flushSync } from 'react-dom';
 
@@ -7,7 +8,13 @@ import { cn } from '@/src/utils/class-name';
 
 import { createGuestbookAction } from './actions';
 
-export function GuestbookForm({ onSubmitSuccess }: { onSubmitSuccess: () => void }) {
+export function GuestbookForm({
+  guestbooks,
+  onSubmitSuccess,
+}: {
+  guestbooks: { id: number; name: string; message: string; created_at: string }[];
+  onSubmitSuccess: () => void;
+}) {
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState('');
   const [message, setMessage] = useState('');
@@ -21,7 +28,8 @@ export function GuestbookForm({ onSubmitSuccess }: { onSubmitSuccess: () => void
   }
 
   function handleClickRandomName() {
-    setName(pickRandomName());
+    const currentNames = guestbooks.map(({ name }) => name);
+    setName(pickRandomName(currentNames));
   }
 
   async function handleSubmit(formData: FormData) {
@@ -49,8 +57,9 @@ export function GuestbookForm({ onSubmitSuccess }: { onSubmitSuccess: () => void
   }
 
   useEffect(() => {
-    setName(pickRandomName());
-  }, []);
+    const currentNames = guestbooks.map(({ name }) => name);
+    setName(pickRandomName(currentNames));
+  }, [guestbooks]);
 
   return (
     <form className='flex flex-col gap-2' action={handleSubmit}>
@@ -70,7 +79,7 @@ export function GuestbookForm({ onSubmitSuccess }: { onSubmitSuccess: () => void
             'w-fit rounded-md bg-gray-500 px-2 py-1 text-sm text-white',
             loading && 'cursor-not-allowed opacity-50',
           )}>
-          랜덤 변경
+          <RotateCw size={20} />
         </button>
       </div>
       <textarea
@@ -93,9 +102,13 @@ export function GuestbookForm({ onSubmitSuccess }: { onSubmitSuccess: () => void
   );
 }
 
-function pickRandomName() {
+function pickRandomName(currentNames: string[]) {
   const adjective = ADJECTIVES[Math.floor(Math.random() * ADJECTIVES.length)];
   const noun = NOUNS[Math.floor(Math.random() * NOUNS.length)];
+
+  if (currentNames.includes(`${adjective}${noun}`)) {
+    return pickRandomName(currentNames);
+  }
 
   return `${adjective}${noun}`;
 }

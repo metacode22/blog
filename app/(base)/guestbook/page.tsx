@@ -20,7 +20,10 @@ export default function GuestbookPage() {
 
   return (
     <section className='flex flex-col gap-6'>
-      <GuestbookForm onSubmitSuccess={() => getGuestbooks().then(({ guestbooks }) => setGuestbooks(guestbooks))} />
+      <GuestbookForm
+        guestbooks={guestbooks}
+        onSubmitSuccess={() => getGuestbooks().then(({ guestbooks }) => setGuestbooks(guestbooks))}
+      />
       {loading ? (
         <ul className='flex flex-col gap-6'>
           {[1, 2, 3, 4, 5, 6, 7].map((index) => (
