@@ -5,7 +5,7 @@ import { routes } from '../constants/routes';
 const LINKS = {
   개발: routes.posts.root,
   '읽은 책': routes.books.root,
-  생각: routes.logs.root,
+  기록: routes.logs.root,
   방명록: routes.guestbook.root,
 } as const;
 
