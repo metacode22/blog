@@ -8,9 +8,16 @@ import { MDXRemote, MDXRemoteProps } from 'next-mdx-remote';
 import { DetailedHTMLProps, ReactNode, VideoHTMLAttributes } from 'react';
 
 import { useBoolean } from '../hooks/useBoolean';
+import { calculateMyAge } from '../utils/calculateMyAge';
 
 export function MDX({ scope = {}, ...props }: Omit<MDXRemoteProps, 'scope'> & { scope?: Record<string, any> }) {
-  return <MDXRemote {...props} scope={scope} components={{ Image, Video, Resource, MyThought, Short, Long }} />;
+  return (
+    <MDXRemote
+      {...props}
+      scope={scope}
+      components={{ Image, Link, Video, Resource, MyThought, Short, Long, Year, Month, Age, BooksLeftToRead }}
+    />
+  );
 }
 
 function Image({
@@ -99,4 +106,23 @@ function Long() {
       <Activity size={20} color='#ed1d65' className='scale-x-[-1] transform' />
     </div>
   );
+}
+
+function Year() {
+  return <span>{new Date().getFullYear()}</span>;
+}
+
+function Month() {
+  return <span>{new Date().getMonth() + 1}</span>;
+}
+
+function Age() {
+  return <span>{calculateMyAge()}</span>;
+}
+
+function BooksLeftToRead() {
+  const age = calculateMyAge();
+  const booksLeftToRead = (70 - age) * 18;
+
+  return <span>{booksLeftToRead}</span>;
 }
