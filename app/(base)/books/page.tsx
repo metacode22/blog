@@ -8,7 +8,9 @@ export default function BooksPage() {
         <ul>
           <h4>4월</h4>
           <ul>
-            <li>상자 밖에 있는 사람</li>
+            <li>
+              <Link href='/books/getting-out-of-the-box'>상자 밖에 있는 사람</Link>
+            </li>
           </ul>
         </ul>
         <ul>
