@@ -49,7 +49,7 @@ export default async function PostPage({ params: { slug } }: { params: { slug: s
 
   return (
     <div className='w-full max-w-3xl'>
-      <article className='prose prose-neutral w-full max-w-none dark:prose-invert'>
+      <article className='prose prose-neutral w-full max-w-none dark:prose-invert break-all'>
         <h1 className='m-0 py-4'>{title}</h1>
         <div className='flex flex-col items-start gap-1'>
           <Summary>{summary}</Summary>
