@@ -1,0 +1,144 @@
+---
+title: noUncheckedIndexedAccess는 왜 strict 모드의 기본값이 아닐까?
+summary:
+categories:
+  - noUncheckedIndexedAccess
+  - TypeScript
+  - tsconfig
+createdAt: 2025-05-05
+updatedAt: 2025-05-05
+published: true
+---
+
+<Short />
+
+- tsconfig의 compilerOptions에서 true 혹은 false로 설정할 수 있는 noUncheckedIndexedAccess 옵션은 **객체나 배열에 접근할 때 undefined 가능성을 더해주어 더 안전한 코드를 작성하도록 도와줍니다.**
+
+- 안정성을 높여줄 수 있는 옵션임에도 불구하고 tsconfig에서 strict를 true로 설정하더라도 noUncheckedIndexedAccess의 기본값은 false입니다.
+
+<br />
+<br />
+
+<Long />
+
+<Image
+  src='/images/contents/posts/why-is-nouncheckedindexedaccess-not-default-in-strict-mode/type-error.png'
+  alt='Type Error'
+  description='TypeError'
+/>
+
+위와 같은 에러를 보신 적이 있으신가요? 아시다시피 이 에러는 객체가 undefined임에도 불구하고 그 객체의 속성에 접근할 때 발생합니다. 꽤나 자주 겪어보았던 터라 이 에러가 뜨면 오히려 안심하고 디버깅을 하곤 합니다.
+
+근데 이번엔 에러가 났던 코드를 보고 한 가지 의문점이 생겼습니다. 에러를 발생시키고 있던 문제의 코드는 다음과 같은데요,
+
+```tsx
+import { useSuspenseQuery } from '@tanstack/react-query';
+
+export default function useCustomHook() {
+  const { data: enrolleds = [] } = useSuspenseQuery(enrolledsQuery);
+
+  ...
+
+  return {
+    ...
+    // enrolleds가 빈 배열일 경우, enrolleds[0]은 undefined가 됨.
+    // 따라서 undefined.course와 같이 undefined의 속성에 접근하려고 하면 에러 발생.
+    courseName: enrolleds[0].course.name,
+    ...
+  }
+}
+```
+
+여기서 enrolleds[0]은 undefined일 수 있는데 왜 TypeScript에서는 type error를 IDE 상에서 발생시켜주지 않았을까?라는 것입니다.
+
+저의 이러한 의문과 착각은 엄격한 타입 체킹을 해주는 strict 옵션이 모든 걸 커버해주겠지?라는 믿음 때문이었습니다. 실제로 다음 사진과 같이, strict를 true로 켜놓았다고 해서 type error가 표시되진 않습니다.
+
+<Image
+  src='/images/contents/posts/why-is-nouncheckedindexedaccess-not-default-in-strict-mode/nouncheckedindexedaccess-false.png'
+  alt='Type Error'
+  description='strict만 true일 때'
+/>
+
+알아보니 배열이나 객체에서 undefined일 수 있는 속성에 접근할 때 type error를 발생시키기 위해서는 **strict 옵션과 함께 noUncheckedIndexedAccess라는 옵션 또한 켜주어야 합니다.**
+
+```json
+// tsconfig.json
+{
+  "compilerOptions": {
+    ...
+
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+
+    ...
+  },
+  ...
+}
+```
+
+이렇게 설정해주어야 비로소 다음과 같이 type error가 IDE 상에 표시되는 걸 확인할 수 있습니다.
+
+<Image
+  src='/images/contents/posts/why-is-nouncheckedindexedaccess-not-default-in-strict-mode/nouncheckedindexedaccess-true.png'
+  alt='Type Error'
+  description='strict만 true일 때'
+/>
+
+<br />
+<br />
+
+### 왜 strict를 켜도 noUncheckedIndexedAccess를 따로 켜주어야 할까?
+
+타입을 엄격히 체크해주는 strict를 켜도 왜 noUncheckedIndexedAccess는 따로 또 켜주어야 할까요? strict만 true로 설정해두면 noUncheckedIndexedAccess 또한 기본적으로 true가 되어 조금 더 안전한 코드를 작성할 수 있게 해주면 당연히 좋지 않을까요?
+
+라는 의문이 들어서 한 번 이와 관련된 글들을 찾아보았습니다. 반갑게도 [같은 의문을 제기한 글을 깃헙 이슈](https://github.com/microsoft/TypeScript/issues/49169)에서 발견할 수 있었어요.
+
+요약하자면 다음과 같습니다.
+
+1. 이슈 작성자는 strict가 true인 상태에서 다음과 같은 코드는 타입 에러를 발생시키지 않는다며, strict가 true일 때 noUncheckedIndexedAccess 또한 자동으로 true가 되어야 한다고 주장함.
+
+```typescript
+const numbers: Array<number> = [];
+
+// 여기서 test 타입은 number가 아니라 number | undefined여야 한다고 주장.
+const test = numbers[1];
+```
+
+2. 마이크로소프트의 타입스크립트 개발팀 리드는 다음과 같이 주장하며 지금처럼 별도의 옵션으로 존재하는 것이 낫다는 의견을 내비침.
+
+- strict 모드에 noUnchechedIndexedAccess가 기본적으로 켜지도록 변경하면 기존 코드베이스에 많은 false positive들을 발생시킬 것
+- 특히 C-style loop에서 많은 오류를 표시할 것
+
+여기서 false positive란, 실제론 문제가 없음에도 문제가 있다고 표시되는 경우를 말합니다. 그리고 C-style loop란 명령형 for문을 말하는데요, 이 개발팀 리드가 주장하는 false positive의 경우는 대표적으로 다음과 같습니다.
+
+```typescript
+const array = [1, 2, 3];
+
+for (let i = 0; i < array.length; i++) {
+  const element = array[i];
+
+  element.toFixed(2); // 'element' is possibly 'undefined'라는 type 에러 발생.
+}
+```
+
+위 코드에서는 length를 확인해서 loop를 돌기 때문에 element는 undefined가 될 수 없습니다. 그럼에도 불구하고 noUncheckedIndexedAccess를 켜두면 type error가 발생하게 됩니다. 실제론 문제가 없음에도 문제가 발생한, 즉 false positive인 C-style loop 코드입니다.
+
+이러한 코드는 흔하게 쓰입니다. 따라서 **갑자기 strict 모드에 noUnchechedIndexedAccess를 기본적으로 켜지게 변경하면, TypeScript 버전을 올렸을 경우 갑작스런 type error가 많이 발생할 것이란 우려를 내비친 겁니다.**
+
+<br />
+
+---
+
+<br />
+
+어쨌든 에러가 날 수 있는 여지를 최대한 개발 과정에서 막기 위해 noUncheckedIndexedAccess 옵션을 true로 설정해주었습니다. C-style loop 코드가 거의 없기도 하고, 프로덕션 환경에서 일어날 수 있는 에러를 사전에 막는 것이 가장 우선이다라고 판단했기 때문입니다.
+
+TypeScript 개발장의 의도를 직접적으로 알 수 있었어서 의문을 쉽게 해소할 수 있었던 재밌는 경험이었네요! 그리고 tsconfig 옵션이나 eslint 룰을 팀에 맞게 다시 한 번 잘 정비하여 더 많은 에러를 사전에 방지해봐야겠다는 생각도 들었습니다.
+
+<br />
+
+## 참고
+
+- [noUncheckedIndexedAccess](https://www.typescriptlang.org/tsconfig/#noUncheckedIndexedAccess)
+- [Make accessing objects safer by enabling 'noUncheckedIndexedAccess' in tsconfig](https://www.totaltypescript.com/tips/make-accessing-objects-safer-by-enabling-nouncheckedindexedaccess-in-tsconfig)
+- [noUncheckedIndexedAccess should be enabled by default in strict mode](https://github.com/microsoft/TypeScript/issues/49169)
