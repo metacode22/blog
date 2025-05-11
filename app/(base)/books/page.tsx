@@ -8,6 +8,7 @@ export default function BooksPage() {
         <ul>
           <h4>5월</h4>
           <ul>
+            <li>프로젝트 헤일메리</li>
             <li>울트라러닝</li>
           </ul>
         </ul>
