@@ -24,7 +24,9 @@ export default function BooksPage() {
         <ul>
           <h4>3월</h4>
           <ul>
-            <li>사피엔스</li>
+            <li>
+              <Link href='/books/sapiens'>사피엔스</Link>
+            </li>
           </ul>
         </ul>
       </div>
