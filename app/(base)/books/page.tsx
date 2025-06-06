@@ -6,9 +6,11 @@ export default function BooksPage() {
       <div>
         <h3 className='m-0'>2025년</h3>
         <ul>
-          <h4>5월</h4>
+          <h4>6월</h4>
           <ul>
-            <li>프로젝트 헤일메리</li>
+            <li>
+              <Link href='/books/project-hail-mary'>프로젝트 헤일메리</Link>
+            </li>
             <li>울트라러닝</li>
           </ul>
         </ul>
