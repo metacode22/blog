@@ -58,7 +58,10 @@ export function GuestbookForm({
 
   useEffect(() => {
     const currentNames = guestbooks.map(({ name }) => name);
-    setName(pickRandomName(currentNames));
+    const result = pickRandomName(currentNames);
+    console.log(guestbooks);
+    console.log('🚀 ~ useEffect ~ result:', result);
+    setName(result);
   }, [guestbooks]);
 
   return (
