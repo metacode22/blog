@@ -57,12 +57,12 @@ export function GuestbookForm({
   }
 
   useEffect(() => {
-    const currentNames = guestbooks.map(({ name }) => name);
-    const result = pickRandomName(currentNames);
-    console.log(guestbooks);
-    console.log('🚀 ~ useEffect ~ result:', result);
-    setName(result);
-  }, [guestbooks]);
+    if (!Boolean(name)) {
+      const currentNames = guestbooks.map(({ name }) => name);
+      const result = pickRandomName(currentNames);
+      setName(result);
+    }
+  }, [guestbooks, name]);
 
   return (
     <form className='flex flex-col gap-2' action={handleSubmit}>
