@@ -86,6 +86,7 @@ export function GuestbookForm({
         </button>
       </div>
       <textarea
+        ref={(element) => element?.focus()}
         name='message'
         className='w-full rounded-md border border-gray-300 p-2 text-sm dark:border-gray-600 dark:bg-gray-800 dark:text-white'
         maxLength={200}
