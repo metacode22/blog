@@ -5,7 +5,7 @@ export default async function HomePage() {
     <section className='flex flex-col gap-6'>
       <h1 className='sr-only'>신승준</h1>
       <p className='prose dark:prose-invert'>
-        늙어서도 유쾌하게 일하게 싶은 개발자입니다. 현재 팀스파르타라는 회사에서 좋은 동료들에 파묻혀 정말 재밌게 일하고
+        늙어서도 유쾌하게 일하고 싶은 개발자입니다. 현재 팀스파르타라는 회사에서 좋은 동료들에 파묻혀 정말 재밌게 일하고
         있어요.
         <br />
         <br />
