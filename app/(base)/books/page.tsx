@@ -20,7 +20,9 @@ export default function BooksPage() {
         <div>
           <h4>7월</h4>
           <ul>
-            <li>린치핀</li>
+            <li>
+              <Link href='/books/linchpin'>린치핀</Link>
+            </li>
           </ul>
         </div>
         <div>
