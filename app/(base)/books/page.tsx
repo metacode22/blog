@@ -6,6 +6,13 @@ export default function BooksPage() {
       <div>
         <h3 className='m-0'>2025년</h3>
         <div>
+          <h4>10월</h4>
+          <ul>
+            <li>테라피스트</li>
+            <li>(사용자를) 생각하게 하지 마!</li>
+          </ul>
+        </div>
+        <div>
           <h4>9월</h4>
           <ul>
             <li>편안함의 습격</li>
