@@ -1,4 +1,7 @@
+'use client';
+
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 import { routes } from '../constants/routes';
 
@@ -10,6 +13,8 @@ const LINKS = {
 } as const;
 
 export function GNB() {
+  const pathname = usePathname();
+
   return (
     <aside className='mb-16 tracking-tight'>
       <nav className='flex flex-row items-center gap-4'>
@@ -18,7 +23,10 @@ export function GNB() {
         </Link>
         <div className='flex flex-row items-center gap-2'>
           {Object.entries(LINKS).map(([name, path]) => (
-            <Link key={path} href={path} className='flex px-2 opacity-50'>
+            <Link
+              key={path}
+              href={path}
+              className={`flex px-2 ${pathname.startsWith(path) ? 'font-bold' : 'opacity-50'}`}>
               {name}
             </Link>
           ))}
