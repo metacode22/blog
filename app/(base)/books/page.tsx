@@ -8,7 +8,9 @@ export default function BooksPage() {
         <div>
           <h4>10월</h4>
           <ul>
-            <li>테라피스트</li>
+            <li>
+              <Link href='/books/therapist'>테라피스트</Link>
+            </li>
             <li>(사용자를) 생각하게 하지 마!</li>
           </ul>
         </div>
