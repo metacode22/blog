@@ -10,6 +10,12 @@ export default function BooksPage() {
       <div>
         <h3 className='m-0'>2025년</h3>
         <div>
+          <h4>11월</h4>
+          <ul>
+            <li>요즘 당근 AI 개발</li>
+          </ul>
+        </div>
+        <div>
           <h4>10월</h4>
           <ul>
             <li>
