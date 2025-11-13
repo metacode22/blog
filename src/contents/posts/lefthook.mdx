@@ -1,0 +1,202 @@
+---
+title: 멀티 레포 환경에서 Git Hook 중앙 관리하기
+summary: husky, lint-staged를 lefthook으로 이전하며 얻은 장점과 경험을 나열해보았습니다.
+categories:
+  - lefthook
+  - husky
+  - lint-staged
+  - git hook
+createdAt: 2025-11-14
+updatedAt: 2025-11-14
+published: true
+---
+
+<Short />
+
+pre-commit git hook을 husky, lint-staged에서 lefthook으로 이전했어요. 이를 통해 pre-commit 시 실행하는 정적 분석 속도를 평균 3.1초에서 2.1초로 단축시킴과 동시에 git hook 설정을 중앙 관리할 수 있는 환경을 마련하게 되었습니다.
+
+<br />
+
+<Long />
+
+지금 회사에 입사하고 나서 두번째로 했던 일은 husky, lint-staged를 이용하여 commit 전에 linting과 formatting을 자동 적용하는 것이었어요.(첫 번째로 했던 일은 랜딩 페이지 작업이었어요)
+
+이 때 husky와 lint-staged를 이용했던 이유는 단순하게도 저에겐 이미 해봤던 작업이었기 때문이에요. 덕분에 빠르게 성공적으로 적용할 수 있었고 다른 팀에게도 긍정적으로 전파가 되어 전반적으로 코드 품질의 수준을 올릴 수 있었습니다.
+
+근데 최근엔 동료가 디자인 시스템에 lefthook을 적용했던 것을 보고 `서비스 레포들도 lefthook을 사용하게 되면 어떨까?`라는 생각을 품게 되었어요. 무엇보다도, lefthook이 출력하는 로그들이 husky보다 더 멋있어 보여서 혹했었습니다.
+
+<Image src='/images/contents/posts/lefthook/husky.png' alt='husky' description='husky' />
+<Image src='/images/contents/posts/lefthook/lefthook.png' alt='lefthook' description='lefthook' />
+
+그래서 한 번 PoC를 해보려고 lefthook 공식 문서를 살펴보던 와중, 생각치 못한 장점을 발견하게 되었습니다. 바로 <Link href='https://lefthook.dev/examples/remotes.html' target='_blank' rel='noopener noreferrer'>remote configs</Link> 기능이었어요. lefthook 설정을 원격 저장소로부터 다운로드 받을 수 있는 기능이에요. 이걸 이용하면 레포들마다 각기 다른 모습으로 git hook이 설정될 수 있는 휴먼 에러를 방지하고, 새로운 레포가 생기더라도 빠르게 git hook 설정 작업을 할 수 있겠다는 생각을 하게 되었습니다.
+
+<br />
+
+## husky에서 lefthook으로 migration하기
+
+아무런 git hook이 설정되지 않은 프로젝트에 <Link href='https://dev.to/quave/lefthook-benefits-vs-husky-and-how-to-use-30je' target='_blank' rel='noopener noreferrer'>lefthook을 적용하는 방법은 여기서</Link> 확인해주시면 되겠습니다.
+
+그러면, remote configs 기능과 함께 husky에서 lefthook으로 migration하는 방법을 알아볼게요.
+
+(저는 pnpm을 자주 사용하고 있어서 이를 기준으로 명령어를 작성하겠습니다)
+
+<br />
+
+1. **remote configs 설정**
+
+먼저 여러 레포에서 가져다 쓸 config를 어느 한 곳에 설정할 차례에요. 저는 config들을 사내 패키지를 관리하는 모노레포에 만들어두었습니다.
+
+```yaml
+// 사내 패키지 모노레포/configs/lefthook/standard.yaml
+pre-commit:
+  parallel: true
+  commands:
+    lint:
+      glob: '*.{js,jsx,ts,tsx}'
+      run: pnpm eslint --fix {staged_files}
+      stage_fixed: true
+
+    prettier:
+      glob: '*.{js,jsx,ts,tsx}'
+      run: pnpm prettier --write {staged_files}
+      stage_fixed: true
+
+commit-msg:
+  commands:
+    commitlint:
+      run: pnpm commitlint --edit {1}
+```
+
+위 config에 대해서 간단히 설명하자면, pre-commit git hook에서는 stage된 파일에 대해 lint와 prettier를 병렬로 실행시키고, commit-msg git hook에서는 commit 메시지를 lint하는 것을 설정했어요.(<Link href='https://commitlint.js.org/guides/getting-started.html' target='_blank' rel='noopener noreferrer'>commitlint 설정은 여기</Link>를 참고해주세요)
+
+여기서 눈에 띌만한 코드는 <Link href='https://lefthook.dev/configuration/parallel.html?highlight=parallel#parallel' target='_blank' rel='noopener noreferrer'>parallel</Link>과 <Link href='https://lefthook.dev/examples/stage_fixed.html?highlight=staged#stage-fixed-files' target='_blank' rel='noopener noreferrer'>staged_files</Link>일 것 같아요. lefthook은 `병렬`로 명령어를 실행시킬 수 있어요. 그래서 속도 향상을 기대할 수 있습니다.
+
+그리고 `{staged_files}`를 통해 stage된 파일에만 대상으로 삼을 수 있는데 이를 통해 간단하게 lint-staged를 대체할 수 있게 돼요. 따라서 lint-staged라는 의존성을 없앰으로써 복잡성을 조금이나마 제거할 수 있습니다.
+
+<br />
+
+2. **husky 흔적 지우기**
+
+위에서 정의한 remote config를 적용할 레포에서 이제 husky를 지우고 lefthook을 설정할 차례에요. 먼저 husky와 lint-staged 의존성을 제거해야 합니다.
+
+```bash
+pnpm uninstall husky lint-staged
+
+rm -rf .husky .lintstagedrc.js
+
+git config --unset core.hooksPath
+```
+
+git hook은 기본적으로 .git/hooks 폴더에 정의돼요. 근데 husky는 git이 hook을 .husky 폴더에서 찾도록 재정의합니다.
+
+반면 lefthook은 git hook을 기본 설정인 .git/hooks 폴더에서 찾습니다. 따라서 husky가 재정의한 것을 원래대로 돌려놓기 위해 `git config --unset core.hooksPath` 명령어를 실행해줘야 해요.
+
+<br />
+
+3. **lefthook 설정 적용**
+
+```bash
+pnpm install --save-dev lefthook
+```
+
+lefthook을 설치해줍니다. 그리고 레포의 루트 경로에 lefthook.yaml 파일을 만들고 다음과 같이 코드를 작성하여 앞서 작성한 remote config를 적용합니다.
+
+```yaml
+remotes:
+  - git_url: https://github.com/TeamSparta-Inc/union.git
+    ref: main
+    configs:
+      - configs/lefthook/standard.yaml
+```
+
+그리고 다음 명령어를 실행해주면
+
+```bash
+pnpm lefthook install
+```
+
+git hook이 `.git/hooks`에 생성돼요.
+
+<Image
+  src='/images/contents/posts/lefthook/git-hooks.png'
+  alt='git hooks'
+  description='.git/hooks 폴더에 생긴 hook들'
+/>
+
+<br />
+
+4. **lefthook 설정 확인**
+
+```bash
+pnpm lefthook dump
+```
+
+실제로 어떠한 설정이 적용되었는지 확인할 수 있어요. remote config에서 작성한 코드들이 터미널에 출력되어야 정상입니다.
+
+<Image src='/images/contents/posts/lefthook/dump.png' alt='lefthook dump' description='lefthook dump 결과' />
+
+<br />
+
+## 결과
+
+lefthook으로 이전한 이후 얻은 장점들을 정리해보겠습니다.
+
+- 속도 항상: macOS M2 Pro 기기를 기준으로 수동 측정을 해보았어요. time 명령어를 사용했습니다. husky, lint-staged 조합은 평균 3.1초가 걸렸던 반면, lefthook은 평균 2.1초가 걸렸습니다.
+
+- 의존성 감소: husky, lint-staged 2개를 사용하는 것이 아니라 lefthook 1개만 사용하면 됩니다.
+
+- SSOT(Single Source of Truth): 여러 레포에서 가져다 쓸 config를 중앙 저장소에 만들어두고, 그저 가져다 사용하면 되기 때문에 중앙 관리가 가능해요.
+
+물론 단점도 있다고 생각합니다. lefthook의 단점이라기보다는 이러한 git hook을 적용하게 되면 생기는 단점이라고 볼 수 있는데요, 이렇게 commit할 때마다 정적 분석을 실행하는 것 자체가 시간 낭비라고 여겨질 수 있을 겁니다.
+
+<br />
+
+## 기타
+
+- git_url에 작성된 레포에 권한이 있어야 remote config를 가져올 수 있습니다.
+
+- 급할 때는 git hook 실행을 무시할 수 있어요. commit 시에 --no-verify 옵션을 사용하면 됩니다.
+
+```bash
+git commit --no-verify
+```
+
+- lefthook의 remote config들은 조합이 가능해요. 앞서 보신 것처럼 standard.yaml 파일에 여러 명령어를 한꺼번에 작성해두는 것이 아니라, 다음과 같이 쪼개어 두고 원하는 config들을 가져다 사용하면 됩니다.
+
+```yaml
+configs/lefthook/eslint.yaml
+pre-commit:
+  commands:
+    lint:
+      glob: '*.{js,jsx,ts,tsx}'
+      run: pnpm eslint --fix {staged_files}
+      stage_fixed: true
+```
+
+```yaml
+configs/lefthook/prettier.yaml
+pre-commit:
+  commands:
+    prettier:
+      glob: '*.{js,jsx,ts,tsx}'
+      run: pnpm prettier --write {staged_files}
+      stage_fixed: true
+```
+
+```yaml
+// 서비스 레포
+remotes:
+  - git_url: https://github.com/TeamSparta-Inc/union.git
+    ref: main
+    configs:
+      - configs/lefthook/eslint.yaml
+      - configs/lefthook/prettier.yaml
+```
+
+<br />
+
+## 마치며
+
+이 작업과 더불어 조금 더 팀이 편하고 일관성 있는 환경에서 코드를 작성할 수 있도록 react-query 버전 업데이트나 Type-Safe한 env 관리, 패키지 모노레포와 같은 일들을 벌려 왔어요.
+
+이러한 작업들을 할 때마다 느끼는 건, 코드를 작성하고 아이디어를 검증해보는 건 생각보다 쉽지만 팀원들의 합의를 이끌어내어 진짜 환경을 변화시키는 것이 가장 어려운 것 같습니다.
