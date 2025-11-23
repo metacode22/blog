@@ -12,6 +12,7 @@ export default function BooksPage() {
         <div>
           <h4>11월</h4>
           <ul>
+            <li>오역하는 말들</li>
             <li>요즘 당근 AI 개발</li>
           </ul>
         </div>
