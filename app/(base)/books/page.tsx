@@ -10,6 +10,13 @@ export default function BooksPage() {
       <div>
         <h3 className='m-0'>2025년</h3>
         <div>
+          <h4>12월</h4>
+          <ul>
+            <li>프로그래머의 뇌</li>
+            <li>행동하지 않으면 인생은 바뀌지 않는다</li>
+          </ul>
+        </div>
+        <div>
           <h4>11월</h4>
           <ul>
             <li>오역하는 말들</li>
