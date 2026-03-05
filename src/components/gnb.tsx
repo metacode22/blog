@@ -9,6 +9,7 @@ const LINKS = {
   개발: routes.posts.root,
   '읽은 책': routes.books.root,
   기록: routes.logs.root,
+  도구들: routes.tools.root,
   방명록: routes.guestbook.root,
 } as const;
 

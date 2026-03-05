@@ -10,6 +10,9 @@ export const routes = {
   logs: {
     root: '/logs',
   },
+  tools: {
+    root: '/tools',
+  },
   guestbook: {
     root: '/guestbook',
   },
