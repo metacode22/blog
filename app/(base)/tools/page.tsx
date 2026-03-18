@@ -4,6 +4,7 @@ export default function ToolsPage() {
       <p>claude code</p>
       <p>zoxide</p>
       <p>refined github</p>
+      <p>raycast</p>
     </section>
   );
 }
