@@ -23,7 +23,7 @@ export async function generateMetadata({ params: { slug } }: { params: { slug: s
 
   if (!book) return {};
 
-  const { title, summary, categories } = book.meta;
+  const { title, summary, categories, createdAt, updatedAt } = book.meta;
 
   return {
     title,
@@ -33,9 +33,12 @@ export async function generateMetadata({ params: { slug } }: { params: { slug: s
       canonical: `/books/${slug}`,
     },
     openGraph: {
+      type: 'article',
       title,
       description: summary,
       url: `${process.env.SITE_URL}/books/${slug}`,
+      publishedTime: new Date(createdAt).toISOString(),
+      modifiedTime: new Date(updatedAt).toISOString(),
     },
   };
 }
@@ -50,8 +53,24 @@ export default async function BookPage({ params: { slug } }: { params: { slug: s
 
   const { compiledSource } = await serialize(content);
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: title,
+    description: summary,
+    datePublished: new Date(book.meta.createdAt).toISOString(),
+    dateModified: new Date(updatedAt).toISOString(),
+    url: `${process.env.SITE_URL}/books/${slug}`,
+    author: {
+      '@type': 'Person',
+      name: '신승준',
+      url: process.env.SITE_URL,
+    },
+  };
+
   return (
     <div className='w-full max-w-3xl'>
+      <script type='application/ld+json' dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <article className='prose prose-neutral w-full max-w-none break-all dark:prose-invert'>
         <h1 className='m-0 py-4'>{title}</h1>
         <div className='flex flex-col items-start gap-1'>
