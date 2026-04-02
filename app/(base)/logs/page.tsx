@@ -4,6 +4,9 @@ import { getLogs } from '@/src/utils/contents/log';
 
 export const metadata = {
   title: '신승준 블로그 | 기록',
+  alternates: {
+    canonical: '/logs',
+  },
 };
 
 export default function LogsPage() {

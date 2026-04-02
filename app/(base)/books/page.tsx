@@ -2,6 +2,9 @@ import Link from 'next/link';
 
 export const metadata = {
   title: '신승준 블로그 | 읽은 책',
+  alternates: {
+    canonical: '/books',
+  },
 };
 
 export default function BooksPage() {

@@ -5,6 +5,9 @@ import { List } from '../../../src/components/post-list';
 
 export const metadata = {
   title: '신승준 블로그 | 개발',
+  alternates: {
+    canonical: '/posts',
+  },
 };
 
 export default function PostsPage() {

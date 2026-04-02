@@ -9,9 +9,6 @@ export const metadata: Metadata = {
   metadataBase: new URL(process.env.SITE_URL),
   title: '신승준 블로그',
   description: '프론트엔드 개발자 신승준의 개인 블로그입니다.',
-  alternates: {
-    canonical: './',
-  },
   verification: {
     google: 'Nu1aSKHqgAe8INSfZ5HDrAi2BC3QfpHXTXlpQ9H55_Y',
     other: {
