@@ -53,20 +53,43 @@ export default async function BookPage({ params: { slug } }: { params: { slug: s
 
   const { compiledSource } = await serialize(content);
 
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'BlogPosting',
-    headline: title,
-    description: summary,
-    datePublished: new Date(book.meta.createdAt).toISOString(),
-    dateModified: new Date(updatedAt).toISOString(),
-    url: `${process.env.SITE_URL}/books/${slug}`,
-    author: {
-      '@type': 'Person',
-      name: '신승준',
-      url: process.env.SITE_URL,
+  const jsonLd = [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'BlogPosting',
+      headline: title,
+      description: summary,
+      datePublished: new Date(book.meta.createdAt).toISOString(),
+      dateModified: new Date(updatedAt).toISOString(),
+      url: `${process.env.SITE_URL}/books/${slug}`,
+      inLanguage: 'ko-KR',
+      keywords: book.meta.categories,
+      author: {
+        '@type': 'Person',
+        '@id': `${process.env.SITE_URL}/#person`,
+        name: '신승준',
+        url: process.env.SITE_URL,
+        sameAs: [
+          'https://github.com/metacode22',
+          'https://www.linkedin.com/in/%EC%8A%B9%EC%A4%80-%EC%8B%A0-73602420a/',
+        ],
+      },
+      publisher: {
+        '@type': 'Person',
+        '@id': `${process.env.SITE_URL}/#person`,
+        name: '신승준',
+      },
     },
-  };
+    {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: '홈', item: process.env.SITE_URL },
+        { '@type': 'ListItem', position: 2, name: '읽은 책', item: `${process.env.SITE_URL}/books` },
+        { '@type': 'ListItem', position: 3, name: title },
+      ],
+    },
+  ];
 
   return (
     <div className='w-full max-w-3xl'>

@@ -7,19 +7,33 @@ import GoogleAnalyticsScript from '@/src/components/google-analytics-script';
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.SITE_URL),
-  title: '신승준 블로그',
+  title: {
+    default: '신승준 블로그',
+    template: '%s - 신승준 블로그',
+  },
   description: '프론트엔드 개발자 신승준의 개인 블로그입니다.',
   openGraph: {
     type: 'website',
     locale: 'ko_KR',
     siteName: '신승준 블로그',
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: '신승준 블로그',
+      },
+    ],
   },
   twitter: {
-    card: 'summary',
+    card: 'summary_large_image',
   },
   robots: {
     index: true,
     follow: true,
+    'max-snippet': -1,
+    'max-image-preview': 'large' as const,
+    'max-video-preview': -1,
   },
   verification: {
     google: 'Nu1aSKHqgAe8INSfZ5HDrAi2BC3QfpHXTXlpQ9H55_Y',
