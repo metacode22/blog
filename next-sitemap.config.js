@@ -24,6 +24,7 @@ module.exports = {
   siteUrl: `${process.env.SITE_URL}`,
   generateRobotsTxt: true,
   generateIndexSitemap: false,
+  exclude: ['/icon', '/apple-icon', '/opengraph-image'],
   transform: async (config, url) => {
     const pathname = new URL(url, config.siteUrl).pathname;
 

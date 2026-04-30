@@ -1,0 +1,31 @@
+# 신승준 블로그
+
+> 팀스파르타 프론트엔드 개발자 신승준의 기술 블로그. React, TypeScript, Chrome Extension 개발 경험과 독서 기록을 다룹니다.
+
+## 주요 기술 포스트
+- [AI 질의응답 개발기](/posts/ai-tutor) - AI 스트리밍 채팅 FE 구현
+- [멀티 레포 환경에서 Git Hook 중앙 관리하기](/posts/lefthook) - lefthook 도입기
+- [react query 마이그레이션 하기](/posts/react-query-migration) - v3에서 v5로 이전
+- [패키지 모노레포](/posts/package-monorepo) - pnpm workspace 모노레포 구성
+- [noUncheckedIndexedAccess는 왜 strict 모드의 기본값이 아닐까?](/posts/why-is-nouncheckedindexedaccess-not-default-in-strict-mode)
+- [chrome extension 개발기 - 2. 자동 배포](/posts/chrome-extension-continuous-deployment)
+- [chrome extension 개발기 - 1. crxjs](/posts/chrome-extension-with-crxjs)
+- [Type-Safe env](/posts/type-safe-env) - 환경 변수 타입 안전성
+- [Git으로 범인 찾기](/posts/find-the-culprit-with-git-bisect) - git bisect 활용
+- [모노레포의 패키지에 Jest 환경 설정하기](/posts/setup-jest-in-monorepo)
+- [MDN 문서 번역을 통해 오픈 소스 기여를 경험해보자](/posts/contribute-to-mdn)
+- [Cypress Cloud의 Test Replay로 CI 단계에서 실패한 E2E 테스트 디버깅하기](/posts/debug-ci-e2e-test-with-cypress-cloud-test-replay)
+- [Divider 컴포넌트 훔쳐오기](/posts/divider-to-design-system)
+- [TypeScript와 함께 확장 가능한 React 컴포넌트 만들기](/posts/make-reusable-and-extendable-component)
+
+## 읽은 책
+- [읽은 책 목록](/books)
+
+## 기록
+- [기록 목록](/logs)
+
+## 작성자
+신승준 (Shin Seung-jun) | 팀스파르타 프론트엔드 개발자
+- GitHub: https://github.com/metacode22
+- LinkedIn: https://www.linkedin.com/in/%EC%8A%B9%EC%A4%80-%EC%8B%A0-73602420a/
+- 블로그: https://metacode22.xyz

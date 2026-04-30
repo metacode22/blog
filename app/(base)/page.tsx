@@ -4,9 +4,42 @@ export const metadata = {
   },
 };
 
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: '신승준 블로그',
+    url: process.env.SITE_URL,
+    description: '프론트엔드 개발자 신승준의 개인 블로그입니다.',
+    inLanguage: 'ko-KR',
+    author: {
+      '@type': 'Person',
+      '@id': `${process.env.SITE_URL}/#person`,
+    },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    '@id': `${process.env.SITE_URL}/#person`,
+    name: '신승준',
+    alternateName: 'metacode22',
+    url: process.env.SITE_URL,
+    jobTitle: '프론트엔드 개발자',
+    worksFor: {
+      '@type': 'Organization',
+      name: '팀스파르타',
+    },
+    sameAs: [
+      'https://github.com/metacode22',
+      'https://www.linkedin.com/in/%EC%8A%B9%EC%A4%80-%EC%8B%A0-73602420a/',
+    ],
+  },
+];
+
 export default async function HomePage() {
   return (
     <section className='flex flex-col gap-6'>
+      <script type='application/ld+json' dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <h1 className='sr-only'>신승준</h1>
       <p className='prose dark:prose-invert'>
         늙어서도 유쾌하게 제품을 만들고 싶은 낙관주의 개발자 신승준입니다. 현재 팀스파르타라는 회사에서 좋은 동료들에게 둘러싸여 정말
