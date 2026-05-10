@@ -1,0 +1,126 @@
+---
+title: Vercel 프로젝트 배포 시 Function Region을 제대로 설정해야 하는 이유
+summary: 잘못 설정되어있던 Vercel Function Region을 수정하고 속도를 개선했습니다.
+categories:
+  - Vercel
+  - Performance
+  - TTFB
+  - SSR
+  - 인프라
+createdAt: 2026-03-12
+updatedAt: 2026-03-12
+published: true
+---
+
+<Short />
+
+한국 사용자만을 대상으로 하는 서비스임에도 Vercel function region이 미국 동부로 설정되어 있어, SSR 함수가 매번 미국 동부에서 실행되고 있었어요.
+
+function region을 서울로 바꾸자 TTFB가 297ms에서 123ms로 줄었고, Datadog으로 살펴본 후속 모니터링에서는 LCP 35.7%, FCP 48.2% 개선이 확인됐습니다.
+
+function region을 바꾸는 것은 간단한 작업이었는데, 실제로 무엇이 어떻게 달라지는지 들여다보고 싶어서 조금 더 조사를 해보았습니다.
+
+<br />
+<br />
+
+<Long />
+
+### Vercel Function region
+
+`Vercel Function Region`은 Vercel에 배포된 serverless function(SSR, API Routes 등)이 실제로 실행되는 물리적 서버의 위치를 말해요. 따라서 고객과 가까운 거리에 위치할수록 응답 속도가 빨라집니다. 이번에 이 Vercel Function Region을 서울로 알맞게 수정함으로써 속도를 개선했던 이야기를 풀어보려고 해요.
+
+한국에서 Vercel로 배포를 하는 프론트엔드 개발자에게는 function region을 서울로 설정해두는 것이 당연했습니다. 그래서 이 Vercel Function Region이 전사적으로 잘못 설정되어 있을 것이라고는 생각하지 못했어요.
+
+미국 동부로 잘못 설정된 것을 발견하게 된 계기는 얼마 전에 제가 맡은 프로젝트의 성능 최적화 작업을 진행하면서였습니다. 다음은 제가 맡고 있는 프로젝트의 레거시 코드입니다. SSR의 이점을 얻기 위해서라기보다는, 다음과 같이 하면 optional이 제거된 타입을 페이지 컴포넌트에 전달할 수 있다는 편의성 때문에 getServerSideProps를 쓴 것 같았습니다.
+
+```typescript
+export const getServerSideProps = async ({ req }: GetServerSidePropsContext) => {
+  return {
+    props: {
+      referer: req.headers.referer || '',
+    },
+  };
+};
+```
+
+그런데 SSR 로직이 거의 비어있는 이 페이지의 TTFB가 200~300ms로 측정되고 있었어요. 왜 이렇게 느릴까 싶어서 이것저것 생각해보다가 원인을 Vercel 대시보드에서 찾을 수 있었습니다. function region이 미국 동부로 설정되어 있었어요.
+
+Cache-Control 또한 설정되어 있지 않았기에 해당 페이지의 SSR 함수는 매번 미국 동부에서 실행되었을 겁니다.
+
+그리고 실제로 해당 페이지 document 요청의 header를 보면 다음 사진과 같았습니다.
+
+<Image src='/images/contents/posts/vercel-function-region/x-vercel-id.png' alt='x-vercel-id header' />
+
+edge는 icn1(서울)이고 함수는 iad1(미국 동부)에서 실행되고 있다는 의미에요.
+
+<br />
+<br />
+
+### 미리 경험해보기
+
+그리고 다음 스크립트를 각각 실행해보면 속도가 정말 차이가 난다는 것을 확인할 수 있습니다.
+
+```bash
+# 서울 ↔ 미국
+curl -o /dev/null -s -w "Connect: %{time_connect}s\n" \
+    "https://ec2.us-east-1.amazonaws.com"
+
+# 서울 ↔ 서울
+curl -o /dev/null -s -w "Connect: %{time_connect}s\n" \
+    "https://ec2.ap-northeast-2.amazonaws.com"
+```
+
+1,000회 정도 실행해본 결과, 서울 ↔ 미국은 보통 약 210ms였고 서울 ↔ 서울은 25ms였어요.
+
+브라우저를 통해 웹 페이지를 방문해서 측정해도 비슷한 결과를 확인할 수 있습니다.
+
+<Image
+  src='/images/contents/posts/vercel-function-region/seoul-to-usa.png'
+  alt='서울과 미국 간 TCP 연결 시간'
+  description='서울 ↔ 미국'
+/>
+
+<Image
+  src='/images/contents/posts/vercel-function-region/seoul-to-seoul.png'
+  alt='서울과 서울 간 TCP 연결 시간'
+  description='서울 ↔ 서울'
+/>
+
+<br />
+<br />
+
+### 경위
+
+저희 회사는 리브랜딩을 거치면서 도메인이 한 번 변경되었어요. 그 때 기존 Vercel 프로젝트들의 도메인을 수정한 것이 아니라, 새로운 Vercel 프로젝트를 만들고 거기에 변경된 도메인을 설정했었어요.
+
+이렇게 새로운 Vercel 프로젝트를 만들면 function region의 기본값은 미국 동부입니다. 인프라팀은 그 때 function region의 중요성을 몰랐기에 설정이 누락되어 있었어요. 따라서 제가 맡은 프로젝트뿐만 아니라 도메인이 이전된 모든 프로젝트의 function region이 잘못 설정되어 있었습니다.
+
+<br />
+<br />
+
+### 조치
+
+조치는 간단했어요. Vercel 대시보드에서 function region을 icn1(서울)로 수정한 뒤, 재배포를 진행해주면 됩니다.
+
+<Image src='/images/contents/posts/vercel-function-region/vercel-function-region.png' alt='vercel-function-region' />
+
+저희 회사가 사용하는 Pro plan은 region을 최대 3개까지 선택할 수 있는데, 해외 사용자가 많지 않은 프로젝트이기에 icn1만 선택해주었습니다.
+
+<br />
+<br />
+
+### 결과
+
+이 작은 조치가 큰 개선을 이끌어냈습니다. Datadog 기준으로 다음과 같이 데이터가 개선된 것을 확인할 수 있어요.
+
+- **Loading Time**: 4.52s → 3.48s (23.0% 개선)
+- **LCP**: 2.63s → 1.69s (35.7% 개선)
+- **FCP**: 2.24s → 1.16s (48.2% 개선)
+
+그리고 여러 페이지가 _poor → needs improvement_, _needs improvement → good_ 등급으로 한 단계씩 올라섰습니다.
+
+그리고 앞서 언급했던 페이지를 1,000회 정도 호출해서 평균을 잡아본 결과, 변경 전에는 TTFB가 297ms였는데 변경 후에는 123ms로 개선되었어요.
+
+---
+
+특정 수치를 넘어가면 알림을 주는 모니터링 시스템을 구축해뒀다면 꽤나 길게 오설정된 상태로 방치되는 것을 방지할 수 있지 않았나 싶습니다.
