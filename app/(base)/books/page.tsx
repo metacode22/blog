@@ -15,6 +15,9 @@ export default function BooksPage() {
         <div>
           <h4>5월</h4>
           <ul>
+            <li>
+              <Link href='/books/new-seoul-park'>뉴서울파크 젤리장수 대학살</Link>
+            </li>
             <li>위버멘쉬</li>
           </ul>
         </div>
