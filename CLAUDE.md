@@ -100,3 +100,8 @@ pnpm postinstall  # Generate Prisma client (runs automatically after install)
 - Remote images are allowed from `raw.githubusercontent.com` (Next.js Image optimization)
 - Sitemap is auto-generated post-build via `next-sitemap`
 - Uses `next-mdx-remote` which requires transpiling in `next.config.js`
+
+## 글쓰기
+
+- 글 작성 시 기존 `src/contents/posts`·`logs` 글들의 어투·어조·구조를 먼저 참고해 톤을 일관되게 맞출 것 (필자는 개발자 관점)
+- 글 초안을 완성하면 요청을 기다리지 말고 오타·종결어미 일관성·어색한 맥락/흐름·보완할 부분을 스스로 점검해 지적할 것 (글 작성과 검토를 한 묶음으로 처리)
