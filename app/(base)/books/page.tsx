@@ -13,6 +13,12 @@ export default function BooksPage() {
       <div>
         <h3 className='m-0'>2026년</h3>
         <div>
+          <h4>6월</h4>
+          <ul>
+            <li>데이터 문해력</li>
+          </ul>
+        </div>
+        <div>
           <h4>5월</h4>
           <ul>
             <li>
