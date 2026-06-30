@@ -15,7 +15,9 @@ export default function BooksPage() {
         <div>
           <h4>6월</h4>
           <ul>
-            <li>데이터 문해력</li>
+            <li>
+              <Link href='/books/data-literacy'>데이터 문해력</Link>
+            </li>
           </ul>
         </div>
         <div>
