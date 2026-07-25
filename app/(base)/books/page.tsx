@@ -15,6 +15,7 @@ export default function BooksPage() {
         <div>
           <h4>7월</h4>
           <ul>
+            <li>신경 끄기의 기술</li>
             <li>내가 알고 있는 걸 당신도 알게 된다면</li>
           </ul>
         </div>
